@@ -47,6 +47,11 @@ from aria.tools.organization import (
     UndoOrganizationTool,
     ListOrganizationLogsTool,
 )
+from aria.tools.email import (
+    ListEmailsTool,
+    SearchEmailsTool,
+    ReadEmailTool,
+)
 from aria.approval import ApprovalHandler
 from aria.logging import setup_logging
 
@@ -316,6 +321,14 @@ async def run_chat_loop(
         registry.register(ListOrganizationLogsTool())
     if "undo_organization" not in registry:
         registry.register(UndoOrganizationTool())
+
+    # Email tools
+    if "list_emails" not in registry:
+        registry.register(ListEmailsTool())
+    if "search_emails" not in registry:
+        registry.register(SearchEmailsTool())
+    if "read_email" not in registry:
+        registry.register(ReadEmailTool())
 
     console.info(f"Loaded {len(registry)} tool(s)")
     if verbose:
