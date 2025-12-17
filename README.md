@@ -5,7 +5,7 @@ A local-first agentic AI personal assistant designed to run entirely on your PC,
 ## Features
 
 - **File Management**: Automated organization, intelligent categorization, duplicate detection
-- **Research & Information Retrieval**: Web search, document analysis, knowledge synthesis
+- **Research & Information Retrieval**: Web search (DuckDuckGo), web page content extraction, document analysis, knowledge synthesis
 - **Document Analysis**: PDF extraction, summarization, Q&A over documents
 - **Email Management**: Gmail integration with intelligent categorization, labeling, and drafting
 - **System Administration**: Routine maintenance tasks, monitoring, automation
@@ -124,6 +124,10 @@ aria/
 │   ├── agent/          # ReAct agent implementation
 │   ├── llm/            # Ollama client and model management
 │   ├── tools/          # Modular tool system
+│   │   ├── email/      # Gmail integration tools
+│   │   ├── search/     # Web search tools (DuckDuckGo)
+│   │   ├── filesystem/ # File operations
+│   │   └── ...         # Other tool categories
 │   ├── memory/         # Conversation history and knowledge base
 │   ├── approval/       # Risk-based approval system
 │   └── ui/             # CLI interface
@@ -221,6 +225,43 @@ To revoke ARIA's access to your Gmail:
 - ARIA automatically refreshes tokens
 - If refresh fails, run the setup wizard again
 
+## Web Search Tools
+
+ARIA includes web search capabilities powered by DuckDuckGo, requiring no API keys or external accounts.
+
+### Available Tools
+
+1. **Web Search** (`web_search`)
+   - Search the web using DuckDuckGo
+   - Filter by region and time range
+   - Returns formatted results with titles, URLs, and snippets
+   - Low risk level (auto-approved)
+
+2. **Fetch Web Page** (`fetch_webpage`)
+   - Extract text content from any web page
+   - Intelligent HTML parsing with BeautifulSoup
+   - Removes navigation, ads, and clutter
+   - Configurable content length limits
+   - Low risk level (auto-approved)
+
+### Usage Examples
+
+```bash
+# Search the web
+aria chat
+> Search for "Python async best practices"
+
+# Extract content from a URL
+> Fetch the content from https://example.com/article
+```
+
+### Technical Details
+
+- **No API Keys Required**: Uses DuckDuckGo's public search
+- **Privacy-Friendly**: No tracking or data collection
+- **Async Support**: Non-blocking operations for better performance
+- **Content Extraction**: BeautifulSoup with lxml parser for clean text extraction
+
 ## Architecture
 
 ARIA uses the **ReAct (Reason + Act)** pattern:
@@ -243,15 +284,19 @@ ARIA uses the **ReAct (Reason + Act)** pattern:
 ## Roadmap
 
 - [x] Project initialization and configuration
-- [ ] Ollama client with tool support
-- [ ] Basic CLI interface
-- [ ] ReAct agent loop
-- [ ] Tool registry and base classes
-- [ ] Gmail integration
-- [ ] File system tools
-- [ ] Vector store and semantic search
-- [ ] PDF extraction
+- [x] Ollama client with tool support
+- [x] Basic CLI interface
+- [x] ReAct agent loop
+- [x] Tool registry and base classes
+- [x] Risk-based approval system
+- [x] File system tools (read, write, list, organize)
+- [x] Gmail integration (read, search, label, send)
+- [x] Web search tools (DuckDuckGo search, web page fetching)
+- [ ] Vector store and semantic search (ChromaDB)
+- [ ] PDF extraction and document analysis
 - [ ] Voice output (TTS)
+- [ ] Calendar integration
+- [ ] Advanced file organization with ML
 
 ## Privacy & Security
 
