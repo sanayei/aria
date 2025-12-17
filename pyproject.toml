@@ -20,16 +20,13 @@ dependencies = [
     "click>=8.1",              # CLI framework (works great with Rich)
     "python-dotenv>=1.0",
     "tenacity>=9.0",           # Retry logic for API calls
-
     # Database & Storage
     "aiosqlite>=0.20",         # Async SQLite for conversation history
     "chromadb>=0.5",           # Vector store for semantic search
-
     # Gmail Integration
     "google-api-python-client>=2.154",
     "google-auth-oauthlib>=1.2",
     "google-auth-httplib2>=0.2",
-
     # Document Processing & OCR
     "surya-ocr>=0.6",          # OCR with GPU acceleration for scanned documents
     "pdf2image>=1.17",         # Convert PDF pages to images for OCR

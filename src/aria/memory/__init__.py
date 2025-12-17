@@ -4,22 +4,39 @@ This module provides persistent storage for conversation history, sessions,
 messages, and tool calls using SQLite.
 """
 
+from aria.memory.conversation import ConversationStore
+from aria.memory.exceptions import (
+    DatabaseError,
+    MemoryError,
+    MessageNotFoundError,
+    SessionNotFoundError,
+    ToolCallNotFoundError,
+)
 from aria.memory.models import (
+    ConversationContext,
     Message,
     MessageRole,
     Session,
     SessionSummary,
     ToolCall,
     ToolCallStatus,
-    ConversationContext,
 )
 
 __all__ = [
+    # Store
+    "ConversationStore",
+    # Models
+    "ConversationContext",
     "Message",
     "MessageRole",
     "Session",
     "SessionSummary",
     "ToolCall",
     "ToolCallStatus",
-    "ConversationContext",
+    # Exceptions
+    "DatabaseError",
+    "MemoryError",
+    "MessageNotFoundError",
+    "SessionNotFoundError",
+    "ToolCallNotFoundError",
 ]
