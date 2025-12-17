@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(tree:*)",
+      "Bash(uv run python:*)",
+      "Bash(curl:*)",
+      "Bash(sh:*)",
+      "Bash(export PATH=\"$HOME/.local/bin:$PATH\")",
+      "Bash(uv sync:*)",
+      "Bash(uv run pytest:*)",
+      "Bash(chmod:*)",
+      "Bash($HOME/.local/bin/uv run pytest tests/ --tb=short -q)",
+      "Bash($HOME/.local/bin/uv run aria:*)",
+      "Bash($HOME/.local/bin/uv run pytest:*)",
+      "Bash(~/.local/bin/uv run pytest:*)",
+      "Bash(~/.local/bin/uv run python:*)",
+      "Bash(~/.local/bin/uv run:*)",
+      "Bash($HOME/.local/bin/uv run --directory /home/amir/projects/aria aria analyze /tmp/test_organize)",
+      "Bash($HOME/.local/bin/uv run:*)",
+      "Bash(timeout 5 $HOME/.local/bin/uv run aria chat:*)",
+      "Bash(uv run aria:*)",
+      "Bash(wc:*)",
+      "Bash(ls:*)",
+      "Bash(xargs:*)"
+    ]
+  }
+}
