@@ -21,7 +21,8 @@
       "Bash(uv run aria:*)",
       "Bash(wc:*)",
       "Bash(ls:*)",
-      "Bash(xargs:*)"
+      "Bash(xargs:*)",
+      "Bash(cat:*)"
     ]
   }
 }

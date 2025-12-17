@@ -104,13 +104,13 @@ class Settings(BaseSettings):
     )
 
     # Email Configuration
-    gmail_credentials_path: Path = Field(
-        default=Path("./credentials.json"),
-        description="Path to Gmail API credentials file",
+    gmail_credentials_dir: Path = Field(
+        default=Path.home() / ".aria" / "credentials",
+        description="Directory for Gmail OAuth credentials and tokens",
     )
-    gmail_token_path: Path = Field(
-        default=Path("./token.json"),
-        description="Path to Gmail API token file",
+    gmail_enabled: bool = Field(
+        default=False,
+        description="Enable Gmail integration (set to True after running setup_gmail.py)",
     )
     gmail_cache_ttl: int = Field(
         default=300,
@@ -174,7 +174,7 @@ class Settings(BaseSettings):
         description="Document categories for classification",
     )
 
-    @field_validator("aria_data_dir", "aria_log_file", "db_path", "conversation_db_path", "chroma_path", "documents_source_dir", "documents_output_dir", mode="before")
+    @field_validator("aria_data_dir", "aria_log_file", "db_path", "conversation_db_path", "chroma_path", "gmail_credentials_dir", "documents_source_dir", "documents_output_dir", mode="before")
     @classmethod
     def expand_paths(cls, v: str | Path | None) -> Path | None:
         """Expand relative paths to absolute paths."""
@@ -220,6 +220,7 @@ class Settings(BaseSettings):
             self.db_path.parent,
             self.conversation_db_path.parent,
             self.chroma_path,
+            self.gmail_credentials_dir,
         ]
 
         for directory in directories:

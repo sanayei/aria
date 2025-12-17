@@ -160,13 +160,66 @@ This project follows:
 
 ## Gmail Integration (Optional)
 
-To enable email management features:
+ARIA can integrate with Gmail for email management features like reading, searching, labeling, and sending emails. The setup process uses OAuth 2.0 for secure authentication.
 
-1. Create a Google Cloud project
-2. Enable the Gmail API
-3. Download OAuth credentials as `credentials.json`
-4. Run the setup script: `uv run python scripts/setup_gmail.py`
-5. Follow the OAuth flow in your browser
+### Prerequisites
+
+- A Google account
+- About 10 minutes for setup
+
+### Setup Steps
+
+1. **Run the setup wizard:**
+   ```bash
+   python scripts/setup_gmail.py
+   ```
+
+2. **Follow the wizard's instructions to:**
+   - Create a Google Cloud project
+   - Enable the Gmail API
+   - Configure OAuth consent screen
+   - Download OAuth credentials
+   - Complete browser-based authentication
+
+3. **Test the connection:**
+   The wizard will automatically test your Gmail connection at the end.
+
+### What Gets Created
+
+- `~/.aria/credentials/gmail_credentials.json` - OAuth app credentials
+- `~/.aria/credentials/gmail_token.json` - Your access token (auto-refreshed)
+
+Both files are stored with restricted permissions (owner read/write only).
+
+### Permissions Requested
+
+The setup requests these Gmail API scopes:
+- `gmail.readonly` - Read emails and labels
+- `gmail.modify` - Modify labels, mark as read/unread
+- `gmail.send` - Send emails on your behalf
+
+### Revoking Access
+
+To revoke ARIA's access to your Gmail:
+
+1. Delete the token file: `rm ~/.aria/credentials/gmail_token.json`
+2. Revoke access in your Google Account: https://myaccount.google.com/permissions
+
+### Troubleshooting
+
+**"App not verified" warning:**
+- This is normal for personal use apps
+- Click "Advanced" → "Go to ARIA (unsafe)" to continue
+- This warning appears because you haven't published your app
+
+**Authentication fails:**
+- Make sure you added your email as a test user in OAuth consent screen
+- Check that the Gmail API is enabled in your project
+- Verify credentials file is in the correct location
+
+**Token expired errors:**
+- ARIA automatically refreshes tokens
+- If refresh fails, run the setup wizard again
 
 ## Architecture
 
