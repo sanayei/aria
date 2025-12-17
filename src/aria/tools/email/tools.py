@@ -398,3 +398,383 @@ class ReadEmailTool(BaseTool[ReadEmailParams]):
         except Exception as e:
             logger.error(f"Failed to read email: {e}")
             return ToolResult.error_result(error=f"Failed to read email: {e}")
+
+
+class LabelEmailParams(BaseModel):
+    """Input for LabelEmailTool."""
+    email_id: str = Field(
+        description="Gmail message ID to label"
+    )
+    add_labels: list[str] = Field(
+        default_factory=list,
+        description="List of label names to add (e.g., ['IMPORTANT', 'Work'])"
+    )
+    remove_labels: list[str] = Field(
+        default_factory=list,
+        description="List of label names to remove"
+    )
+
+
+class LabelEmailTool(BaseTool[LabelEmailParams]):
+    """Add or remove labels from an email.
+
+    This tool modifies email labels, allowing organization and categorization.
+    Common labels: INBOX, SENT, TRASH, SPAM, UNREAD, IMPORTANT, STARRED.
+    """
+
+    name = "label_email"
+    description = (
+        "Add or remove labels from an email message. "
+        "Use this to organize emails by adding labels like IMPORTANT, STARRED, etc. "
+        "Can also remove labels. Provide email_id and lists of labels to add/remove."
+    )
+    risk_level = RiskLevel.MEDIUM
+    parameters_schema = LabelEmailParams
+
+    def __init__(self):
+        """Initialize the label email tool."""
+        super().__init__()
+        self._gmail_client: GmailClient | None = None
+
+    async def _get_gmail_client(self) -> GmailClient:
+        """Get or create Gmail client."""
+        if self._gmail_client is None:
+            settings = get_settings()
+            gmail_auth = GmailAuth(settings.gmail_credentials_dir)
+            self._gmail_client = GmailClient(gmail_auth)
+        return self._gmail_client
+
+    def get_confirmation_message(self, params: LabelEmailParams) -> str:
+        """Get confirmation message.
+
+        Args:
+            params: Validated parameters
+
+        Returns:
+            str: Confirmation message
+        """
+        parts = [f"Modify labels for email {params.email_id}"]
+        if params.add_labels:
+            parts.append(f"Add: {', '.join(params.add_labels)}")
+        if params.remove_labels:
+            parts.append(f"Remove: {', '.join(params.remove_labels)}")
+        return " | ".join(parts)
+
+    async def execute(self, params: LabelEmailParams) -> ToolResult:
+        """Execute the label email tool.
+
+        Args:
+            params: Validated input parameters
+
+        Returns:
+            ToolResult: Result of labeling operation
+        """
+        try:
+            gmail_client = await self._get_gmail_client()
+
+            # Add labels if specified
+            if params.add_labels:
+                logger.info(f"Adding labels {params.add_labels} to {params.email_id}")
+                await gmail_client.add_labels(params.email_id, params.add_labels)
+
+            # Remove labels if specified
+            if params.remove_labels:
+                logger.info(f"Removing labels {params.remove_labels} from {params.email_id}")
+                await gmail_client.remove_labels(params.email_id, params.remove_labels)
+
+            return ToolResult.success_result(
+                data={
+                    "email_id": params.email_id,
+                    "added_labels": params.add_labels,
+                    "removed_labels": params.remove_labels,
+                    "message": "Labels updated successfully"
+                }
+            )
+
+        except Exception as e:
+            logger.error(f"Failed to update labels: {e}")
+            return ToolResult.error_result(error=f"Failed to update labels: {e}")
+
+
+class ArchiveEmailParams(BaseModel):
+    """Input for ArchiveEmailTool."""
+    email_id: str = Field(
+        description="Gmail message ID to archive"
+    )
+
+
+class ArchiveEmailTool(BaseTool[ArchiveEmailParams]):
+    """Archive an email (remove from INBOX).
+
+    Archiving removes the INBOX label, moving the email out of the inbox
+    while keeping it accessible via search and other labels.
+    """
+
+    name = "archive_email"
+    description = (
+        "Archive an email by removing it from the inbox. "
+        "The email will still be accessible via search and other labels. "
+        "Use this to clean up the inbox without deleting emails."
+    )
+    risk_level = RiskLevel.MEDIUM
+    parameters_schema = ArchiveEmailParams
+
+    def __init__(self):
+        """Initialize the archive email tool."""
+        super().__init__()
+        self._gmail_client: GmailClient | None = None
+
+    async def _get_gmail_client(self) -> GmailClient:
+        """Get or create Gmail client."""
+        if self._gmail_client is None:
+            settings = get_settings()
+            gmail_auth = GmailAuth(settings.gmail_credentials_dir)
+            self._gmail_client = GmailClient(gmail_auth)
+        return self._gmail_client
+
+    def get_confirmation_message(self, params: ArchiveEmailParams) -> str:
+        """Get confirmation message.
+
+        Args:
+            params: Validated parameters
+
+        Returns:
+            str: Confirmation message
+        """
+        return f"Archive email {params.email_id} (remove from inbox)"
+
+    async def execute(self, params: ArchiveEmailParams) -> ToolResult:
+        """Execute the archive email tool.
+
+        Args:
+            params: Validated input parameters
+
+        Returns:
+            ToolResult: Result of archiving operation
+        """
+        try:
+            gmail_client = await self._get_gmail_client()
+
+            logger.info(f"Archiving email {params.email_id}")
+            await gmail_client.archive_message(params.email_id)
+
+            return ToolResult.success_result(
+                data={
+                    "email_id": params.email_id,
+                    "message": "Email archived successfully"
+                }
+            )
+
+        except Exception as e:
+            logger.error(f"Failed to archive email: {e}")
+            return ToolResult.error_result(error=f"Failed to archive email: {e}")
+
+
+class CreateDraftParams(BaseModel):
+    """Input for CreateDraftTool."""
+    to: list[str] = Field(
+        description="List of recipient email addresses"
+    )
+    subject: str = Field(
+        description="Email subject"
+    )
+    body: str = Field(
+        description="Email body (plain text)"
+    )
+    cc: list[str] = Field(
+        default_factory=list,
+        description="List of CC recipient email addresses"
+    )
+    reply_to_id: str | None = Field(
+        default=None,
+        description="Optional message ID to reply to (for threading)"
+    )
+
+
+class CreateDraftTool(BaseTool[CreateDraftParams]):
+    """Create an email draft.
+
+    This tool creates a draft email that can be reviewed and sent later.
+    Drafts are saved to Gmail and can be edited in any email client.
+    """
+
+    name = "create_draft"
+    description = (
+        "Create an email draft. The draft will be saved to Gmail but not sent. "
+        "Use this to compose emails for later review and sending. "
+        "Provide recipient(s), subject, and body text."
+    )
+    risk_level = RiskLevel.LOW
+    parameters_schema = CreateDraftParams
+
+    def __init__(self):
+        """Initialize the create draft tool."""
+        super().__init__()
+        self._gmail_client: GmailClient | None = None
+
+    async def _get_gmail_client(self) -> GmailClient:
+        """Get or create Gmail client."""
+        if self._gmail_client is None:
+            settings = get_settings()
+            gmail_auth = GmailAuth(settings.gmail_credentials_dir)
+            self._gmail_client = GmailClient(gmail_auth)
+        return self._gmail_client
+
+    def get_confirmation_message(self, params: CreateDraftParams) -> str:
+        """Get confirmation message.
+
+        Args:
+            params: Validated parameters
+
+        Returns:
+            str: Confirmation message
+        """
+        to_str = ", ".join(params.to)
+        body_preview = params.body[:100] + "..." if len(params.body) > 100 else params.body
+        return f"Create draft to {to_str} | Subject: {params.subject} | Body: {body_preview}"
+
+    async def execute(self, params: CreateDraftParams) -> ToolResult:
+        """Execute the create draft tool.
+
+        Args:
+            params: Validated input parameters
+
+        Returns:
+            ToolResult: Result containing draft ID
+        """
+        try:
+            gmail_client = await self._get_gmail_client()
+
+            logger.info(f"Creating draft to {params.to}")
+            draft_id = await gmail_client.create_draft(
+                to=params.to,
+                subject=params.subject,
+                body=params.body,
+                cc=params.cc if params.cc else None,
+                reply_to_id=params.reply_to_id
+            )
+
+            return ToolResult.success_result(
+                data={
+                    "draft_id": draft_id,
+                    "to": params.to,
+                    "subject": params.subject,
+                    "message": "Draft created successfully"
+                }
+            )
+
+        except Exception as e:
+            logger.error(f"Failed to create draft: {e}")
+            return ToolResult.error_result(error=f"Failed to create draft: {e}")
+
+
+class SendEmailParams(BaseModel):
+    """Input for SendEmailTool."""
+    to: list[str] = Field(
+        description="List of recipient email addresses"
+    )
+    subject: str = Field(
+        description="Email subject"
+    )
+    body: str = Field(
+        description="Email body (plain text)"
+    )
+    cc: list[str] = Field(
+        default_factory=list,
+        description="List of CC recipient email addresses"
+    )
+    reply_to_id: str | None = Field(
+        default=None,
+        description="Optional message ID to reply to (for threading)"
+    )
+
+
+class SendEmailTool(BaseTool[SendEmailParams]):
+    """Send an email message.
+
+    This tool sends email directly through Gmail. It requires user confirmation
+    before sending to prevent accidental sends.
+    """
+
+    name = "send_email"
+    description = (
+        "Send an email message through Gmail. "
+        "Requires user confirmation before sending. "
+        "Provide recipient(s), subject, and body text. "
+        "Optionally include CC recipients and reply-to threading."
+    )
+    risk_level = RiskLevel.MEDIUM
+    parameters_schema = SendEmailParams
+
+    def __init__(self):
+        """Initialize the send email tool."""
+        super().__init__()
+        self._gmail_client: GmailClient | None = None
+
+    async def _get_gmail_client(self) -> GmailClient:
+        """Get or create Gmail client."""
+        if self._gmail_client is None:
+            settings = get_settings()
+            gmail_auth = GmailAuth(settings.gmail_credentials_dir)
+            self._gmail_client = GmailClient(gmail_auth)
+        return self._gmail_client
+
+    def get_confirmation_message(self, params: SendEmailParams) -> str:
+        """Get confirmation message.
+
+        Args:
+            params: Validated parameters
+
+        Returns:
+            str: Confirmation message with full email preview
+        """
+        lines = [
+            "Send email?",
+            f"To: {', '.join(params.to)}",
+        ]
+        if params.cc:
+            lines.append(f"CC: {', '.join(params.cc)}")
+        lines.append(f"Subject: {params.subject}")
+        lines.append("")  # Blank line
+
+        # Include body preview (first 500 chars)
+        body_preview = params.body[:500]
+        if len(params.body) > 500:
+            body_preview += "..."
+        lines.append(body_preview)
+
+        return "\n".join(lines)
+
+    async def execute(self, params: SendEmailParams) -> ToolResult:
+        """Execute the send email tool.
+
+        Args:
+            params: Validated input parameters
+
+        Returns:
+            ToolResult: Result containing sent message ID
+        """
+        try:
+            gmail_client = await self._get_gmail_client()
+
+            logger.info(f"Sending email to {params.to}")
+            message_id = await gmail_client.send_message(
+                to=params.to,
+                subject=params.subject,
+                body=params.body,
+                cc=params.cc if params.cc else None,
+                reply_to_id=params.reply_to_id
+            )
+
+            return ToolResult.success_result(
+                data={
+                    "message_id": message_id,
+                    "to": params.to,
+                    "subject": params.subject,
+                    "message": "Email sent successfully"
+                }
+            )
+
+        except Exception as e:
+            logger.error(f"Failed to send email: {e}")
+            return ToolResult.error_result(error=f"Failed to send email: {e}")

@@ -13,6 +13,14 @@ from aria.tools.email.tools import (
     SearchEmailsParams,
     ReadEmailTool,
     ReadEmailParams,
+    LabelEmailTool,
+    LabelEmailParams,
+    ArchiveEmailTool,
+    ArchiveEmailParams,
+    CreateDraftTool,
+    CreateDraftParams,
+    SendEmailTool,
+    SendEmailParams,
 )
 from aria.tools.email.models import EmailSummary, EmailDetail, AttachmentInfo
 from aria.tools.base import RiskLevel
@@ -290,3 +298,200 @@ class TestReadEmailTool:
 
             assert not result.success
             assert "Failed to read email" in result.error
+
+
+class TestLabelEmailTool:
+    """Tests for LabelEmailTool."""
+
+    def test_init(self):
+        """Test tool initialization."""
+        tool = LabelEmailTool()
+        assert tool.name == "label_email"
+        assert tool.risk_level == RiskLevel.MEDIUM
+        assert tool.parameters_schema == LabelEmailParams
+
+    def test_input_validation(self):
+        """Test input validation."""
+        # Valid input
+        input_data = {
+            "email_id": "test-email-1",
+            "add_labels": ["IMPORTANT"],
+            "remove_labels": ["UNREAD"]
+        }
+        validated = LabelEmailParams(**input_data)
+        assert validated.email_id == "test-email-1"
+        assert validated.add_labels == ["IMPORTANT"]
+        assert validated.remove_labels == ["UNREAD"]
+
+    @pytest.mark.asyncio
+    async def test_execute_add_labels(self):
+        """Test adding labels to email."""
+        tool = LabelEmailTool()
+
+        with patch.object(tool, '_get_gmail_client') as mock_get_client:
+            mock_client = AsyncMock()
+            mock_client.add_labels = AsyncMock(return_value=True)
+            mock_get_client.return_value = mock_client
+
+            input_data = LabelEmailParams(email_id="test-email-1", add_labels=["IMPORTANT"])
+            result = await tool.execute(input_data)
+
+            assert result.success
+            assert result.data["email_id"] == "test-email-1"
+            assert result.data["added_labels"] == ["IMPORTANT"]
+            mock_client.add_labels.assert_called_once_with("test-email-1", ["IMPORTANT"])
+
+    @pytest.mark.asyncio
+    async def test_execute_remove_labels(self):
+        """Test removing labels from email."""
+        tool = LabelEmailTool()
+
+        with patch.object(tool, '_get_gmail_client') as mock_get_client:
+            mock_client = AsyncMock()
+            mock_client.remove_labels = AsyncMock(return_value=True)
+            mock_get_client.return_value = mock_client
+
+            input_data = LabelEmailParams(email_id="test-email-1", remove_labels=["UNREAD"])
+            result = await tool.execute(input_data)
+
+            assert result.success
+            assert result.data["email_id"] == "test-email-1"
+            assert result.data["removed_labels"] == ["UNREAD"]
+            mock_client.remove_labels.assert_called_once_with("test-email-1", ["UNREAD"])
+
+
+class TestArchiveEmailTool:
+    """Tests for ArchiveEmailTool."""
+
+    def test_init(self):
+        """Test tool initialization."""
+        tool = ArchiveEmailTool()
+        assert tool.name == "archive_email"
+        assert tool.risk_level == RiskLevel.MEDIUM
+        assert tool.parameters_schema == ArchiveEmailParams
+
+    def test_input_validation(self):
+        """Test input validation."""
+        input_data = {"email_id": "test-email-1"}
+        validated = ArchiveEmailParams(**input_data)
+        assert validated.email_id == "test-email-1"
+
+    @pytest.mark.asyncio
+    async def test_execute_success(self):
+        """Test successful email archiving."""
+        tool = ArchiveEmailTool()
+
+        with patch.object(tool, '_get_gmail_client') as mock_get_client:
+            mock_client = AsyncMock()
+            mock_client.archive_message = AsyncMock(return_value=True)
+            mock_get_client.return_value = mock_client
+
+            input_data = ArchiveEmailParams(email_id="test-email-1")
+            result = await tool.execute(input_data)
+
+            assert result.success
+            assert result.data["email_id"] == "test-email-1"
+            mock_client.archive_message.assert_called_once_with("test-email-1")
+
+
+class TestCreateDraftTool:
+    """Tests for CreateDraftTool."""
+
+    def test_init(self):
+        """Test tool initialization."""
+        tool = CreateDraftTool()
+        assert tool.name == "create_draft"
+        assert tool.risk_level == RiskLevel.LOW
+        assert tool.parameters_schema == CreateDraftParams
+
+    def test_input_validation(self):
+        """Test input validation."""
+        input_data = {
+            "to": ["recipient@example.com"],
+            "subject": "Test Subject",
+            "body": "Test body"
+        }
+        validated = CreateDraftParams(**input_data)
+        assert validated.to == ["recipient@example.com"]
+        assert validated.subject == "Test Subject"
+        assert validated.body == "Test body"
+
+    @pytest.mark.asyncio
+    async def test_execute_success(self):
+        """Test successful draft creation."""
+        tool = CreateDraftTool()
+
+        with patch.object(tool, '_get_gmail_client') as mock_get_client:
+            mock_client = AsyncMock()
+            mock_client.create_draft = AsyncMock(return_value="draft-123")
+            mock_get_client.return_value = mock_client
+
+            input_data = CreateDraftParams(
+                to=["recipient@example.com"],
+                subject="Test",
+                body="Test body"
+            )
+            result = await tool.execute(input_data)
+
+            assert result.success
+            assert result.data["draft_id"] == "draft-123"
+            assert result.data["to"] == ["recipient@example.com"]
+            mock_client.create_draft.assert_called_once()
+
+
+class TestSendEmailTool:
+    """Tests for SendEmailTool."""
+
+    def test_init(self):
+        """Test tool initialization."""
+        tool = SendEmailTool()
+        assert tool.name == "send_email"
+        assert tool.risk_level == RiskLevel.MEDIUM
+        assert tool.parameters_schema == SendEmailParams
+
+    def test_input_validation(self):
+        """Test input validation."""
+        input_data = {
+            "to": ["recipient@example.com"],
+            "subject": "Test Subject",
+            "body": "Test body"
+        }
+        validated = SendEmailParams(**input_data)
+        assert validated.to == ["recipient@example.com"]
+        assert validated.subject == "Test Subject"
+        assert validated.body == "Test body"
+
+    @pytest.mark.asyncio
+    async def test_execute_success(self):
+        """Test successful email sending."""
+        tool = SendEmailTool()
+
+        with patch.object(tool, '_get_gmail_client') as mock_get_client:
+            mock_client = AsyncMock()
+            mock_client.send_message = AsyncMock(return_value="msg-123")
+            mock_get_client.return_value = mock_client
+
+            input_data = SendEmailParams(
+                to=["recipient@example.com"],
+                subject="Test",
+                body="Test body"
+            )
+            result = await tool.execute(input_data)
+
+            assert result.success
+            assert result.data["message_id"] == "msg-123"
+            assert result.data["to"] == ["recipient@example.com"]
+            mock_client.send_message.assert_called_once()
+
+    def test_confirmation_message(self):
+        """Test confirmation message generation."""
+        tool = SendEmailTool()
+        params = SendEmailParams(
+            to=["recipient@example.com"],
+            subject="Test Subject",
+            body="This is a test email body that should be truncated in the confirmation message if it's too long. " * 10
+        )
+        confirmation = tool.get_confirmation_message(params)
+        assert "recipient@example.com" in confirmation
+        assert "Test Subject" in confirmation
+        assert "..." in confirmation  # Body should be truncated

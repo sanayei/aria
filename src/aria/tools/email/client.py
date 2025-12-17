@@ -512,6 +512,231 @@ class GmailClient:
 
         return addresses
 
+    async def add_labels(self, message_id: str, label_ids: list[str]) -> bool:
+        """Add labels to a message.
+
+        Args:
+            message_id: Gmail message ID
+            label_ids: List of label IDs to add
+
+        Returns:
+            bool: True if successful
+
+        Raises:
+            GmailClientError: If operation fails
+        """
+        try:
+            service = await self._get_service()
+
+            service.users().messages().modify(
+                userId="me",
+                id=message_id,
+                body={"addLabelIds": label_ids}
+            ).execute()
+
+            logger.info(f"Added labels {label_ids} to message {message_id}")
+            return True
+
+        except HttpError as e:
+            logger.error(f"Gmail API error in add_labels: {e}")
+            raise GmailClientError(f"Failed to add labels: {e}") from e
+        except Exception as e:
+            logger.error(f"Unexpected error in add_labels: {e}")
+            raise GmailClientError(f"Failed to add labels: {e}") from e
+
+    async def remove_labels(self, message_id: str, label_ids: list[str]) -> bool:
+        """Remove labels from a message.
+
+        Args:
+            message_id: Gmail message ID
+            label_ids: List of label IDs to remove
+
+        Returns:
+            bool: True if successful
+
+        Raises:
+            GmailClientError: If operation fails
+        """
+        try:
+            service = await self._get_service()
+
+            service.users().messages().modify(
+                userId="me",
+                id=message_id,
+                body={"removeLabelIds": label_ids}
+            ).execute()
+
+            logger.info(f"Removed labels {label_ids} from message {message_id}")
+            return True
+
+        except HttpError as e:
+            logger.error(f"Gmail API error in remove_labels: {e}")
+            raise GmailClientError(f"Failed to remove labels: {e}") from e
+        except Exception as e:
+            logger.error(f"Unexpected error in remove_labels: {e}")
+            raise GmailClientError(f"Failed to remove labels: {e}") from e
+
+    async def archive_message(self, message_id: str) -> bool:
+        """Archive a message (remove INBOX label).
+
+        Args:
+            message_id: Gmail message ID
+
+        Returns:
+            bool: True if successful
+
+        Raises:
+            GmailClientError: If operation fails
+        """
+        return await self.remove_labels(message_id, ["INBOX"])
+
+    async def list_labels(self) -> list[dict[str, str]]:
+        """List all available labels.
+
+        Returns:
+            list[dict]: List of labels with id and name
+
+        Raises:
+            GmailClientError: If operation fails
+        """
+        try:
+            service = await self._get_service()
+
+            result = service.users().labels().list(userId="me").execute()
+            labels = result.get("labels", [])
+
+            return [
+                {"id": label["id"], "name": label["name"]}
+                for label in labels
+            ]
+
+        except HttpError as e:
+            logger.error(f"Gmail API error in list_labels: {e}")
+            raise GmailClientError(f"Failed to list labels: {e}") from e
+        except Exception as e:
+            logger.error(f"Unexpected error in list_labels: {e}")
+            raise GmailClientError(f"Failed to list labels: {e}") from e
+
+    async def create_draft(
+        self,
+        to: list[str],
+        subject: str,
+        body: str,
+        cc: list[str] | None = None,
+        reply_to_id: str | None = None,
+    ) -> str:
+        """Create an email draft.
+
+        Args:
+            to: List of recipient email addresses
+            subject: Email subject
+            body: Email body (plain text)
+            cc: Optional list of CC recipients
+            reply_to_id: Optional message ID to reply to
+
+        Returns:
+            str: Draft ID
+
+        Raises:
+            GmailClientError: If creation fails
+        """
+        try:
+            service = await self._get_service()
+
+            # Create MIME message
+            message = MIMEText(body)
+            message["To"] = ", ".join(to)
+            message["Subject"] = subject
+            if cc:
+                message["Cc"] = ", ".join(cc)
+
+            # Encode message
+            raw = base64.urlsafe_b64encode(message.as_bytes()).decode()
+
+            # Create draft body
+            draft_body = {"message": {"raw": raw}}
+
+            # Add thread ID if replying
+            if reply_to_id:
+                draft_body["message"]["threadId"] = reply_to_id
+
+            # Create draft
+            draft = service.users().drafts().create(
+                userId="me",
+                body=draft_body
+            ).execute()
+
+            draft_id = draft["id"]
+            logger.info(f"Created draft {draft_id}")
+            return draft_id
+
+        except HttpError as e:
+            logger.error(f"Gmail API error in create_draft: {e}")
+            raise GmailClientError(f"Failed to create draft: {e}") from e
+        except Exception as e:
+            logger.error(f"Unexpected error in create_draft: {e}")
+            raise GmailClientError(f"Failed to create draft: {e}") from e
+
+    async def send_message(
+        self,
+        to: list[str],
+        subject: str,
+        body: str,
+        cc: list[str] | None = None,
+        reply_to_id: str | None = None,
+    ) -> str:
+        """Send an email message.
+
+        Args:
+            to: List of recipient email addresses
+            subject: Email subject
+            body: Email body (plain text)
+            cc: Optional list of CC recipients
+            reply_to_id: Optional message ID to reply to
+
+        Returns:
+            str: Sent message ID
+
+        Raises:
+            GmailClientError: If sending fails
+        """
+        try:
+            service = await self._get_service()
+
+            # Create MIME message
+            message = MIMEText(body)
+            message["To"] = ", ".join(to)
+            message["Subject"] = subject
+            if cc:
+                message["Cc"] = ", ".join(cc)
+
+            # Encode message
+            raw = base64.urlsafe_b64encode(message.as_bytes()).decode()
+
+            # Create send body
+            send_body = {"raw": raw}
+
+            # Add thread ID if replying
+            if reply_to_id:
+                send_body["threadId"] = reply_to_id
+
+            # Send message
+            result = service.users().messages().send(
+                userId="me",
+                body=send_body
+            ).execute()
+
+            message_id = result["id"]
+            logger.info(f"Sent message {message_id}")
+            return message_id
+
+        except HttpError as e:
+            logger.error(f"Gmail API error in send_message: {e}")
+            raise GmailClientError(f"Failed to send message: {e}") from e
+        except Exception as e:
+            logger.error(f"Unexpected error in send_message: {e}")
+            raise GmailClientError(f"Failed to send message: {e}") from e
+
     def _parse_date(self, date_str: str) -> datetime:
         """Parse email date header.
 

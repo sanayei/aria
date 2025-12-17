@@ -7,6 +7,10 @@ from aria.tools.email.tools import (
     ListEmailsTool,
     SearchEmailsTool,
     ReadEmailTool,
+    LabelEmailTool,
+    ArchiveEmailTool,
+    CreateDraftTool,
+    SendEmailTool,
 )
 from aria.tools.email.models import (
     EmailSummary,
@@ -30,6 +34,10 @@ __all__ = [
     "ListEmailsTool",
     "SearchEmailsTool",
     "ReadEmailTool",
+    "LabelEmailTool",
+    "ArchiveEmailTool",
+    "CreateDraftTool",
+    "SendEmailTool",
     # Models
     "EmailSummary",
     "EmailDetail",

@@ -51,6 +51,10 @@ from aria.tools.email import (
     ListEmailsTool,
     SearchEmailsTool,
     ReadEmailTool,
+    LabelEmailTool,
+    ArchiveEmailTool,
+    CreateDraftTool,
+    SendEmailTool,
 )
 from aria.approval import ApprovalHandler
 from aria.logging import setup_logging
@@ -329,6 +333,14 @@ async def run_chat_loop(
         registry.register(SearchEmailsTool())
     if "read_email" not in registry:
         registry.register(ReadEmailTool())
+    if "label_email" not in registry:
+        registry.register(LabelEmailTool())
+    if "archive_email" not in registry:
+        registry.register(ArchiveEmailTool())
+    if "create_draft" not in registry:
+        registry.register(CreateDraftTool())
+    if "send_email" not in registry:
+        registry.register(SendEmailTool())
 
     console.info(f"Loaded {len(registry)} tool(s)")
     if verbose:
