@@ -22,7 +22,9 @@
       "Bash(wc:*)",
       "Bash(ls:*)",
       "Bash(xargs:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash($HOME/.local/bin/uv add:*)",
+      "Bash($HOME/.local/bin/uv remove:*)"
     ]
   }
 }

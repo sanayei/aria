@@ -30,7 +30,10 @@ dependencies = [
     # Document Processing & OCR
     "surya-ocr>=0.6",          # OCR with GPU acceleration for scanned documents
     "pdf2image>=1.17",         # Convert PDF pages to images for OCR
-    "Pillow>=10.2,<11.0",      # Image processing (compatible with surya-ocr)
+    "Pillow>=10.2,<11.0",
+    "beautifulsoup4>=4.14.3",
+    "lxml>=6.0.2",
+    "ddgs>=9.9.3",
 ]
 
 [project.optional-dependencies]

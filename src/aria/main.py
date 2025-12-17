@@ -56,6 +56,10 @@ from aria.tools.email import (
     CreateDraftTool,
     SendEmailTool,
 )
+from aria.tools.search import (
+    WebSearchTool,
+    FetchWebPageTool,
+)
 from aria.approval import ApprovalHandler
 from aria.logging import setup_logging
 
@@ -341,6 +345,12 @@ async def run_chat_loop(
         registry.register(CreateDraftTool())
     if "send_email" not in registry:
         registry.register(SendEmailTool())
+
+    # Search tools
+    if "web_search" not in registry:
+        registry.register(WebSearchTool())
+    if "fetch_webpage" not in registry:
+        registry.register(FetchWebPageTool())
 
     console.info(f"Loaded {len(registry)} tool(s)")
     if verbose:
