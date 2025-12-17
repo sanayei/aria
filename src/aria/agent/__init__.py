@@ -4,7 +4,7 @@ This module provides the agent core that orchestrates LLM calls,
 tool execution, and the Thought -> Action -> Observation loop.
 """
 
-from aria.agent.core import Agent, AgentError
+from aria.agent.core import Agent, AgentError, ToolCallRecord
 from aria.agent.executor import ToolExecutor, ToolExecutionError
 from aria.agent.planner import TaskPlanner, TaskAnalysis
 from aria.agent.prompts import (
@@ -18,6 +18,7 @@ __all__ = [
     # Core
     "Agent",
     "AgentError",
+    "ToolCallRecord",
     # Executor
     "ToolExecutor",
     "ToolExecutionError",

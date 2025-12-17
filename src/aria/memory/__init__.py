@@ -4,6 +4,7 @@ This module provides persistent storage for conversation history, sessions,
 messages, and tool calls using SQLite.
 """
 
+from aria.memory.context import context_to_chat_messages, messages_to_chat_messages
 from aria.memory.conversation import ConversationStore
 from aria.memory.exceptions import (
     DatabaseError,
@@ -39,4 +40,7 @@ __all__ = [
     "MessageNotFoundError",
     "SessionNotFoundError",
     "ToolCallNotFoundError",
+    # Context helpers
+    "context_to_chat_messages",
+    "messages_to_chat_messages",
 ]

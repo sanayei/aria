@@ -84,9 +84,17 @@ def cli(ctx: click.Context, verbose: bool, debug: bool, no_color: bool):
 @click.option("--verbose", "-v", is_flag=True, help="Enable verbose output")
 @click.option("--debug", "-d", is_flag=True, help="Enable debug mode (very detailed logging)")
 @click.option("--no-color", is_flag=True, help="Disable colored output")
-def chat(verbose: bool, debug: bool, no_color: bool):
+@click.option("--session", "-s", default=None, help="Resume existing session by ID")
+@click.option("--new", "-n", is_flag=True, help="Force new session (ignore existing)")
+def chat(verbose: bool, debug: bool, no_color: bool, session: str | None, new: bool):
     """Start interactive chat session (default command)."""
-    asyncio.run(run_chat_loop(verbose=verbose, debug=debug, no_color=no_color))
+    asyncio.run(run_chat_loop(
+        verbose=verbose,
+        debug=debug,
+        no_color=no_color,
+        session_id=session,
+        force_new=new,
+    ))
 
 
 @cli.command()
@@ -234,13 +242,21 @@ def undo(
 # =============================================================================
 
 
-async def run_chat_loop(verbose: bool = False, debug: bool = False, no_color: bool = False) -> None:
+async def run_chat_loop(
+    verbose: bool = False,
+    debug: bool = False,
+    no_color: bool = False,
+    session_id: str | None = None,
+    force_new: bool = False,
+) -> None:
     """Run the interactive chat loop.
 
     Args:
         verbose: Enable verbose output
         debug: Enable debug mode with detailed logging
         no_color: Disable colored output
+        session_id: Optional session ID to resume
+        force_new: Force creation of new session
     """
     # Setup logging based on flags
     if debug:
@@ -342,6 +358,14 @@ async def run_chat_loop(verbose: bool = False, debug: bool = False, no_color: bo
             if verbose:
                 console.debug(f"Registered document processing tools")
 
+            # Initialize conversation store
+            conversation_store = None
+            if settings.auto_save_conversations:
+                from aria.memory import ConversationStore
+                conversation_store = ConversationStore(settings.conversation_db_path)
+                await conversation_store.initialize()
+                logger.debug("Conversation store initialized")
+
             # Create agent
             approval_handler = ApprovalHandler(console)
             agent = Agent(
@@ -350,9 +374,31 @@ async def run_chat_loop(verbose: bool = False, debug: bool = False, no_color: bo
                 console=console,
                 approval_handler=approval_handler,
                 max_iterations=settings.agent_max_iterations,
+                conversation_store=conversation_store,
             )
 
             console.success(f"Agent initialized with {len(registry)} tools\n")
+
+            # Start or resume session
+            if conversation_store:
+                if force_new or session_id is None:
+                    # Create new session
+                    active_session_id = await agent.start_session()
+                    console.info(f"New session started: [cyan]{active_session_id}[/cyan]")
+                else:
+                    # Resume existing session
+                    try:
+                        active_session_id = await agent.start_session(session_id)
+                        session = await conversation_store.get_session(active_session_id)
+                        console.info(f"Session resumed: [cyan]{active_session_id}[/cyan]")
+                        console.info(f"Title: {session.title}")
+                        console.info(f"Messages: {session.message_count}")
+                    except Exception as e:
+                        console.error(f"Failed to resume session: {e}")
+                        console.info("Starting new session instead...")
+                        active_session_id = await agent.start_session()
+                        console.info(f"New session: [cyan]{active_session_id}[/cyan]")
+                console.print()  # Blank line
 
             # Show helpful commands
             console.print("[dim]Commands:[/dim]")
@@ -388,24 +434,29 @@ async def run_chat_loop(verbose: bool = False, debug: bool = False, no_color: bo
 
                     # Get response from agent
                     try:
-                        # Run agent with conversation history (excluding current message)
-                        response = await agent.run(
-                            user_message=user_input,
-                            conversation_history=conversation_history,
-                        )
+                        # Use chat() if we have a conversation store, otherwise run()
+                        if conversation_store:
+                            # chat() handles history loading and saving automatically
+                            response = await agent.chat(user_message=user_input)
+                        else:
+                            # Fall back to run() with in-memory history
+                            response, _ = await agent.run(
+                                user_message=user_input,
+                                conversation_history=conversation_history,
+                            )
+
+                            # Add to in-memory history
+                            if response and not _shutdown_requested:
+                                conversation_history.append(ChatMessage.user(user_input))
+                                conversation_history.append(ChatMessage.assistant(response))
+
+                            # Trim history if too long
+                            if len(conversation_history) > settings.aria_max_history:
+                                conversation_history = conversation_history[-settings.aria_max_history:]
 
                         # Display the response
                         if response and not _shutdown_requested:
                             console.assistant_message(response)
-
-                            # Add to history
-                            conversation_history.append(ChatMessage.user(user_input))
-                            conversation_history.append(ChatMessage.assistant(response))
-
-                        # Trim history if too long
-                        if len(conversation_history) > settings.aria_max_history:
-                            # Keep system messages and trim old user/assistant pairs
-                            conversation_history = conversation_history[-settings.aria_max_history:]
 
                     except OllamaConnectionError as e:
                         console.error("Connection to Ollama lost", exception=e)

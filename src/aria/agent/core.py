@@ -6,10 +6,11 @@ Thought → Action → Observation loop using LLM and tools.
 
 import logging
 import time
-from typing import AsyncIterator
+from typing import AsyncIterator, NamedTuple, Any
 
 from aria.llm import OllamaClient, ChatMessage
 from aria.tools.registry import ToolRegistry
+from aria.tools.base import ToolResult
 from aria.ui.console import ARIAConsole
 from aria.approval import ApprovalHandler
 from aria.agent.executor import ToolExecutor
@@ -20,6 +21,8 @@ from aria.agent.prompts import (
     format_approval_denied_message,
 )
 from aria.logging import get_logger, AsyncTimer
+from aria.memory import ConversationStore, MessageRole, ToolCallStatus
+from aria.memory.context import context_to_chat_messages
 
 logger = get_logger("aria.agent.core")
 
@@ -28,6 +31,18 @@ class AgentError(Exception):
     """Exception raised when agent execution fails."""
 
     pass
+
+
+class ToolCallRecord(NamedTuple):
+    """Record of a tool call execution.
+
+    This is used to track tool calls during agent execution so they
+    can be persisted to the conversation history database.
+    """
+    tool_name: str
+    tool_input: dict[str, Any]
+    result: ToolResult
+    execution_time_ms: float | None = None
 
 
 class Agent:
@@ -55,6 +70,7 @@ class Agent:
         console: ARIAConsole,
         approval_handler: ApprovalHandler | None = None,
         max_iterations: int = 10,
+        conversation_store: ConversationStore | None = None,
     ):
         """Initialize the agent.
 
@@ -64,11 +80,14 @@ class Agent:
             console: Console for user interaction
             approval_handler: Handler for tool approvals (creates default if None)
             max_iterations: Maximum number of ReAct loop iterations
+            conversation_store: Optional conversation store for history persistence
         """
         self.client = client
         self.registry = registry
         self.console = console
         self.max_iterations = max_iterations
+        self.conversation_store = conversation_store
+        self.current_session_id: str | None = None
 
         # Create approval handler if not provided
         if approval_handler is None:
@@ -84,11 +103,129 @@ class Agent:
             console=console,
         )
 
+    async def start_session(self, session_id: str | None = None, title: str | None = None) -> str:
+        """Start a new session or resume an existing one.
+
+        Args:
+            session_id: Optional session ID to resume. If None, creates new session.
+            title: Optional title for new session
+
+        Returns:
+            str: The session ID
+
+        Raises:
+            AgentError: If conversation store is not configured
+        """
+        if self.conversation_store is None:
+            raise AgentError("Cannot start session: conversation store not configured")
+
+        if session_id:
+            # Resume existing session
+            session = await self.conversation_store.get_session(session_id)
+            if session is None:
+                raise AgentError(f"Session not found: {session_id}")
+            self.current_session_id = session_id
+            logger.info("Session resumed", session_id=session_id, title=session.title)
+        else:
+            # Create new session
+            session = await self.conversation_store.create_session(title)
+            self.current_session_id = session.id
+            logger.info("New session created", session_id=session.id, title=session.title)
+
+        return self.current_session_id
+
+    async def chat(self, user_message: str) -> str:
+        """Process a message with automatic history persistence.
+
+        This is a convenience method that:
+        1. Loads conversation history from the current session
+        2. Saves the user message
+        3. Runs the agent
+        4. Saves the assistant response and tool calls
+        5. Returns the response
+
+        Args:
+            user_message: The user's input message
+
+        Returns:
+            str: The agent's response
+
+        Raises:
+            AgentError: If no session is active or conversation store not configured
+        """
+        if self.conversation_store is None:
+            # Fall back to run() without persistence
+            logger.warning("No conversation store - running without persistence")
+            response, _ = await self.run(user_message)
+            return response
+
+        if self.current_session_id is None:
+            raise AgentError("No active session. Call start_session() first.")
+
+        # Load conversation context from database
+        context = await self.conversation_store.get_context(
+            self.current_session_id,
+            max_messages=self.client.settings.max_context_messages,
+        )
+
+        # Convert to chat messages for LLM
+        conversation_history = context_to_chat_messages(context)
+
+        # Save user message to database
+        user_msg = await self.conversation_store.add_message(
+            self.current_session_id,
+            role="user",
+            content=user_message,
+        )
+
+        # Run the agent
+        response, tool_calls = await self.run(user_message, conversation_history)
+
+        # Save assistant response to database
+        assistant_msg = await self.conversation_store.add_message(
+            self.current_session_id,
+            role="assistant",
+            content=response,
+        )
+
+        # Save tool calls to database
+        for tool_call_record in tool_calls:
+            # Determine status based on result
+            if tool_call_record.result.success:
+                status = "success"
+                error_message = None
+                tool_output = {"data": tool_call_record.result.data}
+            else:
+                # Check if it was denied or just an error
+                if tool_call_record.result.error and "denied" in tool_call_record.result.error.lower():
+                    status = "denied"
+                else:
+                    status = "error"
+                error_message = tool_call_record.result.error
+                tool_output = None
+
+            await self.conversation_store.add_tool_call(
+                message_id=assistant_msg.id,
+                tool_name=tool_call_record.tool_name,
+                tool_input=tool_call_record.tool_input,
+                tool_output=tool_output,
+                status=status,
+                error_message=error_message,
+            )
+
+        logger.debug(
+            "Messages and tool calls saved to session",
+            session_id=self.current_session_id,
+            tool_calls_count=len(tool_calls),
+        )
+
+        return response
+
     async def run(
         self,
         user_message: str,
         conversation_history: list[ChatMessage] | None = None,
-    ) -> str:
+    ) -> tuple[str, list[ToolCallRecord]]:
         """Run the agent on a user message.
 
         Executes the ReAct loop:
@@ -99,14 +236,14 @@ class Agent:
            - Add results to context
            - Call LLM again with results
            - Repeat until no more tool calls or max iterations
-        4. Return final text response
+        4. Return final text response and tool call records
 
         Args:
             user_message: The user's input message
             conversation_history: Previous conversation messages (optional)
 
         Returns:
-            str: The agent's final response
+            tuple[str, list[ToolCallRecord]]: The agent's final response and tool call records
 
         Raises:
             AgentError: If agent execution fails
@@ -133,6 +270,9 @@ class Agent:
             tool_count=len(tools),
             tool_names=[t.function.get("name", "unknown") if isinstance(t.function, dict) else t.function.name for t in tools],
         )
+
+        # Track tool calls for conversation history
+        tool_call_records: list[ToolCallRecord] = []
 
         # ReAct loop
         iteration = 0
@@ -183,8 +323,18 @@ class Agent:
                         )
 
                         # Execute tool with timing
+                        tool_exec_start = time.perf_counter()
                         async with AsyncTimer(f"Tool execution: {tool_name}", logger):
                             result = await self.executor.execute(tool_name, arguments)
+                        tool_exec_elapsed = time.perf_counter() - tool_exec_start
+
+                        # Record tool call for conversation history
+                        tool_call_records.append(ToolCallRecord(
+                            tool_name=tool_name,
+                            tool_input=arguments,
+                            result=result,
+                            execution_time_ms=tool_exec_elapsed * 1000,
+                        ))
 
                         logger.info(
                             f"Tool {tool_name} complete",
@@ -274,9 +424,10 @@ class Agent:
             total_iterations=iteration,
             total_time_s=f"{run_elapsed:.3f}",
             response_length=len(final_response),
+            tool_calls_count=len(tool_call_records),
         )
 
-        return final_response
+        return final_response, tool_call_records
 
     async def stream_response(
         self,
