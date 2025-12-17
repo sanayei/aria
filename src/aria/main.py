@@ -7,9 +7,15 @@ including the interactive chat loop and utility commands.
 import asyncio
 import sys
 import signal
+from datetime import datetime, UTC, timedelta
+from pathlib import Path
 from typing import NoReturn
 
 import click
+from rich.table import Table
+from rich.panel import Panel
+from rich.syntax import Syntax
+from rich import box
 
 from aria import __version__
 from aria.config import get_settings
@@ -1172,6 +1178,495 @@ async def run_undo(
         if verbose:
             import traceback
             traceback.print_exc()
+        sys.exit(1)
+
+
+# ============================================================================
+# History Command Utilities
+# ============================================================================
+
+def format_relative_time(dt: datetime) -> str:
+    """Format a datetime as a relative time string.
+
+    Args:
+        dt: Datetime to format
+
+    Returns:
+        str: Relative time string like "2 hours ago", "Yesterday", etc.
+    """
+    now = datetime.now(UTC)
+
+    # Ensure dt is timezone-aware
+    if dt.tzinfo is None:
+        # Assume UTC if no timezone
+        dt = dt.replace(tzinfo=UTC)
+
+    diff = now - dt
+
+    if diff < timedelta(minutes=1):
+        return "Just now"
+    elif diff < timedelta(hours=1):
+        minutes = int(diff.total_seconds() / 60)
+        return f"{minutes} minute{'s' if minutes != 1 else ''} ago"
+    elif diff < timedelta(hours=24):
+        hours = int(diff.total_seconds() / 3600)
+        return f"{hours} hour{'s' if hours != 1 else ''} ago"
+    elif diff < timedelta(days=2):
+        return "Yesterday"
+    elif diff < timedelta(days=7):
+        days = diff.days
+        return f"{days} day{'s' if days != 1 else ''} ago"
+    elif diff < timedelta(days=30):
+        weeks = diff.days // 7
+        return f"{weeks} week{'s' if weeks != 1 else ''} ago"
+    elif diff < timedelta(days=365):
+        months = diff.days // 30
+        return f"{months} month{'s' if months != 1 else ''} ago"
+    else:
+        years = diff.days // 365
+        return f"{years} year{'s' if years != 1 else ''} ago"
+
+
+def truncate_text(text: str, max_length: int = 80) -> str:
+    """Truncate text to a maximum length with ellipsis.
+
+    Args:
+        text: Text to truncate
+        max_length: Maximum length (default 80)
+
+    Returns:
+        str: Truncated text with "..." if needed
+    """
+    if len(text) <= max_length:
+        return text
+    return text[:max_length - 3] + "..."
+
+
+# ============================================================================
+# History Commands
+# ============================================================================
+
+@cli.group()
+def history():
+    """Manage conversation history."""
+    pass
+
+
+@history.command("list")
+@click.option("--limit", "-n", default=10, help="Number of sessions to show (default: 10)")
+@click.option("--all", "-a", "show_all", is_flag=True, help="Show all sessions")
+@click.option("--no-color", is_flag=True, help="Disable colored output")
+def history_list(limit: int, show_all: bool, no_color: bool):
+    """List recent conversation sessions."""
+    asyncio.run(_history_list(limit=limit, show_all=show_all, no_color=no_color))
+
+
+async def _history_list(limit: int, show_all: bool, no_color: bool):
+    """Implementation of history list command."""
+    from aria.memory import ConversationStore
+
+    console = get_console(no_color=no_color)
+    settings = get_settings()
+
+    try:
+        # Initialize conversation store
+        store = ConversationStore(settings.conversation_db_path)
+        await store.initialize()
+
+        # Get sessions
+        actual_limit = None if show_all else limit
+        sessions = await store.list_sessions(limit=actual_limit or 1000, offset=0)
+
+        if not sessions:
+            console.console.print("\n[yellow]No conversation sessions found.[/yellow]")
+            console.console.print("\nStart a new conversation with: [cyan]aria chat[/cyan]\n")
+            await store.close()
+            return
+
+        # Create table
+        table = Table(
+            title=f"Recent Conversations ({len(sessions)} session{'s' if len(sessions) != 1 else ''})",
+            box=box.ROUNDED,
+            show_header=True,
+            header_style="bold cyan",
+        )
+
+        table.add_column("ID", style="dim", width=12)
+        table.add_column("Title", style="white", no_wrap=False, max_width=40)
+        table.add_column("Messages", justify="right", style="blue")
+        table.add_column("Last Updated", style="green")
+
+        # Add rows
+        for session in sessions:
+            session_id_short = session.id[:8]
+            title = truncate_text(session.title, 38)
+            msg_count = str(session.message_count)
+            last_updated = format_relative_time(session.updated_at)
+
+            table.add_row(session_id_short, title, msg_count, last_updated)
+
+        console.console.print()
+        console.console.print(table)
+        console.console.print()
+        console.console.print(f"[dim]Resume a session:[/dim] [cyan]aria resume <id>[/cyan]")
+        console.console.print(f"[dim]View session details:[/dim] [cyan]aria history show <id>[/cyan]")
+        console.console.print()
+
+        await store.close()
+
+    except Exception as e:
+        console.error(f"Failed to list sessions: {e}")
+        sys.exit(1)
+
+
+@history.command("show")
+@click.argument("session_id")
+@click.option("--messages", "-n", default=None, type=int, help="Number of messages to show (default: all)")
+@click.option("--no-color", is_flag=True, help="Disable colored output")
+def history_show(session_id: str, messages: int | None, no_color: bool):
+    """Show details of a specific conversation session."""
+    asyncio.run(_history_show(session_id=session_id, messages=messages, no_color=no_color))
+
+
+async def _history_show(session_id: str, messages: int | None, no_color: bool):
+    """Implementation of history show command."""
+    from aria.memory import ConversationStore
+
+    console = get_console(no_color=no_color)
+    settings = get_settings()
+
+    try:
+        # Initialize conversation store
+        store = ConversationStore(settings.conversation_db_path)
+        await store.initialize()
+
+        # Get session
+        session = await store.get_session(session_id)
+        if session is None:
+            console.error(f"Session not found: {session_id}")
+            await store.close()
+            sys.exit(1)
+
+        # Get context with messages and tool calls
+        context = await store.get_context(session.id, max_messages=messages)
+
+        # Display session header
+        console.console.print()
+        console.console.print(Panel(
+            f"[bold]{session.title}[/bold]\n\n"
+            f"[dim]Session ID:[/dim] {session.id}\n"
+            f"[dim]Created:[/dim] {session.created_at.strftime('%Y-%m-%d %H:%M:%S')}\n"
+            f"[dim]Updated:[/dim] {format_relative_time(session.updated_at)}\n"
+            f"[dim]Messages:[/dim] {session.message_count}",
+            title="Session Details",
+            border_style="cyan",
+        ))
+        console.console.print()
+
+        # Display messages
+        if not context.messages:
+            console.console.print("[yellow]No messages in this session.[/yellow]\n")
+        else:
+            for i, msg in enumerate(context.messages, 1):
+                # Determine style based on role
+                if msg.role.value == "user":
+                    role_style = "bold blue"
+                    border_style = "blue"
+                elif msg.role.value == "assistant":
+                    role_style = "bold green"
+                    border_style = "green"
+                else:
+                    role_style = "bold yellow"
+                    border_style = "yellow"
+
+                # Create message panel
+                content = msg.content
+
+                # Check if this message has tool calls
+                if msg.id in context.tool_calls:
+                    tool_calls_list = context.tool_calls[msg.id]
+                    if tool_calls_list:
+                        content += "\n\n[dim]─── Tool Calls ───[/dim]\n"
+                        for tc in tool_calls_list:
+                            status_icon = "✓" if tc.status.value == "success" else "✗"
+                            status_color = "green" if tc.status.value == "success" else "red"
+                            content += f"\n[{status_color}]{status_icon}[/{status_color}] [bold]{tc.tool_name}[/bold]"
+                            if tc.tool_input:
+                                import json
+                                input_str = json.dumps(tc.tool_input, indent=2)
+                                if len(input_str) > 200:
+                                    input_str = input_str[:200] + "..."
+                                content += f"\n[dim]{input_str}[/dim]"
+
+                console.console.print(Panel(
+                    content,
+                    title=f"[{role_style}]{msg.role.value.title()}[/{role_style}] ({msg.timestamp.strftime('%H:%M:%S')})",
+                    border_style=border_style,
+                ))
+                console.console.print()
+
+        console.console.print(f"[dim]Resume this session:[/dim] [cyan]aria resume {session_id}[/cyan]\n")
+
+        await store.close()
+
+    except Exception as e:
+        console.error(f"Failed to show session: {e}")
+        import traceback
+        traceback.print_exc()
+        sys.exit(1)
+
+
+@cli.command("resume")
+@click.argument("session_id")
+@click.option("--verbose", "-v", is_flag=True, help="Enable verbose output")
+@click.option("--debug", "-d", is_flag=True, help="Enable debug mode")
+@click.option("--no-color", is_flag=True, help="Disable colored output")
+def resume(session_id: str, verbose: bool, debug: bool, no_color: bool):
+    """Resume a previous conversation session (shortcut for 'chat --session')."""
+    # This is a convenience command that just invokes chat with --session
+    asyncio.run(run_chat_loop(
+        verbose=verbose,
+        debug=debug,
+        no_color=no_color,
+        session_id=session_id,
+        force_new=False,
+    ))
+
+
+@history.command("search")
+@click.argument("query")
+@click.option("--session", "-s", "session_id", default=None, help="Limit search to specific session")
+@click.option("--limit", "-n", default=10, help="Maximum number of results (default: 10)")
+@click.option("--no-color", is_flag=True, help="Disable colored output")
+def history_search(query: str, session_id: str | None, limit: int, no_color: bool):
+    """Search across conversation history."""
+    asyncio.run(_history_search(query=query, session_id=session_id, limit=limit, no_color=no_color))
+
+
+async def _history_search(query: str, session_id: str | None, limit: int, no_color: bool):
+    """Implementation of history search command."""
+    from aria.memory import ConversationStore
+
+    console = get_console(no_color=no_color)
+    settings = get_settings()
+
+    try:
+        # Initialize conversation store
+        store = ConversationStore(settings.conversation_db_path)
+        await store.initialize()
+
+        # Search messages
+        messages = await store.search_messages(query, session_id=session_id, limit=limit)
+
+        if not messages:
+            console.console.print(f"\n[yellow]No matches found for:[/yellow] '{query}'\n")
+            await store.close()
+            return
+
+        console.console.print(f"\n[bold green]Found {len(messages)} match{'es' if len(messages) != 1 else ''}:[/bold green]\n")
+
+        # Group messages by session
+        from collections import defaultdict
+        by_session = defaultdict(list)
+        for msg in messages:
+            by_session[msg.session_id].append(msg)
+
+        # Display results grouped by session
+        for sess_id, sess_messages in by_session.items():
+            # Get session info
+            session = await store.get_session(sess_id)
+            if session:
+                session_id_short = sess_id[:8]
+                time_ago = format_relative_time(session.updated_at)
+
+                console.console.print(f"[cyan bold][{session_id_short}][/cyan bold] {session.title} [dim]({time_ago})[/dim]")
+
+                for msg in sess_messages:
+                    # Find query in content (case-insensitive)
+                    content = msg.content
+                    lower_content = content.lower()
+                    lower_query = query.lower()
+
+                    # Find position of query
+                    pos = lower_content.find(lower_query)
+                    if pos != -1:
+                        # Extract context around match
+                        start = max(0, pos - 30)
+                        end = min(len(content), pos + len(query) + 30)
+                        excerpt = content[start:end]
+
+                        # Add ellipsis if truncated
+                        if start > 0:
+                            excerpt = "..." + excerpt
+                        if end < len(content):
+                            excerpt = excerpt + "..."
+
+                        # Highlight the query (simple approach)
+                        console.console.print(f"  [dim]{excerpt}[/dim]")
+
+                console.console.print()
+
+        await store.close()
+
+    except Exception as e:
+        console.error(f"Search failed: {e}")
+        sys.exit(1)
+
+
+@history.command("delete")
+@click.argument("session_id")
+@click.option("--force", "-f", is_flag=True, help="Skip confirmation prompt")
+@click.option("--no-color", is_flag=True, help="Disable colored output")
+def history_delete(session_id: str, force: bool, no_color: bool):
+    """Delete a conversation session."""
+    asyncio.run(_history_delete(session_id=session_id, force=force, no_color=no_color))
+
+
+async def _history_delete(session_id: str, force: bool, no_color: bool):
+    """Implementation of history delete command."""
+    from aria.memory import ConversationStore
+
+    console = get_console(no_color=no_color)
+    settings = get_settings()
+
+    try:
+        # Initialize conversation store
+        store = ConversationStore(settings.conversation_db_path)
+        await store.initialize()
+
+        # Get session to show what will be deleted
+        session = await store.get_session(session_id)
+        if session is None:
+            console.error(f"Session not found: {session_id}")
+            await store.close()
+            sys.exit(1)
+
+        # Confirm deletion unless --force
+        if not force:
+            console.console.print()
+            console.console.print(Panel(
+                f"[bold yellow]Warning:[/bold yellow] This will permanently delete:\n\n"
+                f"[bold]{session.title}[/bold]\n"
+                f"• {session.message_count} messages\n"
+                f"• All associated tool calls\n"
+                f"• Created: {session.created_at.strftime('%Y-%m-%d %H:%M:%S')}",
+                title="Confirm Deletion",
+                border_style="yellow",
+            ))
+            console.console.print()
+
+            confirmed = confirm("Are you sure you want to delete this session?", default=False)
+
+            if not confirmed:
+                console.console.print("[yellow]Deletion cancelled.[/yellow]\n")
+                await store.close()
+                return
+
+        # Delete session
+        deleted = await store.delete_session(session_id)
+
+        if deleted:
+            console.console.print(f"\n[green]✓ Session deleted successfully:[/green] {session.title}\n")
+        else:
+            console.error("Failed to delete session (may have already been deleted)")
+            sys.exit(1)
+
+        await store.close()
+
+    except Exception as e:
+        console.error(f"Delete failed: {e}")
+        sys.exit(1)
+
+
+@history.command("export")
+@click.argument("session_id")
+@click.option("--output", "-o", default=None, help="Output file path (default: <session_id>.md)")
+@click.option("--no-color", is_flag=True, help="Disable colored output")
+def history_export(session_id: str, output: str | None, no_color: bool):
+    """Export a conversation session to markdown."""
+    asyncio.run(_history_export(session_id=session_id, output=output, no_color=no_color))
+
+
+async def _history_export(session_id: str, output: str | None, no_color: bool):
+    """Implementation of history export command."""
+    from aria.memory import ConversationStore
+
+    console = get_console(no_color=no_color)
+    settings = get_settings()
+
+    try:
+        # Initialize conversation store
+        store = ConversationStore(settings.conversation_db_path)
+        await store.initialize()
+
+        # Get session
+        session = await store.get_session(session_id)
+        if session is None:
+            console.error(f"Session not found: {session_id}")
+            await store.close()
+            sys.exit(1)
+
+        # Get all messages
+        context = await store.get_context(session.id)
+
+        # Determine output file
+        if output is None:
+            output = f"{session_id}.md"
+
+        output_path = Path(output)
+
+        # Generate markdown
+        markdown_lines = []
+        markdown_lines.append(f"# {session.title}\n")
+        markdown_lines.append(f"**Session ID:** `{session.id}`  ")
+        markdown_lines.append(f"**Created:** {session.created_at.strftime('%Y-%m-%d %H:%M:%S')}  ")
+        markdown_lines.append(f"**Updated:** {session.updated_at.strftime('%Y-%m-%d %H:%M:%S')}  ")
+        markdown_lines.append(f"**Messages:** {session.message_count}  \n")
+        markdown_lines.append("---\n")
+
+        # Add messages
+        for msg in context.messages:
+            role_icon = "👤" if msg.role.value == "user" else "🤖"
+            markdown_lines.append(f"## {role_icon} {msg.role.value.title()}\n")
+            markdown_lines.append(f"*{msg.timestamp.strftime('%Y-%m-%d %H:%M:%S')}*\n")
+            markdown_lines.append(f"{msg.content}\n")
+
+            # Add tool calls if present
+            if msg.id in context.tool_calls:
+                tool_calls_list = context.tool_calls[msg.id]
+                if tool_calls_list:
+                    markdown_lines.append("\n### Tool Calls\n")
+                    for tc in tool_calls_list:
+                        status_icon = "✅" if tc.status.value == "success" else "❌"
+                        markdown_lines.append(f"**{status_icon} {tc.tool_name}**\n")
+
+                        if tc.tool_input:
+                            import json
+                            input_json = json.dumps(tc.tool_input, indent=2)
+                            markdown_lines.append(f"```json\n{input_json}\n```\n")
+
+                        if tc.status.value == "success" and tc.tool_output:
+                            output_json = json.dumps(tc.tool_output, indent=2)
+                            markdown_lines.append(f"**Output:**\n```json\n{output_json}\n```\n")
+                        elif tc.error_message:
+                            markdown_lines.append(f"**Error:** {tc.error_message}\n")
+
+                        markdown_lines.append("")
+
+            markdown_lines.append("---\n")
+
+        # Write to file
+        output_path.write_text("\n".join(markdown_lines))
+
+        console.console.print(f"\n[green]✓ Session exported successfully[/green]")
+        console.console.print(f"[dim]Output:[/dim] {output_path.absolute()}\n")
+
+        await store.close()
+
+    except Exception as e:
+        console.error(f"Export failed: {e}")
+        import traceback
+        traceback.print_exc()
         sys.exit(1)
 
 
