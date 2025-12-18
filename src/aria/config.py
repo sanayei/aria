@@ -102,6 +102,28 @@ class Settings(BaseSettings):
         default="aria_knowledge",
         description="ChromaDB collection name for knowledge base",
     )
+    embedding_provider: Literal["ollama", "sentence-transformers"] = Field(
+        default="ollama",
+        description="Embedding provider to use for semantic search",
+    )
+    embedding_model: str = Field(
+        default="nomic-embed-text",
+        description="Embedding model name (nomic-embed-text for Ollama, all-MiniLM-L6-v2 for sentence-transformers)",
+    )
+    enable_semantic_search: bool = Field(
+        default=True,
+        description="Enable semantic search over conversation history",
+    )
+    auto_index_conversations: bool = Field(
+        default=True,
+        description="Automatically index conversations for semantic search",
+    )
+    semantic_search_max_results: int = Field(
+        default=3,
+        description="Maximum number of relevant past conversations to retrieve",
+        ge=0,
+        le=10,
+    )
 
     # Email Configuration
     gmail_credentials_dir: Path = Field(
@@ -249,6 +271,8 @@ class Settings(BaseSettings):
             "db_path": str(self.db_path),
             "conversation_db_path": str(self.conversation_db_path),
             "chroma_path": str(self.chroma_path),
+            "embedding_provider": self.embedding_provider,
+            "embedding_model": self.embedding_model,
             "auto_approve_low_risk": self.tool_auto_approve_low_risk,
             "auto_save_conversations": self.auto_save_conversations,
             "max_context_messages": self.max_context_messages,

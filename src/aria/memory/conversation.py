@@ -48,15 +48,18 @@ class ConversationStore:
         await store.add_message(session.id, "user", "Hello!")
     """
 
-    def __init__(self, db_path: Path | None = None):
+    def __init__(self, db_path: Path | None = None, auto_index_callback: Any | None = None):
         """Initialize the conversation store.
 
         Args:
             db_path: Path to SQLite database file. If None, uses config default.
+            auto_index_callback: Optional async callback for auto-indexing messages.
+                                Should accept (session_id, message) and return None.
         """
         settings = get_settings()
         self.db_path = db_path or settings.conversation_db_path
         self._initialized = False
+        self._auto_index_callback = auto_index_callback
 
         logger.debug("ConversationStore initialized", db_path=str(self.db_path))
 
@@ -336,6 +339,15 @@ class ConversationStore:
             )
 
             logger.debug("Message added", message_id=message_id, session_id=session_id, role=role)
+
+            # Auto-index if callback is set
+            if self._auto_index_callback:
+                try:
+                    await self._auto_index_callback(session_id, message)
+                except Exception as e:
+                    # Log but don't fail - indexing is non-critical
+                    logger.warning(f"Auto-index failed for message {message_id}: {e}")
+
             return message
 
         except Exception as e:
