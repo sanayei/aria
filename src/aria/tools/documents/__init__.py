@@ -6,6 +6,8 @@ This module provides tools for:
 - Automated document organization by person and category
 - Batch processing of document inboxes
 - PDF analysis and extraction
+- Document ingestion and semantic search
+- Question-answering over documents using RAG
 """
 
 from aria.tools.documents.classifier import DocumentClassifier
@@ -31,6 +33,19 @@ from aria.tools.documents.process_inbox import (
     ProcessInboxTool,
 )
 from aria.tools.documents.processor import DocumentProcessor
+from aria.tools.documents.qa import DocumentQA, QAResponse, QASource
+from aria.tools.documents.tools import (
+    AskDocumentsParams,
+    AskDocumentsTool,
+    IngestDirectoryParams,
+    IngestDirectoryTool,
+    IngestDocumentParams,
+    IngestDocumentTool,
+    ListIngestedDocumentsParams,
+    ListIngestedDocumentsTool,
+    SearchDocumentsParams,
+    SearchDocumentsTool,
+)
 
 __all__ = [
     # Models - OCR/Classification
@@ -44,17 +59,35 @@ __all__ = [
     "PDFPage",
     "PDFDocument",
     "PDFComparison",
+    # Models - Q&A
+    "QAResponse",
+    "QASource",
     # Core classes
     "DocumentClassifier",
     "DocumentProcessor",
     "PDFExtractor",
     "PDFError",
-    # Tools
+    "DocumentQA",
+    # Tools - OCR/Processing
     "OCRTool",
     "ProcessDocumentTool",
     "ProcessInboxTool",
-    # Parameters
+    # Tools - Ingestion
+    "IngestDocumentTool",
+    "IngestDirectoryTool",
+    "SearchDocumentsTool",
+    "ListIngestedDocumentsTool",
+    # Tools - Q&A
+    "AskDocumentsTool",
+    # Parameters - OCR/Processing
     "OCRParams",
     "ProcessDocumentParams",
     "ProcessInboxParams",
+    # Parameters - Ingestion
+    "IngestDocumentParams",
+    "IngestDirectoryParams",
+    "SearchDocumentsParams",
+    "ListIngestedDocumentsParams",
+    # Parameters - Q&A
+    "AskDocumentsParams",
 ]

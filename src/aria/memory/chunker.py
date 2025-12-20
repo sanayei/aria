@@ -1,12 +1,14 @@
 """Document chunking for semantic search."""
 
 from pathlib import Path
-from typing import Any
+from typing import Any, TYPE_CHECKING
 
 from pydantic import BaseModel, Field
 
 from aria.logging import get_logger
-from aria.tools.documents.pdf_extractor import PDFExtractor
+
+if TYPE_CHECKING:
+    from aria.tools.documents.pdf_extractor import PDFExtractor
 
 logger = get_logger("aria.memory.chunker")
 
@@ -154,6 +156,9 @@ class DocumentChunker:
         metadata = metadata or {}
 
         try:
+            # Lazy import to avoid circular dependency
+            from aria.tools.documents.pdf_extractor import PDFExtractor
+
             # Extract pages with text
             pages = PDFExtractor.extract_pages(pdf_path)
 
