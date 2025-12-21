@@ -47,7 +47,8 @@ class ListEmailsTool(BaseTool[ListEmailsParams]):
     description = (
         "List recent emails from Gmail inbox or other folders. "
         "Returns email summaries with subject, sender, date, and preview. "
-        "Use this to see what emails the user has received."
+        "Use this to see what emails the user has received. "
+        "This tool is SUFFICIENT for showing the user their emails - no additional tools needed."
     )
     risk_level = RiskLevel.LOW
     parameters_schema = ListEmailsParams

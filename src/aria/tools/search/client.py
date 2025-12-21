@@ -107,7 +107,6 @@ class DuckDuckGoClient:
         with DDGS() as ddgs:
             # Build search parameters
             params: dict[str, Any] = {
-                "keywords": query,
                 "region": region,
                 "max_results": max_results,
             }
@@ -115,8 +114,8 @@ class DuckDuckGoClient:
             if time_range:
                 params["timelimit"] = time_range
 
-            # Execute search
-            results = ddgs.text(**params)
+            # Execute search - query is now a positional argument
+            results = ddgs.text(query, **params)
             return list(results)
 
     def _extract_domain(self, url: str) -> str:

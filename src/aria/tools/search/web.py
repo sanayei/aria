@@ -42,7 +42,8 @@ class WebSearchTool(BaseTool[WebSearchParams]):
     description = (
         "Search the web using DuckDuckGo. "
         "Returns relevant results with titles, URLs, and snippets. "
-        "Use this to find current information, research topics, or verify facts. "
+        "Use this ONLY when the user explicitly asks to search the web or look up information online. "
+        "DO NOT use this to research email subjects or content already provided by other tools. "
         "Supports time range filtering and region selection."
     )
     risk_level = RiskLevel.LOW

@@ -61,7 +61,9 @@ from aria.tools.search import (
     FetchWebPageTool,
 )
 from aria.approval import ApprovalHandler
-from aria.logging import setup_logging
+from aria.logging import setup_logging, get_logger
+
+logger = get_logger("aria.main")
 
 
 # Global flag for graceful shutdown
