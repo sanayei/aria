@@ -6,7 +6,7 @@ import re
 from datetime import date
 
 from aria.config import Settings
-from aria.llm import OllamaClient, ChatMessage
+from aria.llm import ChatMessage, OllamaClient
 from aria.logging import get_logger
 from aria.tools.documents.models import ClassificationResult
 from aria.tools.documents.prompts import format_classification_prompt
