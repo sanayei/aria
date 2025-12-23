@@ -147,9 +147,7 @@ def get_conversation_summary(context: ConversationContext) -> str:
     parts = []
 
     parts.append(f"Session: {context.session.title}")
-    parts.append(
-        f"Messages: {len(context.messages)} of {context.total_messages} total"
-    )
+    parts.append(f"Messages: {len(context.messages)} of {context.total_messages} total")
 
     if context.is_truncated:
         parts.append("(Context truncated - showing recent messages only)")

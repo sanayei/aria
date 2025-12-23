@@ -123,8 +123,7 @@ class OllamaClient:
             yield self._client
         except httpx.ConnectError as e:
             raise OllamaConnectionError(
-                f"Failed to connect to Ollama at {self.base_url}. "
-                f"Is Ollama running? Error: {e}"
+                f"Failed to connect to Ollama at {self.base_url}. Is Ollama running? Error: {e}"
             ) from e
         except httpx.TimeoutException as e:
             raise OllamaConnectionError(
@@ -272,6 +271,7 @@ class OllamaClient:
         model: str | None = None,
         temperature: float | None = None,
         max_tokens: int | None = None,
+        format: str | None = None,
         **options: Any,
     ) -> ChatResponse:
         """Send a chat completion request.
@@ -281,6 +281,7 @@ class OllamaClient:
             model: Model to use (defaults to client default)
             temperature: Sampling temperature
             max_tokens: Maximum tokens to generate
+            format: Response format ('json' for JSON-only output)
             **options: Additional model options
 
         Returns:
@@ -305,6 +306,7 @@ class OllamaClient:
             model=model,
             messages=messages,
             stream=False,
+            format=format,
             options=model_options,
         )
 
@@ -400,7 +402,10 @@ class OllamaClient:
         # Calculate sizes for logging
         prompt_size = sum(len(m.content or "") for m in messages)
         tools_json_size = len(str([t.model_dump() for t in tools]))
-        tool_names = [t.function.get("name", "unknown") if isinstance(t.function, dict) else t.function.name for t in tools]
+        tool_names = [
+            t.function.get("name", "unknown") if isinstance(t.function, dict) else t.function.name
+            for t in tools
+        ]
 
         logger.debug(
             "chat_with_tools() called",
@@ -508,6 +513,7 @@ class OllamaClient:
 
                     try:
                         import json
+
                         data = json.loads(line)
                         chunk = ChatResponse(**data)
                         yield chunk

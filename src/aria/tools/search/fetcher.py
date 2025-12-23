@@ -14,6 +14,7 @@ logger = get_logger("aria.tools.search.fetcher")
 
 class FetcherError(Exception):
     """Exception raised when fetching or parsing fails."""
+
     pass
 
 

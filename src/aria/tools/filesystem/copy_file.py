@@ -46,8 +46,7 @@ class CopyFileTool(BaseTool[CopyFileParams]):
 
             if destination.exists() and not params.overwrite:
                 return ToolResult.error_result(
-                    f"Destination already exists: {destination}. "
-                    "Set overwrite=true to replace it."
+                    f"Destination already exists: {destination}. Set overwrite=true to replace it."
                 )
 
             # Create destination directory if needed

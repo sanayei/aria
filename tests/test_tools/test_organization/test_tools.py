@@ -20,21 +20,24 @@ def temp_logs_dir(tmp_path, monkeypatch):
     logs_dir.mkdir()
 
     # Monkeypatch get_logs_directory to use temp directory
-    monkeypatch.setattr(
-        "aria.tools.organization.log_manager.get_logs_directory",
-        lambda: logs_dir
-    )
+    monkeypatch.setattr("aria.tools.organization.log_manager.get_logs_directory", lambda: logs_dir)
     monkeypatch.setattr(
         "aria.tools.organization.list_logs.list_organization_logs",
-        lambda: __import__("aria.tools.organization.log_manager", fromlist=["list_organization_logs"]).list_organization_logs()
+        lambda: __import__(
+            "aria.tools.organization.log_manager", fromlist=["list_organization_logs"]
+        ).list_organization_logs(),
     )
     monkeypatch.setattr(
         "aria.tools.organization.undo.load_organization_log",
-        lambda path: __import__("aria.tools.organization.log_manager", fromlist=["load_organization_log"]).load_organization_log(path)
+        lambda path: __import__(
+            "aria.tools.organization.log_manager", fromlist=["load_organization_log"]
+        ).load_organization_log(path),
     )
     monkeypatch.setattr(
         "aria.tools.organization.undo.get_most_recent_log",
-        lambda: __import__("aria.tools.organization.log_manager", fromlist=["get_most_recent_log"]).get_most_recent_log()
+        lambda: __import__(
+            "aria.tools.organization.log_manager", fromlist=["get_most_recent_log"]
+        ).get_most_recent_log(),
     )
 
     return logs_dir
@@ -79,12 +82,14 @@ class TestListOrganizationLogsTool:
         """Test listing logs when logs exist."""
         # Create test logs
         for i in range(3):
-            operations = [{
-                "source": f"/test/file{i}.txt",
-                "destination": f"/test/Documents/file{i}.txt",
-                "action": "move",
-                "status": "completed",
-            }]
+            operations = [
+                {
+                    "source": f"/test/file{i}.txt",
+                    "destination": f"/test/Documents/file{i}.txt",
+                    "action": "move",
+                    "status": "completed",
+                }
+            ]
 
             save_organization_log(
                 source_path=f"/test{i}",
@@ -118,12 +123,14 @@ class TestListOrganizationLogsTool:
         """Test limiting number of logs returned."""
         # Create 5 logs
         for i in range(5):
-            operations = [{
-                "source": f"/test/file{i}.txt",
-                "destination": f"/test/Documents/file{i}.txt",
-                "action": "move",
-                "status": "completed",
-            }]
+            operations = [
+                {
+                    "source": f"/test/file{i}.txt",
+                    "destination": f"/test/Documents/file{i}.txt",
+                    "action": "move",
+                    "status": "completed",
+                }
+            ]
 
             save_organization_log(
                 source_path="/test",
@@ -347,12 +354,14 @@ class TestUndoOrganizationTool:
         source_dir = organized_directory.parent
 
         # Create multiple logs
-        log1_ops = [{
-            "source": str(source_dir / "report.pdf"),
-            "destination": str(organized_directory / "Documents" / "report.pdf"),
-            "action": "move",
-            "status": "completed",
-        }]
+        log1_ops = [
+            {
+                "source": str(source_dir / "report.pdf"),
+                "destination": str(organized_directory / "Documents" / "report.pdf"),
+                "action": "move",
+                "status": "completed",
+            }
+        ]
 
         log1_path = save_organization_log(
             source_path=str(source_dir),
@@ -361,12 +370,14 @@ class TestUndoOrganizationTool:
             operations=log1_ops,
         )
 
-        log2_ops = [{
-            "source": str(source_dir / "photo.jpg"),
-            "destination": str(organized_directory / "Images" / "photo.jpg"),
-            "action": "move",
-            "status": "completed",
-        }]
+        log2_ops = [
+            {
+                "source": str(source_dir / "photo.jpg"),
+                "destination": str(organized_directory / "Images" / "photo.jpg"),
+                "action": "move",
+                "status": "completed",
+            }
+        ]
 
         save_organization_log(
             source_path=str(source_dir),

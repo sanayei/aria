@@ -187,9 +187,7 @@ class DocumentQA:
             page_num = result.metadata.get("page_number")
             page_info = f" (page {page_num})" if page_num else ""
 
-            context_parts.append(
-                f"[Source {i}: {file_name}{page_info}]\n{result.content}\n"
-            )
+            context_parts.append(f"[Source {i}: {file_name}{page_info}]\n{result.content}\n")
 
         return "\n".join(context_parts)
 
@@ -244,9 +242,7 @@ Answer:"""
 
         # Generate answer using LLM
         try:
-            messages = [
-                ChatMessage(role="user", content=prompt)
-            ]
+            messages = [ChatMessage(role="user", content=prompt)]
             response = await self._llm_client.chat(
                 messages=messages,
                 temperature=0.3,  # Lower temperature for more factual responses
@@ -309,6 +305,4 @@ Answer:"""
             metadata_filter=document_filter,
         )
 
-        return [
-            result for result in search_results if result.score >= self._min_relevance
-        ]
+        return [result for result in search_results if result.score >= self._min_relevance]

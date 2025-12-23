@@ -20,20 +20,15 @@ logger = get_logger("aria.tools.email.tools")
 
 class ListEmailsParams(BaseModel):
     """Input for ListEmailsTool."""
+
     folder: str = Field(
         default="INBOX",
-        description="Gmail label/folder to list emails from (e.g., INBOX, SENT, SPAM)"
+        description="Gmail label/folder to list emails from (e.g., INBOX, SENT, SPAM)",
     )
     max_results: int = Field(
-        default=10,
-        ge=1,
-        le=50,
-        description="Maximum number of emails to return"
+        default=10, ge=1, le=50, description="Maximum number of emails to return"
     )
-    unread_only: bool = Field(
-        default=False,
-        description="If True, only return unread emails"
-    )
+    unread_only: bool = Field(default=False, description="If True, only return unread emails")
 
 
 class ListEmailsTool(BaseTool[ListEmailsParams]):
@@ -111,7 +106,7 @@ class ListEmailsTool(BaseTool[ListEmailsParams]):
             emails = await gmail_client.list_messages(
                 label_ids=label_ids,
                 max_results=params.max_results,
-                include_spam_trash=params.folder.upper() in ["SPAM", "TRASH"]
+                include_spam_trash=params.folder.upper() in ["SPAM", "TRASH"],
             )
 
             # Cache results
@@ -123,7 +118,7 @@ class ListEmailsTool(BaseTool[ListEmailsParams]):
                     data={
                         "count": 0,
                         "emails": [],
-                        "message": f"No emails found in {params.folder}"
+                        "message": f"No emails found in {params.folder}",
                     }
                 )
 
@@ -156,14 +151,12 @@ class ListEmailsTool(BaseTool[ListEmailsParams]):
 
 class SearchEmailsParams(BaseModel):
     """Input for SearchEmailsTool."""
+
     query: str = Field(
         description="Gmail search query (supports Gmail search operators like 'from:', 'subject:', 'after:', etc.)"
     )
     max_results: int = Field(
-        default=10,
-        ge=1,
-        le=50,
-        description="Maximum number of emails to return"
+        default=10, ge=1, le=50, description="Maximum number of emails to return"
     )
 
 
@@ -236,10 +229,7 @@ class SearchEmailsTool(BaseTool[SearchEmailsParams]):
             cache = await self._get_email_cache()
 
             # Create query
-            query = GmailQuery(
-                query=params.query,
-                max_results=params.max_results
-            )
+            query = GmailQuery(query=params.query, max_results=params.max_results)
 
             # Search emails
             logger.info(f"Searching emails with query: {params.query}")
@@ -255,7 +245,7 @@ class SearchEmailsTool(BaseTool[SearchEmailsParams]):
                         "count": 0,
                         "emails": [],
                         "query": params.query,
-                        "message": f"No emails found matching query: {params.query}"
+                        "message": f"No emails found matching query: {params.query}",
                     }
                 )
 
@@ -288,12 +278,12 @@ class SearchEmailsTool(BaseTool[SearchEmailsParams]):
 
 class ReadEmailParams(BaseModel):
     """Input for ReadEmailTool."""
+
     email_id: str = Field(
         description="Gmail message ID to read (obtained from list_emails or search_emails)"
     )
     mark_as_read: bool = Field(
-        default=False,
-        description="If True, mark the email as read after reading"
+        default=False, description="If True, mark the email as read after reading"
     )
 
 
@@ -403,16 +393,13 @@ class ReadEmailTool(BaseTool[ReadEmailParams]):
 
 class LabelEmailParams(BaseModel):
     """Input for LabelEmailTool."""
-    email_id: str = Field(
-        description="Gmail message ID to label"
-    )
+
+    email_id: str = Field(description="Gmail message ID to label")
     add_labels: list[str] = Field(
-        default_factory=list,
-        description="List of label names to add (e.g., ['IMPORTANT', 'Work'])"
+        default_factory=list, description="List of label names to add (e.g., ['IMPORTANT', 'Work'])"
     )
     remove_labels: list[str] = Field(
-        default_factory=list,
-        description="List of label names to remove"
+        default_factory=list, description="List of label names to remove"
     )
 
 
@@ -488,7 +475,7 @@ class LabelEmailTool(BaseTool[LabelEmailParams]):
                     "email_id": params.email_id,
                     "added_labels": params.add_labels,
                     "removed_labels": params.remove_labels,
-                    "message": "Labels updated successfully"
+                    "message": "Labels updated successfully",
                 }
             )
 
@@ -499,9 +486,8 @@ class LabelEmailTool(BaseTool[LabelEmailParams]):
 
 class ArchiveEmailParams(BaseModel):
     """Input for ArchiveEmailTool."""
-    email_id: str = Field(
-        description="Gmail message ID to archive"
-    )
+
+    email_id: str = Field(description="Gmail message ID to archive")
 
 
 class ArchiveEmailTool(BaseTool[ArchiveEmailParams]):
@@ -560,10 +546,7 @@ class ArchiveEmailTool(BaseTool[ArchiveEmailParams]):
             await gmail_client.archive_message(params.email_id)
 
             return ToolResult.success_result(
-                data={
-                    "email_id": params.email_id,
-                    "message": "Email archived successfully"
-                }
+                data={"email_id": params.email_id, "message": "Email archived successfully"}
             )
 
         except Exception as e:
@@ -573,22 +556,13 @@ class ArchiveEmailTool(BaseTool[ArchiveEmailParams]):
 
 class CreateDraftParams(BaseModel):
     """Input for CreateDraftTool."""
-    to: list[str] = Field(
-        description="List of recipient email addresses"
-    )
-    subject: str = Field(
-        description="Email subject"
-    )
-    body: str = Field(
-        description="Email body (plain text)"
-    )
-    cc: list[str] = Field(
-        default_factory=list,
-        description="List of CC recipient email addresses"
-    )
+
+    to: list[str] = Field(description="List of recipient email addresses")
+    subject: str = Field(description="Email subject")
+    body: str = Field(description="Email body (plain text)")
+    cc: list[str] = Field(default_factory=list, description="List of CC recipient email addresses")
     reply_to_id: str | None = Field(
-        default=None,
-        description="Optional message ID to reply to (for threading)"
+        default=None, description="Optional message ID to reply to (for threading)"
     )
 
 
@@ -652,7 +626,7 @@ class CreateDraftTool(BaseTool[CreateDraftParams]):
                 subject=params.subject,
                 body=params.body,
                 cc=params.cc if params.cc else None,
-                reply_to_id=params.reply_to_id
+                reply_to_id=params.reply_to_id,
             )
 
             return ToolResult.success_result(
@@ -660,7 +634,7 @@ class CreateDraftTool(BaseTool[CreateDraftParams]):
                     "draft_id": draft_id,
                     "to": params.to,
                     "subject": params.subject,
-                    "message": "Draft created successfully"
+                    "message": "Draft created successfully",
                 }
             )
 
@@ -671,22 +645,13 @@ class CreateDraftTool(BaseTool[CreateDraftParams]):
 
 class SendEmailParams(BaseModel):
     """Input for SendEmailTool."""
-    to: list[str] = Field(
-        description="List of recipient email addresses"
-    )
-    subject: str = Field(
-        description="Email subject"
-    )
-    body: str = Field(
-        description="Email body (plain text)"
-    )
-    cc: list[str] = Field(
-        default_factory=list,
-        description="List of CC recipient email addresses"
-    )
+
+    to: list[str] = Field(description="List of recipient email addresses")
+    subject: str = Field(description="Email subject")
+    body: str = Field(description="Email body (plain text)")
+    cc: list[str] = Field(default_factory=list, description="List of CC recipient email addresses")
     reply_to_id: str | None = Field(
-        default=None,
-        description="Optional message ID to reply to (for threading)"
+        default=None, description="Optional message ID to reply to (for threading)"
     )
 
 
@@ -764,7 +729,7 @@ class SendEmailTool(BaseTool[SendEmailParams]):
                 subject=params.subject,
                 body=params.body,
                 cc=params.cc if params.cc else None,
-                reply_to_id=params.reply_to_id
+                reply_to_id=params.reply_to_id,
             )
 
             return ToolResult.success_result(
@@ -772,7 +737,7 @@ class SendEmailTool(BaseTool[SendEmailParams]):
                     "message_id": message_id,
                     "to": params.to,
                     "subject": params.subject,
-                    "message": "Email sent successfully"
+                    "message": "Email sent successfully",
                 }
             )
 

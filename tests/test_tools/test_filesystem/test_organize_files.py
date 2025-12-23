@@ -205,9 +205,7 @@ class TestOrganizeFilesTool:
                 assert "/" in op["destination"]
                 parts = Path(op["destination"]).parts
                 # Find year/month parts (YYYY and MM)
-                has_date_structure = any(
-                    len(part) == 4 and part.isdigit() for part in parts
-                )
+                has_date_structure = any(len(part) == 4 and part.isdigit() for part in parts)
                 assert has_date_structure
 
     @pytest.mark.asyncio

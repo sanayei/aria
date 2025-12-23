@@ -24,6 +24,52 @@ from aria.ui.console import ARIAConsole, get_console
 from aria.ui.prompts import confirm
 from aria.agent import Agent
 from aria.tools import get_registry
+
+# Global shutdown event for signal handling
+_shutdown_event = asyncio.Event()
+_shutting_down = False
+
+
+def setup_signal_handlers(console: ARIAConsole | None = None):
+    """Setup signal handlers for graceful shutdown."""
+    global _shutting_down
+
+    def signal_handler(signum, frame):
+        """Handle interrupt signals gracefully."""
+        global _shutting_down
+
+        if _shutting_down:
+            # Second interrupt - force exit
+            if console:
+                console.console.print("\n[red]Force exiting...[/red]")
+            sys.exit(130)
+
+        _shutting_down = True
+        sig_name = signal.Signals(signum).name
+
+        if console:
+            console.console.print(
+                f"\n[yellow]Received {sig_name}, cancelling operation...[/yellow]"
+            )
+        else:
+            print(f"\nReceived {sig_name}, cancelling...")
+
+        # Set shutdown event
+        _shutdown_event.set()
+
+        # Cancel all running tasks
+        try:
+            loop = asyncio.get_event_loop()
+            for task in asyncio.all_tasks(loop):
+                task.cancel()
+        except RuntimeError:
+            pass  # No event loop running
+
+    # Register handlers
+    signal.signal(signal.SIGINT, signal_handler)  # Ctrl+C
+    signal.signal(signal.SIGTERM, signal_handler)  # Kill signal
+
+
 from aria.tools.examples import EchoTool, SystemInfoTool
 from aria.tools.filesystem import (
     ListDirectoryTool,
@@ -59,6 +105,13 @@ from aria.tools.email import (
 from aria.tools.search import (
     WebSearchTool,
     FetchWebPageTool,
+)
+from aria.tools.scanner import (
+    ScanAndIndexTool,
+    SearchArchivedDocumentsTool,
+    ListArchivedDocumentsTool,
+    GetArchivedDocumentTool,
+    ArchiveStatisticsTool,
 )
 from aria.approval import ApprovalHandler
 from aria.logging import setup_logging, get_logger
@@ -109,13 +162,15 @@ def cli(ctx: click.Context, verbose: bool, debug: bool, no_color: bool):
 @click.option("--new", "-n", is_flag=True, help="Force new session (ignore existing)")
 def chat(verbose: bool, debug: bool, no_color: bool, session: str | None, new: bool):
     """Start interactive chat session (default command)."""
-    asyncio.run(run_chat_loop(
-        verbose=verbose,
-        debug=debug,
-        no_color=no_color,
-        session_id=session,
-        force_new=new,
-    ))
+    asyncio.run(
+        run_chat_loop(
+            verbose=verbose,
+            debug=debug,
+            no_color=no_color,
+            session_id=session,
+            force_new=new,
+        )
+    )
 
 
 @cli.command()
@@ -162,12 +217,27 @@ def test_timing(verbose: bool, debug: bool, no_color: bool):
 
 @cli.command()
 @click.argument("path", type=click.Path(exists=True))
-@click.option("--scheme", type=click.Choice(["category", "date", "extension", "date_category"]), default="category", help="Organization scheme")
-@click.option("--dest", type=click.Path(), default=None, help="Destination directory (default: same as source)")
+@click.option(
+    "--scheme",
+    type=click.Choice(["category", "date", "extension", "date_category"]),
+    default="category",
+    help="Organization scheme",
+)
+@click.option(
+    "--dest",
+    type=click.Path(),
+    default=None,
+    help="Destination directory (default: same as source)",
+)
 @click.option("--execute", is_flag=True, help="Actually organize files (default is dry run)")
 @click.option("--recursive", "-r", is_flag=True, help="Process subdirectories")
 @click.option("--no-hidden", is_flag=True, help="Skip hidden files")
-@click.option("--conflict", type=click.Choice(["skip", "rename"]), default="rename", help="Conflict resolution strategy")
+@click.option(
+    "--conflict",
+    type=click.Choice(["skip", "rename"]),
+    default="rename",
+    help="Conflict resolution strategy",
+)
 @click.option("--verbose", "-v", is_flag=True, help="Enable verbose output")
 @click.option("--no-color", is_flag=True, help="Disable colored output")
 def organize(
@@ -186,17 +256,19 @@ def organize(
     By default, runs in dry-run mode showing what would be done.
     Use --execute to actually move files.
     """
-    asyncio.run(run_organize(
-        path=path,
-        scheme=scheme,
-        dest=dest,
-        execute=execute,
-        recursive=recursive,
-        skip_hidden=no_hidden,
-        conflict=conflict,
-        verbose=verbose,
-        no_color=no_color,
-    ))
+    asyncio.run(
+        run_organize(
+            path=path,
+            scheme=scheme,
+            dest=dest,
+            execute=execute,
+            recursive=recursive,
+            skip_hidden=no_hidden,
+            conflict=conflict,
+            verbose=verbose,
+            no_color=no_color,
+        )
+    )
 
 
 @cli.command()
@@ -218,14 +290,16 @@ def analyze(
 
     Shows breakdown by category, top extensions, largest files, etc.
     """
-    asyncio.run(run_analyze(
-        path=path,
-        recursive=recursive,
-        detailed=detailed,
-        output_json=output_json,
-        verbose=verbose,
-        no_color=no_color,
-    ))
+    asyncio.run(
+        run_analyze(
+            path=path,
+            recursive=recursive,
+            detailed=detailed,
+            output_json=output_json,
+            verbose=verbose,
+            no_color=no_color,
+        )
+    )
 
 
 @cli.command()
@@ -248,14 +322,16 @@ def undo(
     By default, shows what would be undone (dry run).
     Use --execute to actually undo the operation.
     """
-    asyncio.run(run_undo(
-        list_logs=list_logs,
-        log_file=log,
-        execute=execute,
-        limit=limit,
-        verbose=verbose,
-        no_color=no_color,
-    ))
+    asyncio.run(
+        run_undo(
+            list_logs=list_logs,
+            log_file=log,
+            execute=execute,
+            limit=limit,
+            verbose=verbose,
+            no_color=no_color,
+        )
+    )
 
 
 # =============================================================================
@@ -354,6 +430,37 @@ async def run_chat_loop(
     if "fetch_webpage" not in registry:
         registry.register(FetchWebPageTool())
 
+    # Initialize scanner/archive infrastructure
+    vector_store = None
+    archive_index = None
+    try:
+        from aria.memory import VectorStore, ArchiveIndex
+        from aria.memory.embeddings import OllamaEmbeddings
+
+        # Initialize embedding provider
+        embedding_provider = OllamaEmbeddings(
+            model=settings.embedding_model,
+            host=settings.ollama_host,
+        )
+
+        # Initialize vector store for document embeddings
+        vector_store = VectorStore(
+            persist_directory=settings.chroma_path,
+            embedding_provider=embedding_provider,
+            collection_name="archived_documents",
+        )
+        await vector_store.initialize()
+
+        # Initialize archive index database
+        archive_index = ArchiveIndex(db_path=settings.archive_db_path)
+        await archive_index.initialize()
+
+        if verbose:
+            console.debug("Initialized vector store and archive index")
+    except Exception as e:
+        logger.warning(f"Failed to initialize scanner infrastructure: {e}")
+        # Continue without scanner tools if initialization fails
+
     console.info(f"Loaded {len(registry)} tool(s)")
     if verbose:
         for tool_name in registry.get_tool_names():
@@ -401,10 +508,66 @@ async def run_chat_loop(
             if verbose:
                 console.debug(f"Registered document processing tools")
 
+            # Register scanner tools (if infrastructure initialized)
+            if vector_store and archive_index:
+                if "scan_and_index" not in registry:
+                    # Create document ingester
+                    from aria.memory import DocumentIngester
+
+                    doc_ingester = DocumentIngester(vector_store=vector_store)
+
+                    # Reuse doc_processor from process_document tool
+                    if "process_document" in registry:
+                        process_doc_tool = registry.get("process_document")
+                        doc_processor = process_doc_tool.processor
+                    else:
+                        # Create new processor if needed
+                        doc_classifier = DocumentClassifier(client, settings)
+                        doc_processor = DocumentProcessor(
+                            ocr_tool=OCRTool(),
+                            classifier=doc_classifier,
+                            settings=settings,
+                        )
+
+                    registry.register(
+                        ScanAndIndexTool(
+                            processor=doc_processor,
+                            ingester=doc_ingester,
+                            archive_index=archive_index,
+                            settings=settings,
+                        )
+                    )
+
+                if "search_archived_documents" not in registry:
+                    registry.register(
+                        SearchArchivedDocumentsTool(
+                            vector_store=vector_store,
+                            archive_index=archive_index,
+                        )
+                    )
+
+                if "list_archived_documents" not in registry:
+                    registry.register(ListArchivedDocumentsTool(archive_index=archive_index))
+
+                if "get_archived_document" not in registry:
+                    registry.register(
+                        GetArchivedDocumentTool(
+                            archive_index=archive_index,
+                            vector_store=vector_store,
+                        )
+                    )
+
+                if "archive_statistics" not in registry:
+                    registry.register(ArchiveStatisticsTool(archive_index=archive_index))
+
+                if verbose:
+                    console.debug(f"Registered scanner/archive tools")
+
             # Initialize conversation store
             conversation_store = None
             if settings.auto_save_conversations:
                 from aria.memory import ConversationStore
+
                 conversation_store = ConversationStore(settings.conversation_db_path)
                 await conversation_store.initialize()
                 logger.debug("Conversation store initialized")
@@ -495,7 +658,9 @@ async def run_chat_loop(
 
                             # Trim history if too long
                             if len(conversation_history) > settings.aria_max_history:
-                                conversation_history = conversation_history[-settings.aria_max_history:]
+                                conversation_history = conversation_history[
+                                    -settings.aria_max_history :
+                                ]
 
                         # Display the response
                         if response and not _shutdown_requested:
@@ -569,9 +734,7 @@ async def list_models(verbose: bool = False, debug: bool = False, no_color: bool
                 name = model.name
                 size = f"{model.size_gb:.2f} GB" if model.size_gb else "Unknown"
                 modified = (
-                    model.modified_at.strftime("%Y-%m-%d %H:%M")
-                    if model.modified_at
-                    else "Unknown"
+                    model.modified_at.strftime("%Y-%m-%d %H:%M") if model.modified_at else "Unknown"
                 )
                 model_data.append((name, size, modified))
 
@@ -661,7 +824,9 @@ def show_config(verbose: bool = False, debug: bool = False, no_color: bool = Fal
         console.console.print(f"  - .env file (if present)")
 
 
-async def run_timing_test(verbose: bool = False, debug: bool = False, no_color: bool = False) -> None:
+async def run_timing_test(
+    verbose: bool = False, debug: bool = False, no_color: bool = False
+) -> None:
     """Run timing tests to diagnose performance issues.
 
     Args:
@@ -734,7 +899,10 @@ async def run_timing_test(verbose: bool = False, debug: bool = False, no_color: 
                     parameters={
                         "type": "object",
                         "properties": {
-                            "expression": {"type": "string", "description": "Mathematical expression to evaluate"},
+                            "expression": {
+                                "type": "string",
+                                "description": "Mathematical expression to evaluate",
+                            },
                         },
                         "required": ["expression"],
                     },
@@ -742,7 +910,9 @@ async def run_timing_test(verbose: bool = False, debug: bool = False, no_color: 
 
             # Test with different tool counts
             for tool_count in [1, 3, 5, 9]:
-                console.console.print(f"[yellow]Test 3.{tool_count}: Chat with {tool_count} tools[/yellow]")
+                console.console.print(
+                    f"[yellow]Test 3.{tool_count}: Chat with {tool_count} tools[/yellow]"
+                )
                 # Always include the time tool + additional dummy tools
                 tools = [create_time_tool()] + [create_dummy_tool(i) for i in range(tool_count - 1)]
                 messages = [ChatMessage.user("What time is it?")]
@@ -753,12 +923,18 @@ async def run_timing_test(verbose: bool = False, debug: bool = False, no_color: 
 
                 console.success(f"Chat with {tool_count} tools: {elapsed:.3f}s")
                 if response.has_tool_calls:
-                    console.console.print(f"[dim]✓ Tool calls: {len(response.message.tool_calls)}[/dim]")
+                    console.console.print(
+                        f"[dim]✓ Tool calls: {len(response.message.tool_calls)}[/dim]"
+                    )
                     # Show which tools were called
                     for tc in response.message.tool_calls:
-                        console.console.print(f"[dim]  → {tc.function.name}({tc.function.arguments})[/dim]")
+                        console.console.print(
+                            f"[dim]  → {tc.function.name}({tc.function.arguments})[/dim]"
+                        )
                 else:
-                    console.console.print(f"[dim]✗ No tool calls - Response: {response.message.content[:100]}...[/dim]")
+                    console.console.print(
+                        f"[dim]✗ No tool calls - Response: {response.message.content[:100]}...[/dim]"
+                    )
                 console.console.print()
 
             # Test 4: Actual ARIA agent with real tools
@@ -780,18 +956,24 @@ async def run_timing_test(verbose: bool = False, debug: bool = False, no_color: 
             tools = registry.get_tools_for_ollama()
             console.info(f"Testing with {len(tools)} real tools")
 
-            messages = [ChatMessage.user("What time is it and what operating system are we running on?")]
+            messages = [
+                ChatMessage.user("What time is it and what operating system are we running on?")
+            ]
             start = time.perf_counter()
             response = await client.chat_with_tools(messages=messages, tools=tools)
             elapsed = time.perf_counter() - start
 
             console.success(f"Chat with {len(tools)} real tools: {elapsed:.3f}s")
             if response.has_tool_calls:
-                console.console.print(f"[dim]✓ Tool calls: {len(response.message.tool_calls)}[/dim]")
+                console.console.print(
+                    f"[dim]✓ Tool calls: {len(response.message.tool_calls)}[/dim]"
+                )
                 for tc in response.message.tool_calls:
                     console.console.print(f"[dim]  → {tc.function.name}[/dim]")
             else:
-                console.console.print(f"[dim]✗ No tool calls - Response: {response.message.content[:100]}...[/dim]")
+                console.console.print(
+                    f"[dim]✗ No tool calls - Response: {response.message.content[:100]}...[/dim]"
+                )
             console.console.print()
 
             # Summary
@@ -799,9 +981,15 @@ async def run_timing_test(verbose: bool = False, debug: bool = False, no_color: 
             console.console.print("\n[bold]Key Insights:[/bold]")
             console.console.print("  • Compare timing across different tool counts")
             console.console.print("  • Large tool schemas may cause slow LLM processing")
-            console.console.print("  • Debug logs (--debug) show detailed timing for each component")
-            console.console.print("  • Tool descriptions matter: model won't call tools that don't match the query")
-            console.console.print("\n[bold yellow]Note:[/bold yellow] qwen3:30b-a3b includes 'thinking' in responses even with think=False")
+            console.console.print(
+                "  • Debug logs (--debug) show detailed timing for each component"
+            )
+            console.console.print(
+                "  • Tool descriptions matter: model won't call tools that don't match the query"
+            )
+            console.console.print(
+                "\n[bold yellow]Note:[/bold yellow] qwen3:30b-a3b includes 'thinking' in responses even with think=False"
+            )
 
     except OllamaConnectionError as e:
         console.error("Failed to connect to Ollama", exception=e)
@@ -868,14 +1056,16 @@ async def run_organize(
 
         if not execute:
             # Dry run - show what would be done
-            console.console.print(Panel(
-                f"[bold]Summary[/bold]\n\n"
-                f"Total files: {summary['total_files']}\n"
-                f"To move: {summary.get('to_move', 0)}\n"
-                f"To skip: {summary.get('to_skip', 0)}",
-                title="Dry Run Results",
-                border_style="yellow",
-            ))
+            console.console.print(
+                Panel(
+                    f"[bold]Summary[/bold]\n\n"
+                    f"Total files: {summary['total_files']}\n"
+                    f"To move: {summary.get('to_move', 0)}\n"
+                    f"To skip: {summary.get('to_skip', 0)}",
+                    title="Dry Run Results",
+                    border_style="yellow",
+                )
+            )
 
             # Show by destination
             if summary.get("by_destination"):
@@ -904,14 +1094,16 @@ async def run_organize(
 
         else:
             # Actual execution - show results
-            console.console.print(Panel(
-                f"[bold]Summary[/bold]\n\n"
-                f"Total files: {summary['total_files']}\n"
-                f"Completed: {summary.get('completed', 0)} ✓\n"
-                f"Errors: {summary.get('errors', 0)} ✗",
-                title="Organization Complete",
-                border_style="green" if summary.get("errors", 0) == 0 else "yellow",
-            ))
+            console.console.print(
+                Panel(
+                    f"[bold]Summary[/bold]\n\n"
+                    f"Total files: {summary['total_files']}\n"
+                    f"Completed: {summary.get('completed', 0)} ✓\n"
+                    f"Errors: {summary.get('errors', 0)} ✗",
+                    title="Organization Complete",
+                    border_style="green" if summary.get("errors", 0) == 0 else "yellow",
+                )
+            )
 
             # Show by destination
             if summary.get("by_destination"):
@@ -934,6 +1126,7 @@ async def run_organize(
         console.error(f"Organize command failed: {e}")
         if verbose:
             import traceback
+
             traceback.print_exc()
         sys.exit(1)
 
@@ -983,14 +1176,16 @@ async def run_analyze(
         console.console.print(f"Path: {data['path']}")
         console.console.print()
 
-        console.console.print(Panel(
-            f"[bold]Summary[/bold]\n\n"
-            f"Total files: {data['total_files']}\n"
-            f"Total size: {data['total_size_human']}\n"
-            f"Permission errors: {data.get('permission_errors', 0)}",
-            title="Statistics",
-            border_style="cyan",
-        ))
+        console.console.print(
+            Panel(
+                f"[bold]Summary[/bold]\n\n"
+                f"Total files: {data['total_files']}\n"
+                f"Total size: {data['total_size_human']}\n"
+                f"Permission errors: {data.get('permission_errors', 0)}",
+                title="Statistics",
+                border_style="cyan",
+            )
+        )
 
         # Show categories
         if data.get("categories"):
@@ -1025,6 +1220,7 @@ async def run_analyze(
 
             for ext, info in list(data["by_extension"].items())[:10]:
                 from aria.tools.filesystem.analyze_file import format_size
+
                 table.add_row(
                     ext,
                     str(info["count"]),
@@ -1045,7 +1241,9 @@ async def run_analyze(
         if data.get("potential_duplicates") and len(data["potential_duplicates"]) > 0 and detailed:
             console.console.print(f"\n[bold yellow]Potential Duplicates:[/bold yellow]")
             for dup in data["potential_duplicates"][:5]:
-                console.console.print(f"\n  {dup['name']} ({dup['size_human']}) - {dup['count']} copies:")
+                console.console.print(
+                    f"\n  {dup['name']} ({dup['size_human']}) - {dup['count']} copies:"
+                )
                 for loc in dup["locations"][:3]:
                     console.console.print(f"    • {loc}")
 
@@ -1053,6 +1251,7 @@ async def run_analyze(
         console.error(f"Analyze command failed: {e}")
         if verbose:
             import traceback
+
             traceback.print_exc()
         sys.exit(1)
 
@@ -1137,7 +1336,9 @@ async def run_undo(
                 )
 
             console.console.print(table)
-            console.console.print("\n[dim]Use 'aria undo --log <log_file> --execute' to undo a specific operation[/dim]")
+            console.console.print(
+                "\n[dim]Use 'aria undo --log <log_file> --execute' to undo a specific operation[/dim]"
+            )
             return
 
         # Undo operation
@@ -1167,13 +1368,15 @@ async def run_undo(
 
         if not execute:
             # Dry run
-            console.console.print(Panel(
-                f"[bold]Summary[/bold]\n\n"
-                f"Can undo: {summary['can_undo']}\n"
-                f"Cannot undo: {summary['cannot_undo']}",
-                title="Undo Preview",
-                border_style="yellow",
-            ))
+            console.console.print(
+                Panel(
+                    f"[bold]Summary[/bold]\n\n"
+                    f"Can undo: {summary['can_undo']}\n"
+                    f"Cannot undo: {summary['cannot_undo']}",
+                    title="Undo Preview",
+                    border_style="yellow",
+                )
+            )
 
             # Show what can be undone
             if data.get("can_undo") and verbose:
@@ -1190,37 +1393,802 @@ async def run_undo(
                     console.console.print(f"  • {src_name}: {op['reason']}")
 
             if summary["can_undo"] > 0:
-                console.console.print("\n[dim]Run with --execute to actually undo the organization[/dim]")
+                console.console.print(
+                    "\n[dim]Run with --execute to actually undo the organization[/dim]"
+                )
 
         else:
             # Actual undo
-            console.console.print(Panel(
-                f"[bold]Summary[/bold]\n\n"
-                f"Undone: {summary['undone']} ✓\n"
-                f"Failed: {summary['failed']} ✗\n"
-                f"Cannot undo: {summary['cannot_undo']} ⊘",
-                title="Undo Complete",
-                border_style="green" if summary['failed'] == 0 else "yellow",
-            ))
+            console.console.print(
+                Panel(
+                    f"[bold]Summary[/bold]\n\n"
+                    f"Undone: {summary['undone']} ✓\n"
+                    f"Failed: {summary['failed']} ✗\n"
+                    f"Cannot undo: {summary['cannot_undo']} ⊘",
+                    title="Undo Complete",
+                    border_style="green" if summary["failed"] == 0 else "yellow",
+                )
+            )
 
             # Show failures if any
             if data.get("failed"):
                 console.console.print("\n[bold red]Failed:[/bold red]")
                 for op in data["failed"]:
                     src_name = Path(op["source"]).name
-                    console.console.print(f"  • {src_name}: {op.get('error_message', 'Unknown error')}")
+                    console.console.print(
+                        f"  • {src_name}: {op.get('error_message', 'Unknown error')}"
+                    )
 
     except Exception as e:
         console.error(f"Undo command failed: {e}")
         if verbose:
             import traceback
+
             traceback.print_exc()
         sys.exit(1)
+
+
+# =============================================================================
+# Scanner/Archive Command Implementations
+# =============================================================================
+
+
+async def run_scan_process(
+    directory: str | None,
+    pattern: str,
+    limit: int | None,
+    execute: bool,
+    verbose: bool,
+    no_color: bool,
+) -> None:
+    """Run the scan and process command."""
+    from aria.tools.scanner import ScanAndIndexTool, ScanAndIndexParams
+    from aria.memory import VectorStore, ArchiveIndex
+
+    console = get_console(no_color=no_color, verbose=verbose)
+    settings = get_settings()
+
+    # Setup signal handlers for graceful shutdown
+    setup_signal_handlers(console)
+
+    # Use configured directory if not specified
+    scan_dir = directory if directory else str(settings.scan_directory)
+
+    try:
+        # Initialize infrastructure
+        console.info("Initializing scanner infrastructure...")
+
+        from aria.memory.embeddings import OllamaEmbeddings
+
+        # Initialize embedding provider
+        embedding_provider = OllamaEmbeddings(
+            model=settings.embedding_model,
+            host=settings.ollama_host,
+        )
+
+        vector_store = VectorStore(
+            persist_directory=settings.chroma_path,
+            embedding_provider=embedding_provider,
+            collection_name="archived_documents",
+        )
+        await vector_store.initialize()
+
+        archive_index = ArchiveIndex(db_path=settings.archive_db_path)
+        await archive_index.initialize()
+
+        # Create document ingester
+        from aria.memory import DocumentIngester
+
+        doc_ingester = DocumentIngester(vector_store=vector_store)
+
+        # Initialize Ollama client for document processing
+        async with OllamaClient() as client:
+            # Initialize document processing components
+            doc_classifier = DocumentClassifier(client, settings)
+            doc_processor = DocumentProcessor(
+                ocr_tool=OCRTool(),
+                classifier=doc_classifier,
+                settings=settings,
+            )
+
+            # Create scan tool
+            scan_tool = ScanAndIndexTool(
+                processor=doc_processor,
+                ingester=doc_ingester,
+                archive_index=archive_index,
+                settings=settings,
+            )
+
+            # Create parameters
+            params = ScanAndIndexParams(
+                source_directory=scan_dir,
+                file_pattern=pattern,
+                max_files=limit,
+                preview_only=not execute,
+            )
+
+            # Show header
+            mode = "[yellow]PREVIEW MODE[/yellow]" if not execute else "[red]EXECUTE MODE[/red]"
+            console.console.print(f"\n[bold cyan]Document Scanner[/bold cyan] {mode}\n")
+            console.console.print(f"Directory: {scan_dir}")
+            console.console.print(f"Pattern: {pattern}")
+            if limit:
+                console.console.print(f"Limit: {limit} files")
+            console.console.print()
+
+            # Run scan
+            with console.thinking("Scanning and processing documents..."):
+                result = await scan_tool.execute(params)
+
+            if not result.success:
+                console.error(f"Scan failed: {result.error}")
+                sys.exit(1)
+
+            data = result.data
+
+            # Show results
+            if not execute or data.get("preview_only"):
+                # Preview mode
+                console.console.print(
+                    Panel(
+                        f"[bold]Preview Results[/bold]\n\n"
+                        f"Files found: {data.get('found_count', 0)}\n"
+                        f"Would process: {data.get('processed_count', 0)}\n"
+                        f"Would fail: {data.get('failed_count', 0)}",
+                        title="Preview",
+                        border_style="yellow",
+                    )
+                )
+
+                if verbose and data.get("documents"):
+                    console.console.print("\n[bold]Sample Documents:[/bold]")
+                    for doc in data["documents"][:5]:
+                        console.console.print(f"  • {Path(doc['source']).name}")
+                        console.console.print(f"    → {doc['person']} / {doc['category']}")
+
+                console.console.print("\n[dim]Run with --execute to actually process files[/dim]")
+            else:
+                # Execute mode
+                console.console.print(
+                    Panel(
+                        f"[bold]Processing Complete[/bold]\n\n"
+                        f"Files found: {data.get('found_count', 0)}\n"
+                        f"Processed: {data.get('processed_count', 0)} ✓\n"
+                        f"Organized: {data.get('organized_count', 0)} 📁\n"
+                        f"Indexed: {data.get('indexed_count', 0)} 🔍\n"
+                        f"Moved: {data.get('moved_count', 0)} ➡️\n"
+                        f"Failed: {data.get('failed_count', 0)} ✗",
+                        title="Results",
+                        border_style="green" if data.get("failed_count", 0) == 0 else "yellow",
+                    )
+                )
+
+                # Show statistics
+                if data.get("person_counts"):
+                    console.console.print("\n[bold]By Person:[/bold]")
+                    for person, count in sorted(data["person_counts"].items()):
+                        console.console.print(f"  • {person}: {count}")
+
+                if data.get("category_counts"):
+                    console.console.print("\n[bold]By Category:[/bold]")
+                    for category, count in sorted(data["category_counts"].items()):
+                        console.console.print(f"  • {category}: {count}")
+
+                # Show sample documents
+                if verbose and data.get("documents"):
+                    console.console.print("\n[bold]Processed Documents:[/bold]")
+                    for doc in data["documents"][:10]:
+                        console.console.print(f"  • {Path(doc['source']).name}")
+                        console.console.print(f"    → {doc['person']} / {doc['category']}")
+                        console.console.print(f"    📄 {doc['summary'][:80]}...")
+                        if doc.get("sender"):
+                            console.console.print(f"    📧 From: {doc['sender']}")
+                        console.console.print()
+
+                # Show failures if any
+                if data.get("failures"):
+                    console.console.print("\n[bold red]Failed Documents:[/bold red]")
+                    for failure in data["failures"]:
+                        console.console.print(f"  • {Path(failure['file']).name}")
+                        console.console.print(f"    ✗ {failure['error']}")
+                        console.console.print()
+
+    except KeyboardInterrupt:
+        console.console.print("\n[yellow]Operation cancelled by user[/yellow]")
+        sys.exit(130)  # Standard exit code for SIGINT
+    except asyncio.CancelledError:
+        console.console.print("\n[yellow]Operation cancelled[/yellow]")
+        sys.exit(130)
+    except EOFError:
+        console.console.print("\n[yellow]EOF received, exiting...[/yellow]")
+        sys.exit(0)
+    except Exception as e:
+        console.error(f"Scan command failed: {e}")
+        if verbose:
+            import traceback
+
+            traceback.print_exc()
+        sys.exit(1)
+
+
+async def run_archive_search(
+    query: str,
+    person: str | None,
+    category: str | None,
+    year: int | None,
+    tags: list[str],
+    limit: int,
+    verbose: bool,
+    no_color: bool,
+) -> None:
+    """Run the archive search command."""
+    from aria.tools.scanner import SearchArchivedDocumentsTool, SearchArchivedDocumentsParams
+    from aria.memory import VectorStore, ArchiveIndex
+
+    console = get_console(no_color=no_color, verbose=verbose)
+    settings = get_settings()
+
+    try:
+        # Initialize infrastructure
+        from aria.memory.embeddings import OllamaEmbeddings
+
+        # Initialize embedding provider
+        embedding_provider = OllamaEmbeddings(
+            model=settings.embedding_model,
+            host=settings.ollama_host,
+        )
+
+        vector_store = VectorStore(
+            persist_directory=settings.chroma_path,
+            embedding_provider=embedding_provider,
+            collection_name="archived_documents",
+        )
+        await vector_store.initialize()
+
+        archive_index = ArchiveIndex(db_path=settings.archive_db_path)
+        await archive_index.initialize()
+
+        # Create search tool
+        search_tool = SearchArchivedDocumentsTool(
+            vector_store=vector_store,
+            archive_index=archive_index,
+        )
+
+        # Create parameters
+        params = SearchArchivedDocumentsParams(
+            query=query,
+            person=person,
+            category=category,
+            year=year,
+            tags=tags if tags else None,
+            max_results=limit,
+        )
+
+        # Run search
+        with console.thinking(f"Searching for '{query}'..."):
+            result = await search_tool.execute(params)
+
+        if not result.success:
+            console.error(f"Search failed: {result.error}")
+            sys.exit(1)
+
+        data = result.data
+        documents = data.get("documents", [])
+
+        # Show results
+        console.console.print(
+            f"\n[bold green]Found {len(documents)} document{'s' if len(documents) != 1 else ''}:[/bold green]\n"
+        )
+
+        if not documents:
+            console.console.print("[yellow]No matching documents found.[/yellow]\n")
+            return
+
+        for i, doc in enumerate(documents, 1):
+            # Format document info
+            console.console.print(f"[cyan bold]{i}. {doc['original_filename']}[/cyan bold]")
+            console.console.print(f"   ID: [dim]{doc['id'][:16]}...[/dim]")
+            console.console.print(f"   Person: {doc['person']} | Category: {doc['category']}")
+            if doc.get("document_date"):
+                console.console.print(f"   Date: {doc['document_date']}")
+            if doc.get("tags"):
+                console.console.print(f"   Tags: {', '.join(doc['tags'][:5])}")
+            if doc.get("excerpt"):
+                console.console.print(f"   [dim]...{doc['excerpt']}...[/dim]")
+            if doc.get("relevance_score"):
+                console.console.print(f"   Relevance: {doc['relevance_score']:.2f}")
+            console.console.print()
+
+    except Exception as e:
+        console.error(f"Search command failed: {e}")
+        if verbose:
+            import traceback
+
+            traceback.print_exc()
+        sys.exit(1)
+
+
+async def run_archive_list(
+    person: str | None,
+    category: str | None,
+    year: int | None,
+    sender: str | None,
+    tag: str | None,
+    limit: int,
+    verbose: bool,
+    no_color: bool,
+) -> None:
+    """Run the archive list command."""
+    from aria.tools.scanner import ListArchivedDocumentsTool, ListArchivedDocumentsParams
+    from aria.memory import ArchiveIndex
+
+    console = get_console(no_color=no_color, verbose=verbose)
+    settings = get_settings()
+
+    try:
+        # Initialize archive index
+        archive_index = ArchiveIndex(db_path=settings.archive_db_path)
+        await archive_index.initialize()
+
+        # Create list tool
+        list_tool = ListArchivedDocumentsTool(archive_index=archive_index)
+
+        # Create parameters
+        params = ListArchivedDocumentsParams(
+            person=person,
+            category=category,
+            year=year,
+            sender=sender,
+            tag=tag,
+            max_results=limit,
+        )
+
+        # Run list
+        filter_desc = []
+        if person:
+            filter_desc.append(f"person={person}")
+        if category:
+            filter_desc.append(f"category={category}")
+        if year:
+            filter_desc.append(f"year={year}")
+        if sender:
+            filter_desc.append(f"sender={sender}")
+        if tag:
+            filter_desc.append(f"tag={tag}")
+
+        filter_str = f" ({', '.join(filter_desc)})" if filter_desc else ""
+        with console.thinking(f"Listing documents{filter_str}..."):
+            result = await list_tool.execute(params)
+
+        if not result.success:
+            console.error(f"List failed: {result.error}")
+            sys.exit(1)
+
+        data = result.data
+        documents = data.get("documents", [])
+        total = data.get("total_count", 0)
+
+        # Show results
+        console.console.print(f"\n[bold cyan]Archived Documents[/bold cyan]{filter_str}\n")
+        console.console.print(f"Showing {len(documents)} of {total} total documents\n")
+
+        if not documents:
+            console.console.print("[yellow]No matching documents found.[/yellow]\n")
+            return
+
+        # Create table
+        table = Table(show_header=True, header_style="bold cyan")
+        table.add_column("#", justify="right", style="dim", width=4)
+        table.add_column("Filename", style="white", no_wrap=False, max_width=30)
+        table.add_column("Person", style="green")
+        table.add_column("Category", style="blue")
+        table.add_column("Date", style="yellow")
+
+        for i, doc in enumerate(documents, 1):
+            filename = doc["original_filename"]
+            if len(filename) > 28:
+                filename = filename[:25] + "..."
+
+            table.add_row(
+                str(i),
+                filename,
+                doc.get("person", ""),
+                doc.get("category", ""),
+                doc.get("document_date", ""),
+            )
+
+        console.console.print(table)
+        console.console.print()
+
+    except Exception as e:
+        console.error(f"List command failed: {e}")
+        if verbose:
+            import traceback
+
+            traceback.print_exc()
+        sys.exit(1)
+
+
+async def run_archive_show(
+    document_id: str,
+    verbose: bool,
+    no_color: bool,
+) -> None:
+    """Run the archive show command."""
+    from aria.tools.scanner import GetArchivedDocumentTool, GetArchivedDocumentParams
+    from aria.memory import ArchiveIndex, VectorStore
+
+    console = get_console(no_color=no_color, verbose=verbose)
+    settings = get_settings()
+
+    try:
+        # Initialize infrastructure
+        archive_index = ArchiveIndex(db_path=settings.archive_db_path)
+        await archive_index.initialize()
+
+        from aria.memory.embeddings import OllamaEmbeddings
+
+        # Initialize embedding provider
+        embedding_provider = OllamaEmbeddings(
+            model=settings.embedding_model,
+            host=settings.ollama_host,
+        )
+
+        vector_store = VectorStore(
+            persist_directory=settings.chroma_path,
+            embedding_provider=embedding_provider,
+            collection_name="archived_documents",
+        )
+        await vector_store.initialize()
+
+        # Create get tool
+        get_tool = GetArchivedDocumentTool(
+            archive_index=archive_index,
+            vector_store=vector_store,
+        )
+
+        # Create parameters
+        params = GetArchivedDocumentParams(document_id=document_id)
+
+        # Run get
+        with console.thinking("Retrieving document..."):
+            result = await get_tool.execute(params)
+
+        if not result.success:
+            console.error(f"Failed to get document: {result.error}")
+            sys.exit(1)
+
+        data = result.data
+        doc = data.get("document")
+
+        if not doc:
+            console.error(f"Document not found: {document_id}")
+            sys.exit(1)
+
+        # Display document details
+        console.console.print()
+        console.console.print(
+            Panel(
+                f"[bold]{doc['original_filename']}[/bold]\n\n"
+                f"[dim]ID:[/dim] {doc['id']}\n"
+                f"[dim]Person:[/dim] {doc['person']}\n"
+                f"[dim]Category:[/dim] {doc['category']}\n"
+                f"[dim]Date:[/dim] {doc.get('document_date', 'N/A')}\n"
+                f"[dim]Sender:[/dim] {doc.get('sender', 'N/A')}\n"
+                f"[dim]Processed:[/dim] {doc['processed_at']}\n"
+                f"[dim]File exists:[/dim] {'✓' if doc.get('file_exists') else '✗'}",
+                title="Document Details",
+                border_style="cyan",
+            )
+        )
+
+        # Show summary
+        if doc.get("summary"):
+            console.console.print("\n[bold]Summary:[/bold]")
+            console.console.print(doc["summary"])
+
+        # Show tags
+        if doc.get("tags"):
+            console.console.print(f"\n[bold]Tags:[/bold] {', '.join(doc['tags'])}")
+
+        # Show file paths
+        console.console.print(f"\n[dim]Original path:[/dim] {doc['original_path']}")
+        console.console.print(f"[dim]Archive path:[/dim] {doc['archived_path']}")
+
+        # Show chunk count
+        if doc.get("chunk_count"):
+            console.console.print(f"\n[dim]Indexed chunks:[/dim] {doc['chunk_count']}")
+
+        console.console.print()
+
+    except Exception as e:
+        console.error(f"Show command failed: {e}")
+        if verbose:
+            import traceback
+
+            traceback.print_exc()
+        sys.exit(1)
+
+
+async def run_archive_stats(
+    verbose: bool,
+    no_color: bool,
+) -> None:
+    """Run the archive stats command."""
+    from aria.tools.scanner import ArchiveStatisticsTool, ArchiveStatisticsParams
+    from aria.memory import ArchiveIndex
+
+    console = get_console(no_color=no_color, verbose=verbose)
+    settings = get_settings()
+
+    try:
+        # Initialize archive index
+        archive_index = ArchiveIndex(db_path=settings.archive_db_path)
+        await archive_index.initialize()
+
+        # Create stats tool
+        stats_tool = ArchiveStatisticsTool(archive_index=archive_index)
+
+        # Create parameters
+        params = ArchiveStatisticsParams()
+
+        # Run stats
+        with console.thinking("Calculating statistics..."):
+            result = await stats_tool.execute(params)
+
+        if not result.success:
+            console.error(f"Failed to get statistics: {result.error}")
+            sys.exit(1)
+
+        data = result.data
+        stats = data.get("statistics", {})
+
+        # Display statistics
+        console.console.print()
+        console.console.print(
+            Panel(
+                f"[bold]Archive Statistics[/bold]\n\n"
+                f"Total documents: {stats.get('total_documents', 0)}\n"
+                f"Total size: {stats.get('total_size_human', '0 B')}\n"
+                f"Date range: {stats.get('oldest_date', 'N/A')} to {stats.get('newest_date', 'N/A')}",
+                title="Overview",
+                border_style="cyan",
+            )
+        )
+
+        # Show by person
+        if stats.get("by_person"):
+            console.console.print("\n[bold]Documents by Person:[/bold]")
+            table = Table(show_header=True, header_style="bold cyan")
+            table.add_column("Person", style="green")
+            table.add_column("Count", justify="right", style="blue")
+
+            for person, count in sorted(stats["by_person"].items(), key=lambda x: -x[1]):
+                table.add_row(person, str(count))
+
+            console.console.print(table)
+
+        # Show by category
+        if stats.get("by_category"):
+            console.console.print("\n[bold]Documents by Category:[/bold]")
+            table = Table(show_header=True, header_style="bold cyan")
+            table.add_column("Category", style="blue")
+            table.add_column("Count", justify="right", style="green")
+
+            for category, count in sorted(stats["by_category"].items(), key=lambda x: -x[1]):
+                table.add_row(category, str(count))
+
+            console.console.print(table)
+
+        # Show by year
+        if stats.get("by_year"):
+            console.console.print("\n[bold]Documents by Year:[/bold]")
+            table = Table(show_header=True, header_style="bold cyan")
+            table.add_column("Year", style="yellow")
+            table.add_column("Count", justify="right", style="green")
+
+            for year, count in sorted(stats["by_year"].items()):
+                table.add_row(str(year), str(count))
+
+            console.console.print(table)
+
+        console.console.print()
+
+    except Exception as e:
+        console.error(f"Stats command failed: {e}")
+        if verbose:
+            import traceback
+
+            traceback.print_exc()
+        sys.exit(1)
+
+
+# =============================================================================
+# Scanner Commands
+# =============================================================================
+
+
+@cli.group()
+def scan():
+    """Scan and process documents into the archive."""
+    pass
+
+
+@scan.command("process")
+@click.argument("directory", type=click.Path(exists=True), required=False)
+@click.option("--pattern", default="*.pdf", help="File pattern to scan (default: *.pdf)")
+@click.option("--limit", type=int, default=None, help="Maximum files to process")
+@click.option("--execute", is_flag=True, help="Actually process files (default is preview)")
+@click.option("--verbose", "-v", is_flag=True, help="Enable verbose output")
+@click.option("--no-color", is_flag=True, help="Disable colored output")
+def scan_process(
+    directory: str | None,
+    pattern: str,
+    limit: int | None,
+    execute: bool,
+    verbose: bool,
+    no_color: bool,
+):
+    """Scan and process documents into the archive.
+
+    By default runs in preview mode. Use --execute to actually process files.
+    """
+    asyncio.run(
+        run_scan_process(
+            directory=directory,
+            pattern=pattern,
+            limit=limit,
+            execute=execute,
+            verbose=verbose,
+            no_color=no_color,
+        )
+    )
+
+
+@scan.command("preview")
+@click.argument("directory", type=click.Path(exists=True), required=False)
+@click.option("--pattern", default="*.pdf", help="File pattern to scan (default: *.pdf)")
+@click.option("--limit", type=int, default=10, help="Maximum files to preview (default: 10)")
+@click.option("--verbose", "-v", is_flag=True, help="Enable verbose output")
+@click.option("--no-color", is_flag=True, help="Disable colored output")
+def scan_preview(
+    directory: str | None,
+    pattern: str,
+    limit: int,
+    verbose: bool,
+    no_color: bool,
+):
+    """Preview what would be scanned and processed (alias for process without --execute)."""
+    asyncio.run(
+        run_scan_process(
+            directory=directory,
+            pattern=pattern,
+            limit=limit,
+            execute=False,
+            verbose=verbose,
+            no_color=no_color,
+        )
+    )
+
+
+# =============================================================================
+# Archive Commands
+# =============================================================================
+
+
+@cli.group()
+def archive():
+    """Search and manage the document archive."""
+    pass
+
+
+@archive.command("search")
+@click.argument("query")
+@click.option("--person", default=None, help="Filter by person name")
+@click.option("--category", default=None, help="Filter by category")
+@click.option("--year", type=int, default=None, help="Filter by year")
+@click.option("--tags", multiple=True, help="Filter by tags (can specify multiple)")
+@click.option("--limit", "-n", type=int, default=10, help="Maximum results (default: 10)")
+@click.option("--verbose", "-v", is_flag=True, help="Enable verbose output")
+@click.option("--no-color", is_flag=True, help="Disable colored output")
+def archive_search(
+    query: str,
+    person: str | None,
+    category: str | None,
+    year: int | None,
+    tags: tuple[str, ...],
+    limit: int,
+    verbose: bool,
+    no_color: bool,
+):
+    """Search archived documents by content and metadata."""
+    asyncio.run(
+        run_archive_search(
+            query=query,
+            person=person,
+            category=category,
+            year=year,
+            tags=list(tags),
+            limit=limit,
+            verbose=verbose,
+            no_color=no_color,
+        )
+    )
+
+
+@archive.command("list")
+@click.option("--person", default=None, help="Filter by person name")
+@click.option("--category", default=None, help="Filter by category")
+@click.option("--year", type=int, default=None, help="Filter by year")
+@click.option("--sender", default=None, help="Filter by sender")
+@click.option("--tag", default=None, help="Filter by tag")
+@click.option("--limit", "-n", type=int, default=50, help="Maximum results (default: 50)")
+@click.option("--verbose", "-v", is_flag=True, help="Enable verbose output")
+@click.option("--no-color", is_flag=True, help="Disable colored output")
+def archive_list(
+    person: str | None,
+    category: str | None,
+    year: int | None,
+    sender: str | None,
+    tag: str | None,
+    limit: int,
+    verbose: bool,
+    no_color: bool,
+):
+    """List archived documents by metadata filters."""
+    asyncio.run(
+        run_archive_list(
+            person=person,
+            category=category,
+            year=year,
+            sender=sender,
+            tag=tag,
+            limit=limit,
+            verbose=verbose,
+            no_color=no_color,
+        )
+    )
+
+
+@archive.command("show")
+@click.argument("document_id")
+@click.option("--verbose", "-v", is_flag=True, help="Enable verbose output")
+@click.option("--no-color", is_flag=True, help="Disable colored output")
+def archive_show(
+    document_id: str,
+    verbose: bool,
+    no_color: bool,
+):
+    """Show details of a specific archived document."""
+    asyncio.run(
+        run_archive_show(
+            document_id=document_id,
+            verbose=verbose,
+            no_color=no_color,
+        )
+    )
+
+
+@archive.command("stats")
+@click.option("--verbose", "-v", is_flag=True, help="Enable verbose output")
+@click.option("--no-color", is_flag=True, help="Disable colored output")
+def archive_stats(
+    verbose: bool,
+    no_color: bool,
+):
+    """Show archive statistics."""
+    asyncio.run(
+        run_archive_stats(
+            verbose=verbose,
+            no_color=no_color,
+        )
+    )
 
 
 # ============================================================================
 # History Command Utilities
 # ============================================================================
+
 
 def format_relative_time(dt: datetime) -> str:
     """Format a datetime as a relative time string.
@@ -1276,12 +2244,13 @@ def truncate_text(text: str, max_length: int = 80) -> str:
     """
     if len(text) <= max_length:
         return text
-    return text[:max_length - 3] + "..."
+    return text[: max_length - 3] + "..."
 
 
 # ============================================================================
 # History Commands
 # ============================================================================
+
 
 @cli.group()
 def history():
@@ -1346,7 +2315,9 @@ async def _history_list(limit: int, show_all: bool, no_color: bool):
         console.console.print(table)
         console.console.print()
         console.console.print(f"[dim]Resume a session:[/dim] [cyan]aria resume <id>[/cyan]")
-        console.console.print(f"[dim]View session details:[/dim] [cyan]aria history show <id>[/cyan]")
+        console.console.print(
+            f"[dim]View session details:[/dim] [cyan]aria history show <id>[/cyan]"
+        )
         console.console.print()
 
         await store.close()
@@ -1358,7 +2329,9 @@ async def _history_list(limit: int, show_all: bool, no_color: bool):
 
 @history.command("show")
 @click.argument("session_id")
-@click.option("--messages", "-n", default=None, type=int, help="Number of messages to show (default: all)")
+@click.option(
+    "--messages", "-n", default=None, type=int, help="Number of messages to show (default: all)"
+)
 @click.option("--no-color", is_flag=True, help="Disable colored output")
 def history_show(session_id: str, messages: int | None, no_color: bool):
     """Show details of a specific conversation session."""
@@ -1389,15 +2362,17 @@ async def _history_show(session_id: str, messages: int | None, no_color: bool):
 
         # Display session header
         console.console.print()
-        console.console.print(Panel(
-            f"[bold]{session.title}[/bold]\n\n"
-            f"[dim]Session ID:[/dim] {session.id}\n"
-            f"[dim]Created:[/dim] {session.created_at.strftime('%Y-%m-%d %H:%M:%S')}\n"
-            f"[dim]Updated:[/dim] {format_relative_time(session.updated_at)}\n"
-            f"[dim]Messages:[/dim] {session.message_count}",
-            title="Session Details",
-            border_style="cyan",
-        ))
+        console.console.print(
+            Panel(
+                f"[bold]{session.title}[/bold]\n\n"
+                f"[dim]Session ID:[/dim] {session.id}\n"
+                f"[dim]Created:[/dim] {session.created_at.strftime('%Y-%m-%d %H:%M:%S')}\n"
+                f"[dim]Updated:[/dim] {format_relative_time(session.updated_at)}\n"
+                f"[dim]Messages:[/dim] {session.message_count}",
+                title="Session Details",
+                border_style="cyan",
+            )
+        )
         console.console.print()
 
         # Display messages
@@ -1430,25 +2405,31 @@ async def _history_show(session_id: str, messages: int | None, no_color: bool):
                             content += f"\n[{status_color}]{status_icon}[/{status_color}] [bold]{tc.tool_name}[/bold]"
                             if tc.tool_input:
                                 import json
+
                                 input_str = json.dumps(tc.tool_input, indent=2)
                                 if len(input_str) > 200:
                                     input_str = input_str[:200] + "..."
                                 content += f"\n[dim]{input_str}[/dim]"
 
-                console.console.print(Panel(
-                    content,
-                    title=f"[{role_style}]{msg.role.value.title()}[/{role_style}] ({msg.timestamp.strftime('%H:%M:%S')})",
-                    border_style=border_style,
-                ))
+                console.console.print(
+                    Panel(
+                        content,
+                        title=f"[{role_style}]{msg.role.value.title()}[/{role_style}] ({msg.timestamp.strftime('%H:%M:%S')})",
+                        border_style=border_style,
+                    )
+                )
                 console.console.print()
 
-        console.console.print(f"[dim]Resume this session:[/dim] [cyan]aria resume {session_id}[/cyan]\n")
+        console.console.print(
+            f"[dim]Resume this session:[/dim] [cyan]aria resume {session_id}[/cyan]\n"
+        )
 
         await store.close()
 
     except Exception as e:
         console.error(f"Failed to show session: {e}")
         import traceback
+
         traceback.print_exc()
         sys.exit(1)
 
@@ -1461,18 +2442,22 @@ async def _history_show(session_id: str, messages: int | None, no_color: bool):
 def resume(session_id: str, verbose: bool, debug: bool, no_color: bool):
     """Resume a previous conversation session (shortcut for 'chat --session')."""
     # This is a convenience command that just invokes chat with --session
-    asyncio.run(run_chat_loop(
-        verbose=verbose,
-        debug=debug,
-        no_color=no_color,
-        session_id=session_id,
-        force_new=False,
-    ))
+    asyncio.run(
+        run_chat_loop(
+            verbose=verbose,
+            debug=debug,
+            no_color=no_color,
+            session_id=session_id,
+            force_new=False,
+        )
+    )
 
 
 @history.command("search")
 @click.argument("query")
-@click.option("--session", "-s", "session_id", default=None, help="Limit search to specific session")
+@click.option(
+    "--session", "-s", "session_id", default=None, help="Limit search to specific session"
+)
 @click.option("--limit", "-n", default=10, help="Maximum number of results (default: 10)")
 @click.option("--no-color", is_flag=True, help="Disable colored output")
 def history_search(query: str, session_id: str | None, limit: int, no_color: bool):
@@ -1500,10 +2485,13 @@ async def _history_search(query: str, session_id: str | None, limit: int, no_col
             await store.close()
             return
 
-        console.console.print(f"\n[bold green]Found {len(messages)} match{'es' if len(messages) != 1 else ''}:[/bold green]\n")
+        console.console.print(
+            f"\n[bold green]Found {len(messages)} match{'es' if len(messages) != 1 else ''}:[/bold green]\n"
+        )
 
         # Group messages by session
         from collections import defaultdict
+
         by_session = defaultdict(list)
         for msg in messages:
             by_session[msg.session_id].append(msg)
@@ -1516,7 +2504,9 @@ async def _history_search(query: str, session_id: str | None, limit: int, no_col
                 session_id_short = sess_id[:8]
                 time_ago = format_relative_time(session.updated_at)
 
-                console.console.print(f"[cyan bold][{session_id_short}][/cyan bold] {session.title} [dim]({time_ago})[/dim]")
+                console.console.print(
+                    f"[cyan bold][{session_id_short}][/cyan bold] {session.title} [dim]({time_ago})[/dim]"
+                )
 
                 for msg in sess_messages:
                     # Find query in content (case-insensitive)
@@ -1581,15 +2571,17 @@ async def _history_delete(session_id: str, force: bool, no_color: bool):
         # Confirm deletion unless --force
         if not force:
             console.console.print()
-            console.console.print(Panel(
-                f"[bold yellow]Warning:[/bold yellow] This will permanently delete:\n\n"
-                f"[bold]{session.title}[/bold]\n"
-                f"• {session.message_count} messages\n"
-                f"• All associated tool calls\n"
-                f"• Created: {session.created_at.strftime('%Y-%m-%d %H:%M:%S')}",
-                title="Confirm Deletion",
-                border_style="yellow",
-            ))
+            console.console.print(
+                Panel(
+                    f"[bold yellow]Warning:[/bold yellow] This will permanently delete:\n\n"
+                    f"[bold]{session.title}[/bold]\n"
+                    f"• {session.message_count} messages\n"
+                    f"• All associated tool calls\n"
+                    f"• Created: {session.created_at.strftime('%Y-%m-%d %H:%M:%S')}",
+                    title="Confirm Deletion",
+                    border_style="yellow",
+                )
+            )
             console.console.print()
 
             confirmed = confirm("Are you sure you want to delete this session?", default=False)
@@ -1603,7 +2595,9 @@ async def _history_delete(session_id: str, force: bool, no_color: bool):
         deleted = await store.delete_session(session_id)
 
         if deleted:
-            console.console.print(f"\n[green]✓ Session deleted successfully:[/green] {session.title}\n")
+            console.console.print(
+                f"\n[green]✓ Session deleted successfully:[/green] {session.title}\n"
+            )
         else:
             console.error("Failed to delete session (may have already been deleted)")
             sys.exit(1)
@@ -1679,6 +2673,7 @@ async def _history_export(session_id: str, output: str | None, no_color: bool):
 
                         if tc.tool_input:
                             import json
+
                             input_json = json.dumps(tc.tool_input, indent=2)
                             markdown_lines.append(f"```json\n{input_json}\n```\n")
 
@@ -1703,6 +2698,7 @@ async def _history_export(session_id: str, output: str | None, no_color: bool):
     except Exception as e:
         console.error(f"Export failed: {e}")
         import traceback
+
         traceback.print_exc()
         sys.exit(1)
 

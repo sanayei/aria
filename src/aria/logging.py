@@ -61,16 +61,20 @@ def setup_logging(
     # Add different formatters for console vs file
     if log_file:
         # File output: use JSON for parsing
-        processors.extend([
-            structlog.processors.dict_tracebacks,
-            structlog.processors.JSONRenderer(),
-        ])
+        processors.extend(
+            [
+                structlog.processors.dict_tracebacks,
+                structlog.processors.JSONRenderer(),
+            ]
+        )
     else:
         # Console output: use colored, human-readable format
-        processors.extend([
-            structlog.dev.set_exc_info,
-            structlog.dev.ConsoleRenderer(colors=True),
-        ])
+        processors.extend(
+            [
+                structlog.dev.set_exc_info,
+                structlog.dev.ConsoleRenderer(colors=True),
+            ]
+        )
 
     structlog.configure(
         processors=processors,

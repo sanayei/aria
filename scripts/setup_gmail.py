@@ -43,13 +43,15 @@ def print_instructions(md_text: str):
 def main():
     """Run Gmail setup wizard."""
     console.print()
-    console.print(Panel.fit(
-        "[bold]Gmail OAuth Setup Wizard for ARIA[/bold]\n\n"
-        "This wizard will help you set up Gmail integration.\n"
-        "You'll need a Google account and about 10 minutes.",
-        title="Welcome",
-        border_style="cyan",
-    ))
+    console.print(
+        Panel.fit(
+            "[bold]Gmail OAuth Setup Wizard for ARIA[/bold]\n\n"
+            "This wizard will help you set up Gmail integration.\n"
+            "You'll need a Google account and about 10 minutes.",
+            title="Welcome",
+            border_style="cyan",
+        )
+    )
 
     # Check if already configured
     settings = get_settings()
@@ -58,7 +60,9 @@ def main():
     if gmail_auth.is_authenticated():
         console.print("\n[yellow]Gmail is already configured![/yellow]")
         if not Confirm.ask("Do you want to reconfigure?", default=False):
-            console.print("[green]Setup cancelled. Your existing configuration is unchanged.[/green]\n")
+            console.print(
+                "[green]Setup cancelled. Your existing configuration is unchanged.[/green]\n"
+            )
             return
 
     # Step 1: Create Google Cloud Project
@@ -76,7 +80,9 @@ Once created, select your new project from the dropdown.
     """)
 
     if not Confirm.ask("\n[bold]Have you created the project?[/bold]", default=False):
-        console.print("[yellow]Please create a project first, then run this script again.[/yellow]\n")
+        console.print(
+            "[yellow]Please create a project first, then run this script again.[/yellow]\n"
+        )
         return
 
     # Step 2: Enable Gmail API
@@ -115,8 +121,12 @@ Configure the OAuth consent screen:
 8. Review and click **"Back to Dashboard"**
     """)
 
-    if not Confirm.ask("\n[bold]Have you configured the OAuth consent screen?[/bold]", default=False):
-        console.print("[yellow]Please configure OAuth consent, then run this script again.[/yellow]\n")
+    if not Confirm.ask(
+        "\n[bold]Have you configured the OAuth consent screen?[/bold]", default=False
+    ):
+        console.print(
+            "[yellow]Please configure OAuth consent, then run this script again.[/yellow]\n"
+        )
         return
 
     # Step 4: Create OAuth Credentials
@@ -153,6 +163,7 @@ Create OAuth 2.0 credentials:
         # Handle wildcards if provided
         if "*" in str(creds_file_path):
             import glob
+
             matches = glob.glob(str(creds_file_path))
             if matches:
                 creds_file_path = Path(matches[0])
@@ -172,6 +183,7 @@ Create OAuth 2.0 credentials:
     # Copy credentials to ARIA's credentials directory
     try:
         import shutil
+
         gmail_auth.credentials_dir.mkdir(parents=True, exist_ok=True)
         shutil.copy(creds_file_path, gmail_auth.credentials_path)
         console.print(f"\n[green]✓ Credentials copied to {gmail_auth.credentials_path}[/green]")
@@ -199,6 +211,7 @@ Create OAuth 2.0 credentials:
     except Exception as e:
         console.print(f"\n[red]Unexpected error: {e}[/red]")
         import traceback
+
         traceback.print_exc()
         return
 
@@ -210,13 +223,15 @@ Create OAuth 2.0 credentials:
         success = asyncio.run(gmail_auth.test_connection())
         if success:
             console.print()
-            console.print(Panel.fit(
-                "[bold green]✓ Gmail setup complete![/bold green]\n\n"
-                "You can now use Gmail features in ARIA.\n"
-                "Try: [cyan]aria chat[/cyan] and ask ARIA to check your emails!",
-                title="Success",
-                border_style="green",
-            ))
+            console.print(
+                Panel.fit(
+                    "[bold green]✓ Gmail setup complete![/bold green]\n\n"
+                    "You can now use Gmail features in ARIA.\n"
+                    "Try: [cyan]aria chat[/cyan] and ask ARIA to check your emails!",
+                    title="Success",
+                    border_style="green",
+                )
+            )
             console.print()
         else:
             console.print("[red]Connection test failed. Please check the errors above.[/red]\n")
@@ -245,5 +260,6 @@ if __name__ == "__main__":
     except Exception as e:
         console.print(f"\n[red]Unexpected error: {e}[/red]\n")
         import traceback
+
         traceback.print_exc()
         sys.exit(1)

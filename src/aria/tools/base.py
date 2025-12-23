@@ -272,11 +272,7 @@ class BaseTool(ABC, Generic[TParams]):
 
     def __repr__(self) -> str:
         """String representation of the tool."""
-        return (
-            f"<{self.__class__.__name__} "
-            f"name='{self.name}' "
-            f"risk={self.risk_level.value}>"
-        )
+        return f"<{self.__class__.__name__} name='{self.name}' risk={self.risk_level.value}>"
 
 
 # Helper function for creating simple parameter schemas

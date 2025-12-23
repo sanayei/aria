@@ -55,14 +55,10 @@ class ProcessInboxTool(BaseTool[ProcessInboxParams]):
             source_dir = self.settings.documents_source_dir
 
             if not source_dir.exists():
-                return ToolResult.error_result(
-                    f"Source directory does not exist: {source_dir}"
-                )
+                return ToolResult.error_result(f"Source directory does not exist: {source_dir}")
 
             if not source_dir.is_dir():
-                return ToolResult.error_result(
-                    f"Source path is not a directory: {source_dir}"
-                )
+                return ToolResult.error_result(f"Source path is not a directory: {source_dir}")
 
             # Find all PDF files
             pdf_files = list(source_dir.glob("*.pdf"))
@@ -99,9 +95,7 @@ class ProcessInboxTool(BaseTool[ProcessInboxParams]):
                 for doc in processed_docs:
                     try:
                         # Create destination directory
-                        doc.suggested_destination.parent.mkdir(
-                            parents=True, exist_ok=True
-                        )
+                        doc.suggested_destination.parent.mkdir(parents=True, exist_ok=True)
 
                         # Move the file
                         shutil.move(
@@ -135,6 +129,7 @@ class ProcessInboxTool(BaseTool[ProcessInboxParams]):
                     "date": doc.document_date.isoformat() if doc.document_date else None,
                     "sender": doc.sender,
                     "summary": doc.summary,
+                    "tags": doc.tags,
                     "destination": str(doc.suggested_destination),
                     "confidence": doc.confidence,
                 }

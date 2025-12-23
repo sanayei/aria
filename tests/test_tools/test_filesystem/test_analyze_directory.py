@@ -129,9 +129,7 @@ class TestAnalyzeDirectoryTool:
 
         # Find .hidden in largest/oldest/newest files
         all_files_data = (
-            result.data["largest_files"] +
-            result.data["oldest_files"] +
-            result.data["newest_files"]
+            result.data["largest_files"] + result.data["oldest_files"] + result.data["newest_files"]
         )
         file_names = [f["name"] for f in all_files_data]
         assert ".hidden" in file_names
@@ -241,10 +239,7 @@ class TestAnalyzeDirectoryTool:
         assert len(duplicates) > 0
 
         # Find the duplicate.txt entry
-        dup_entry = next(
-            (d for d in duplicates if d["name"] == "duplicate.txt"),
-            None
-        )
+        dup_entry = next((d for d in duplicates if d["name"] == "duplicate.txt"), None)
         assert dup_entry is not None
         assert dup_entry["count"] == 3
         assert len(dup_entry["locations"]) == 3

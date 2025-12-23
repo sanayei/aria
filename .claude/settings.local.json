@@ -25,7 +25,8 @@
       "Bash(cat:*)",
       "Bash($HOME/.local/bin/uv add:*)",
       "Bash($HOME/.local/bin/uv remove:*)",
-      "Bash(touch:*)"
+      "Bash(touch:*)",
+      "Bash(python3:*)"
     ]
   }
 }

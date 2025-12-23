@@ -190,9 +190,7 @@ class TestSessionManagement:
         store, session, messages = store_with_messages
 
         # Add a tool call
-        await store.add_tool_call(
-            messages[0].id, "test_tool", {"param": "value"}, status="success"
-        )
+        await store.add_tool_call(messages[0].id, "test_tool", {"param": "value"}, status="success")
 
         # Delete session
         await store.delete_session(session.id)
@@ -225,9 +223,7 @@ class TestMessageOperations:
         store, session = store_with_session
 
         metadata = {"tokens": 10, "model": "test-model"}
-        message = await store.add_message(
-            session.id, "assistant", "Response", metadata=metadata
-        )
+        message = await store.add_message(session.id, "assistant", "Response", metadata=metadata)
 
         assert message.metadata == metadata
 
@@ -245,9 +241,7 @@ class TestMessageOperations:
         assert updated_session.message_count == 2
 
     @pytest.mark.asyncio
-    async def test_add_message_session_not_found(
-        self, conversation_store: ConversationStore
-    ):
+    async def test_add_message_session_not_found(self, conversation_store: ConversationStore):
         """Test adding a message to non-existent session raises error."""
         with pytest.raises(SessionNotFoundError):
             await conversation_store.add_message("nonexistent_id", "user", "Hello")
@@ -331,9 +325,7 @@ class TestMessageOperations:
         assert context.tool_calls[messages[0].id][0].tool_name == "echo"
 
     @pytest.mark.asyncio
-    async def test_get_context_session_not_found(
-        self, conversation_store: ConversationStore
-    ):
+    async def test_get_context_session_not_found(self, conversation_store: ConversationStore):
         """Test getting context for non-existent session raises error."""
         with pytest.raises(SessionNotFoundError):
             await conversation_store.get_context("nonexistent_id")
@@ -438,9 +430,7 @@ class TestToolCallTracking:
     async def test_update_tool_call_not_found(self, conversation_store: ConversationStore):
         """Test updating non-existent tool call raises error."""
         with pytest.raises(ToolCallNotFoundError) as exc_info:
-            await conversation_store.update_tool_call(
-                "nonexistent_id", {}, "success", 100
-            )
+            await conversation_store.update_tool_call("nonexistent_id", {}, "success", 100)
 
         assert "nonexistent_id" in str(exc_info.value)
 
@@ -517,9 +507,7 @@ class TestSearchAndQueries:
         assert any(s.id == session1.id for s in results)
 
     @pytest.mark.asyncio
-    async def test_get_recent_sessions_filters_old(
-        self, conversation_store: ConversationStore
-    ):
+    async def test_get_recent_sessions_filters_old(self, conversation_store: ConversationStore):
         """Test that get_recent_sessions filters old sessions."""
         # This is hard to test without mocking time, but we can verify
         # the function runs without error
@@ -547,12 +535,8 @@ class TestErrorHandling:
         store, session, messages = store_with_messages
 
         # Add some tool calls
-        await store.add_tool_call(
-            messages[0].id, "tool1", {"param": "value"}, status="success"
-        )
-        await store.add_tool_call(
-            messages[1].id, "tool2", {"param": "value"}, status="success"
-        )
+        await store.add_tool_call(messages[0].id, "tool1", {"param": "value"}, status="success")
+        await store.add_tool_call(messages[1].id, "tool2", {"param": "value"}, status="success")
 
         summaries = await store.list_sessions()
 
@@ -602,9 +586,7 @@ class TestEdgeCases:
             "null": None,
         }
 
-        message = await store.add_message(
-            session.id, "user", "Test", metadata=metadata
-        )
+        message = await store.add_message(session.id, "user", "Test", metadata=metadata)
 
         retrieved = await store.get_messages(session.id)
         assert retrieved[0].metadata == metadata
@@ -617,9 +599,7 @@ class TestEdgeCases:
         store, session = store_with_session
 
         # Add multiple messages concurrently
-        tasks = [
-            store.add_message(session.id, "user", f"Message {i}") for i in range(5)
-        ]
+        tasks = [store.add_message(session.id, "user", f"Message {i}") for i in range(5)]
         messages = await asyncio.gather(*tasks)
 
         assert len(messages) == 5

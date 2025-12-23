@@ -15,10 +15,13 @@ class TestSettings:
         # Clear any env vars and disable .env loading to test actual Field defaults
         monkeypatch.delenv("OLLAMA_HOST", raising=False)
         monkeypatch.delenv("ARIA_DEFAULT_MODEL", raising=False)
-        monkeypatch.setattr("aria.config.Settings.model_config", {
-            **Settings.model_config,
-            "env_file": None,
-        })
+        monkeypatch.setattr(
+            "aria.config.Settings.model_config",
+            {
+                **Settings.model_config,
+                "env_file": None,
+            },
+        )
 
         settings = Settings(aria_data_dir=temp_data_dir)
 

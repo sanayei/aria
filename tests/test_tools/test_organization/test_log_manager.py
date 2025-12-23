@@ -22,10 +22,7 @@ def temp_logs_dir(tmp_path, monkeypatch):
     logs_dir.mkdir()
 
     # Monkeypatch get_logs_directory to use temp directory
-    monkeypatch.setattr(
-        "aria.tools.organization.log_manager.get_logs_directory",
-        lambda: logs_dir
-    )
+    monkeypatch.setattr("aria.tools.organization.log_manager.get_logs_directory", lambda: logs_dir)
 
     return logs_dir
 
@@ -38,16 +35,14 @@ class TestLogManager:
         test_dir = tmp_path / "test_logs"
 
         # Monkeypatch to use test directory
-        monkeypatch.setattr(
-            "aria.tools.organization.log_manager.Path.home",
-            lambda: tmp_path
-        )
+        monkeypatch.setattr("aria.tools.organization.log_manager.Path.home", lambda: tmp_path)
 
         # Directory shouldn't exist yet
         assert not (tmp_path / ".aria" / "organization_logs").exists()
 
         # Call get_logs_directory
         from aria.tools.organization.log_manager import get_logs_directory
+
         logs_dir = get_logs_directory()
 
         # Directory should now exist
@@ -142,12 +137,14 @@ class TestLogManager:
         """Test listing organization logs."""
         # Create multiple logs
         for i in range(3):
-            operations = [{
-                "source": f"/test/file{i}.txt",
-                "destination": f"/test/Documents/file{i}.txt",
-                "action": "move",
-                "status": "completed",
-            }]
+            operations = [
+                {
+                    "source": f"/test/file{i}.txt",
+                    "destination": f"/test/Documents/file{i}.txt",
+                    "action": "move",
+                    "status": "completed",
+                }
+            ]
 
             save_organization_log(
                 source_path="/test",
@@ -174,12 +171,14 @@ class TestLogManager:
     def test_list_organization_logs_skips_invalid(self, temp_logs_dir):
         """Test that invalid logs are skipped."""
         # Create a valid log
-        operations = [{
-            "source": "/test/file.txt",
-            "destination": "/test/Documents/file.txt",
-            "action": "move",
-            "status": "completed",
-        }]
+        operations = [
+            {
+                "source": "/test/file.txt",
+                "destination": "/test/Documents/file.txt",
+                "action": "move",
+                "status": "completed",
+            }
+        ]
 
         save_organization_log(
             source_path="/test",
@@ -201,12 +200,14 @@ class TestLogManager:
         # Create multiple logs
         log_paths = []
         for i in range(3):
-            operations = [{
-                "source": f"/test/file{i}.txt",
-                "destination": f"/test/Documents/file{i}.txt",
-                "action": "move",
-                "status": "completed",
-            }]
+            operations = [
+                {
+                    "source": f"/test/file{i}.txt",
+                    "destination": f"/test/Documents/file{i}.txt",
+                    "action": "move",
+                    "status": "completed",
+                }
+            ]
 
             log_path = save_organization_log(
                 source_path=f"/test{i}",

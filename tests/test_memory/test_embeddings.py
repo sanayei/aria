@@ -25,9 +25,7 @@ class TestOllamaEmbeddings:
     @pytest.mark.asyncio
     async def test_initialization_with_host(self):
         """Test OllamaEmbeddings initialization with custom host."""
-        embedder = OllamaEmbeddings(
-            model="nomic-embed-text", host="http://custom:11434"
-        )
+        embedder = OllamaEmbeddings(model="nomic-embed-text", host="http://custom:11434")
         assert embedder._host == "http://custom:11434"
 
     @pytest.mark.asyncio
@@ -159,9 +157,7 @@ class TestSentenceTransformerEmbeddings:
 
         # Mock the model
         mock_model = MagicMock()
-        mock_model.encode.return_value = MagicMock(
-            tolist=MagicMock(return_value=[0.1, 0.2, 0.3])
-        )
+        mock_model.encode.return_value = MagicMock(tolist=MagicMock(return_value=[0.1, 0.2, 0.3]))
         mock_model.get_sentence_embedding_dimension.return_value = 3
 
         with patch("sentence_transformers.SentenceTransformer", return_value=mock_model):
@@ -220,9 +216,7 @@ class TestSentenceTransformerEmbeddings:
 
         # Mock the model
         mock_model = MagicMock()
-        mock_model.encode.return_value = MagicMock(
-            tolist=MagicMock(return_value=[0.1, 0.2, 0.3])
-        )
+        mock_model.encode.return_value = MagicMock(tolist=MagicMock(return_value=[0.1, 0.2, 0.3]))
         mock_model.get_sentence_embedding_dimension.return_value = 3
 
         with patch("sentence_transformers.SentenceTransformer", return_value=mock_model):

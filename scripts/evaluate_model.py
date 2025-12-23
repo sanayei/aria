@@ -137,7 +137,7 @@ def build_hard_tasks() -> list[HardTask]:
                 "An analyst invests $12,000 in a fund that gains 4% the first year, loses "
                 "3% the second year, and gains 5% the third year. Compute the value at the "
                 "end of the third year, rounding to two decimals. Provide the percentage "
-                "math you use and finish with \"Final answer: <amount>\" without the "
+                'math you use and finish with "Final answer: <amount>" without the '
                 "dollar sign."
             ),
             expected_answer="Final answer: 12710.88",
@@ -163,7 +163,7 @@ def build_hard_tasks() -> list[HardTask]:
                 "place in the alphabet (z wraps to a), keeping spaces in place; "
                 "(2) reverse the order of the words; (3) convert the result to uppercase. "
                 "Explain each transformation and conclude with "
-                "\"Final answer: <transformed phrase>\"."
+                '"Final answer: <transformed phrase>".'
             ),
             expected_answer="Final answer: NJOET TIBSQFO QSPCMFNT IBSE",
         ),
@@ -233,13 +233,9 @@ def render_results(results: Sequence[HardTaskResult]) -> None:
     for result in results:
         icon = "✅" if result.success else "❌"
         latency = f"{result.latency_s:.2f}" if result.latency_s else "?"
-        tokens_out = (
-            str(result.completion_tokens) if result.completion_tokens is not None else "?"
-        )
+        tokens_out = str(result.completion_tokens) if result.completion_tokens is not None else "?"
         tok_speed = (
-            f"{result.tokens_per_second:.1f}"
-            if result.tokens_per_second is not None
-            else "?"
+            f"{result.tokens_per_second:.1f}" if result.tokens_per_second is not None else "?"
         )
         note = result.reason if result.error is None else result.error
 

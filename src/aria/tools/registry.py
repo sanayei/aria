@@ -132,11 +132,7 @@ class ToolRegistry:
         Returns:
             list[BaseTool]: List of tools requiring confirmation
         """
-        return [
-            tool
-            for tool in self._tools.values()
-            if tool.requires_confirmation
-        ]
+        return [tool for tool in self._tools.values() if tool.requires_confirmation]
 
     def clear(self) -> None:
         """Remove all tools from the registry."""
@@ -218,10 +214,7 @@ class ToolRegistry:
 
     def __repr__(self) -> str:
         """String representation of the registry."""
-        return (
-            f"<ToolRegistry: {len(self._tools)} tools "
-            f"({', '.join(self._tools.keys())})>"
-        )
+        return f"<ToolRegistry: {len(self._tools)} tools ({', '.join(self._tools.keys())})>"
 
     def __iter__(self):
         """Iterate over registered tools."""

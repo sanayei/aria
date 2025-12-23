@@ -101,9 +101,7 @@ class OCRTool(BaseTool[OCRParams]):
                     all_confidences.append(text_line.confidence)
 
             extracted_text = "\n".join(all_text)
-            avg_confidence = (
-                sum(all_confidences) / len(all_confidences) if all_confidences else 0.0
-            )
+            avg_confidence = sum(all_confidences) / len(all_confidences) if all_confidences else 0.0
 
             ocr_result = OCRResult(
                 text=extracted_text,

@@ -27,13 +27,12 @@ def temp_logs_dir(tmp_path, monkeypatch):
     logs_dir.mkdir()
 
     # Monkeypatch get_logs_directory
-    monkeypatch.setattr(
-        "aria.tools.organization.log_manager.get_logs_directory",
-        lambda: logs_dir
-    )
+    monkeypatch.setattr("aria.tools.organization.log_manager.get_logs_directory", lambda: logs_dir)
     monkeypatch.setattr(
         "aria.tools.filesystem.organize_files.save_organization_log",
-        lambda **kwargs: __import__("aria.tools.organization.log_manager", fromlist=["save_organization_log"]).save_organization_log(**kwargs)
+        lambda **kwargs: __import__(
+            "aria.tools.organization.log_manager", fromlist=["save_organization_log"]
+        ).save_organization_log(**kwargs),
     )
 
     return logs_dir

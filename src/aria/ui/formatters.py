@@ -211,9 +211,7 @@ def format_list(
     if style == "bullet":
         prefix = "•"
     elif style == "numbered":
-        return "\n".join(
-            f"{' ' * indent}{i + 1}. {item}" for i, item in enumerate(items)
-        )
+        return "\n".join(f"{' ' * indent}{i + 1}. {item}" for i, item in enumerate(items))
     else:  # dash
         prefix = "-"
 
@@ -240,7 +238,9 @@ def format_dict_table(
 
     for key, value in data.items():
         key_str = str(key).ljust(max_key_length)
-        lines.append(f"[{key_style}]{key_str}[/{key_style}] : [{value_style}]{value}[/{value_style}]")
+        lines.append(
+            f"[{key_style}]{key_str}[/{key_style}] : [{value_style}]{value}[/{value_style}]"
+        )
 
     return "\n".join(lines)
 
@@ -324,6 +324,7 @@ def highlight_keywords(
     for keyword in keywords:
         # Case-insensitive replacement
         import re
+
         pattern = re.compile(re.escape(keyword), re.IGNORECASE)
         result = pattern.sub(f"[{style}]{keyword}[/{style}]", result)
 
@@ -340,5 +341,6 @@ def strip_ansi(text: str) -> str:
         str: Text without ANSI codes
     """
     import re
-    ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
-    return ansi_escape.sub('', text)
+
+    ansi_escape = re.compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
+    return ansi_escape.sub("", text)

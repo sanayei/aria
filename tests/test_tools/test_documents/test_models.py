@@ -87,7 +87,9 @@ class TestProcessedDocument:
             summary="Medical lab results",
             confidence=0.92,
             suggested_filename="2025-01-15_kaiser_permanente_medical.pdf",
-            suggested_destination=Path("/home/user/documents/amir/medical/2025-01-15_kaiser_permanente_medical.pdf"),
+            suggested_destination=Path(
+                "/home/user/documents/amir/medical/2025-01-15_kaiser_permanente_medical.pdf"
+            ),
             metadata={"page_count": 3},
         )
 

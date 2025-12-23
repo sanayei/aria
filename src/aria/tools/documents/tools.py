@@ -92,9 +92,7 @@ class IngestDocumentTool(BaseTool[IngestDocumentParams]):
                     message=f"Successfully ingested {file_path.name} ({result.chunks_created} chunks)",
                 )
             else:
-                return ToolResult.error_result(
-                    error=result.error or "Unknown ingestion error"
-                )
+                return ToolResult.error_result(error=result.error or "Unknown ingestion error")
 
         except Exception as e:
             logger.error(f"Error ingesting document: {e}", exc_info=True)

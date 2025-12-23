@@ -210,8 +210,9 @@ class TestAnalyzeFileTool:
             result = await tool.execute(params)
 
             assert result.success is True, f"Failed for {filename}"
-            assert result.data["category"] == expected_category, \
+            assert result.data["category"] == expected_category, (
                 f"Wrong category for {filename}: expected {expected_category}, got {result.data['category']}"
+            )
 
     @pytest.mark.asyncio
     async def test_analyze_with_expanduser(self, tmp_path, monkeypatch):

@@ -96,7 +96,9 @@ class TestGmailAuth:
 
             assert gmail_auth.is_authenticated()
 
-    def test_is_authenticated_expired_with_refresh(self, gmail_auth: GmailAuth, mock_token_file: Path):
+    def test_is_authenticated_expired_with_refresh(
+        self, gmail_auth: GmailAuth, mock_token_file: Path
+    ):
         """Test is_authenticated with expired token but valid refresh token."""
         with patch("aria.tools.email.auth.Credentials") as mock_creds_class:
             # Mock an expired credentials object with refresh token
@@ -116,7 +118,9 @@ class TestGmailAuth:
             await gmail_auth.authenticate()
 
     @pytest.mark.asyncio
-    async def test_authenticate_with_valid_token(self, gmail_auth: GmailAuth, mock_token_file: Path):
+    async def test_authenticate_with_valid_token(
+        self, gmail_auth: GmailAuth, mock_token_file: Path
+    ):
         """Test authenticate with valid existing token."""
         with patch("aria.tools.email.auth.Credentials") as mock_creds_class:
             # Mock valid credentials
@@ -132,10 +136,11 @@ class TestGmailAuth:
     @pytest.mark.asyncio
     async def test_authenticate_refresh_token(self, gmail_auth: GmailAuth, mock_token_file: Path):
         """Test authenticate with expired token that needs refresh."""
-        with patch("aria.tools.email.auth.Credentials") as mock_creds_class, \
-             patch("aria.tools.email.auth.Request") as mock_request, \
-             patch.object(gmail_auth, "_save_credentials") as mock_save:
-
+        with (
+            patch("aria.tools.email.auth.Credentials") as mock_creds_class,
+            patch("aria.tools.email.auth.Request") as mock_request,
+            patch.object(gmail_auth, "_save_credentials") as mock_save,
+        ):
             # Mock expired credentials with refresh token
             mock_creds = Mock()
             mock_creds.valid = False
@@ -154,9 +159,10 @@ class TestGmailAuth:
     @pytest.mark.asyncio
     async def test_authenticate_refresh_fails(self, gmail_auth: GmailAuth, mock_token_file: Path):
         """Test authenticate when token refresh fails."""
-        with patch("aria.tools.email.auth.Credentials") as mock_creds_class, \
-             patch("aria.tools.email.auth.Request"):
-
+        with (
+            patch("aria.tools.email.auth.Credentials") as mock_creds_class,
+            patch("aria.tools.email.auth.Request"),
+        ):
             # Mock expired credentials that fail to refresh
             mock_creds = Mock()
             mock_creds.valid = False
@@ -195,9 +201,10 @@ class TestGmailAuth:
     @pytest.mark.asyncio
     async def test_get_service_success(self, gmail_auth: GmailAuth, mock_token_file: Path):
         """Test getting Gmail service successfully."""
-        with patch("aria.tools.email.auth.Credentials") as mock_creds_class, \
-             patch("aria.tools.email.auth.build") as mock_build:
-
+        with (
+            patch("aria.tools.email.auth.Credentials") as mock_creds_class,
+            patch("aria.tools.email.auth.build") as mock_build,
+        ):
             # Mock valid credentials
             mock_creds = Mock()
             mock_creds.valid = True
@@ -215,9 +222,10 @@ class TestGmailAuth:
     @pytest.mark.asyncio
     async def test_test_connection_success(self, gmail_auth: GmailAuth, mock_token_file: Path):
         """Test connection test with successful API call."""
-        with patch("aria.tools.email.auth.Credentials") as mock_creds_class, \
-             patch("aria.tools.email.auth.build") as mock_build:
-
+        with (
+            patch("aria.tools.email.auth.Credentials") as mock_creds_class,
+            patch("aria.tools.email.auth.build") as mock_build,
+        ):
             # Mock valid credentials
             mock_creds = Mock()
             mock_creds.valid = True
@@ -236,9 +244,10 @@ class TestGmailAuth:
     @pytest.mark.asyncio
     async def test_test_connection_failure(self, gmail_auth: GmailAuth, mock_token_file: Path):
         """Test connection test with API failure."""
-        with patch("aria.tools.email.auth.Credentials") as mock_creds_class, \
-             patch("aria.tools.email.auth.build") as mock_build:
-
+        with (
+            patch("aria.tools.email.auth.Credentials") as mock_creds_class,
+            patch("aria.tools.email.auth.build") as mock_build,
+        ):
             # Mock valid credentials
             mock_creds = Mock()
             mock_creds.valid = True

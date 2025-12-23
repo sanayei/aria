@@ -18,6 +18,7 @@ logger = get_logger("aria.tools.email.cache")
 
 class EmailCacheError(Exception):
     """Exception raised when email cache operations fail."""
+
     pass
 
 
@@ -101,7 +102,7 @@ class EmailCache:
                     SELECT * FROM email_cache
                     WHERE email_id = ? AND expires_at > ?
                     """,
-                    (email_id, datetime.now(UTC).isoformat())
+                    (email_id, datetime.now(UTC).isoformat()),
                 ) as cursor:
                     row = await cursor.fetchone()
 
@@ -125,24 +126,27 @@ class EmailCache:
             expires_at = now + timedelta(seconds=self.ttl_seconds)
 
             async with aiosqlite.connect(self.db_path) as db:
-                await db.execute("""
+                await db.execute(
+                    """
                     INSERT OR REPLACE INTO email_cache
                     (email_id, thread_id, subject, sender, snippet, date,
                      labels, is_unread, has_attachments, cached_at, expires_at)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                """, (
-                    email.id,
-                    email.thread_id,
-                    email.subject,
-                    email.sender,
-                    email.snippet,
-                    email.date.isoformat(),
-                    json.dumps(email.labels),
-                    1 if email.is_unread else 0,
-                    1 if email.has_attachments else 0,
-                    now.isoformat(),
-                    expires_at.isoformat(),
-                ))
+                """,
+                    (
+                        email.id,
+                        email.thread_id,
+                        email.subject,
+                        email.sender,
+                        email.snippet,
+                        email.date.isoformat(),
+                        json.dumps(email.labels),
+                        1 if email.is_unread else 0,
+                        1 if email.has_attachments else 0,
+                        now.isoformat(),
+                        expires_at.isoformat(),
+                    ),
+                )
                 await db.commit()
 
             logger.debug(f"Cached email {email.id}")
@@ -181,12 +185,15 @@ class EmailCache:
                     for email in emails
                 ]
 
-                await db.executemany("""
+                await db.executemany(
+                    """
                     INSERT OR REPLACE INTO email_cache
                     (email_id, thread_id, subject, sender, snippet, date,
                      labels, is_unread, has_attachments, cached_at, expires_at)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                """, rows)
+                """,
+                    rows,
+                )
                 await db.commit()
 
             logger.debug(f"Cached {len(emails)} emails")
@@ -202,10 +209,7 @@ class EmailCache:
         """
         try:
             async with aiosqlite.connect(self.db_path) as db:
-                await db.execute(
-                    "DELETE FROM email_cache WHERE email_id = ?",
-                    (email_id,)
-                )
+                await db.execute("DELETE FROM email_cache WHERE email_id = ?", (email_id,))
                 await db.commit()
 
             logger.debug(f"Invalidated cache for email {email_id}")
@@ -235,7 +239,7 @@ class EmailCache:
             async with aiosqlite.connect(self.db_path) as db:
                 cursor = await db.execute(
                     "DELETE FROM email_cache WHERE expires_at <= ?",
-                    (datetime.now(UTC).isoformat(),)
+                    (datetime.now(UTC).isoformat(),),
                 )
                 await db.commit()
                 count = cursor.rowcount
@@ -265,7 +269,7 @@ class EmailCache:
                 # Expired entries
                 async with db.execute(
                     "SELECT COUNT(*) FROM email_cache WHERE expires_at <= ?",
-                    (datetime.now(UTC).isoformat(),)
+                    (datetime.now(UTC).isoformat(),),
                 ) as cursor:
                     row = await cursor.fetchone()
                     expired = row[0] if row else 0

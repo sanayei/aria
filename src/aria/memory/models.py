@@ -139,7 +139,9 @@ class ToolCall(BaseModel):
 
     def __repr__(self) -> str:
         """String representation of tool call."""
-        return f"ToolCall(tool={self.tool_name}, status={self.status}, duration={self.duration_ms}ms)"
+        return (
+            f"ToolCall(tool={self.tool_name}, status={self.status}, duration={self.duration_ms}ms)"
+        )
 
 
 class ConversationContext(BaseModel):

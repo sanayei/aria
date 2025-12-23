@@ -41,9 +41,7 @@ class CreateDirectoryTool(BaseTool[CreateDirectoryParams]):
                         }
                     )
                 else:
-                    return ToolResult.error_result(
-                        f"Path exists but is not a directory: {path}"
-                    )
+                    return ToolResult.error_result(f"Path exists but is not a directory: {path}")
 
             # Create the directory
             path.mkdir(parents=True, exist_ok=True)

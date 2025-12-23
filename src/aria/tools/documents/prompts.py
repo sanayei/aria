@@ -1,37 +1,20 @@
 """Prompt templates for document classification."""
 
-CLASSIFICATION_PROMPT = """You are classifying a scanned document. Based on the OCR text below, extract the following information.
+CLASSIFICATION_PROMPT = """Classify this document. Return ONLY valid JSON (no text before or after).
 
-**Family Members**: {family_members}
-**Document Categories**: {categories}
+Family members: {family_members}
+Categories: {categories}
 
-Extract:
-1. **person**: Which family member does this document belong to? Look for names, addresses, or account holders mentioned. If unclear, use "unknown".
+Extract and return JSON:
+- person: Which family member (name/address match). Use "unknown" if unclear.
+- category: Type from categories list above.
+- document_date: Date on document (YYYY-MM-DD) or null.
+- sender: Organization/company name or null.
+- summary: One sentence describing the document.
+- tags: 5-10 lowercase hyphenated tags (type, sender, subject, person, year).
 
-2. **category**: What type of document is this? Choose from the categories above.
-
-3. **document_date**: The date ON the document (not today's date). Format: YYYY-MM-DD. Use null if not clearly visible.
-
-4. **sender**: The organization/company that sent this document. Examples: "Kaiser Permanente", "IRS", "PG&E", "Bank of America". Use null if unclear.
-
-5. **summary**: One concise sentence describing what this document is. Examples:
-   - "Electricity bill for January 2025 showing $142.50 due by Feb 15"
-   - "Lab results from annual checkup showing normal values"
-   - "Report card for Fall 2024 semester"
-
-Respond with ONLY valid JSON in this exact format:
-{{
-    "person": "string",
-    "category": "string",
-    "document_date": "YYYY-MM-DD or null",
-    "sender": "string or null",
-    "summary": "string"
-}}
-
----
 DOCUMENT TEXT:
-{ocr_text}
----"""
+{ocr_text}"""
 
 
 def format_classification_prompt(

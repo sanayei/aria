@@ -136,9 +136,7 @@ class VectorStore:
             VectorStoreError: If not initialized
         """
         if self._client is None or self._collection is None:
-            raise VectorStoreError(
-                "VectorStore not initialized. Call initialize() first."
-            )
+            raise VectorStoreError("VectorStore not initialized. Call initialize() first.")
 
     async def _get_count(self) -> int:
         """Get the number of documents in the collection.

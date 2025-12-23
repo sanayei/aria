@@ -123,6 +123,7 @@ def format_available_tools(tools: list[BaseTool]) -> str:
 
     # Group by risk level
     from aria.tools.base import RiskLevel
+
     by_risk = {
         RiskLevel.LOW: [],
         RiskLevel.MEDIUM: [],

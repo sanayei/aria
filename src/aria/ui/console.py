@@ -21,30 +21,29 @@ from aria import __version__
 
 
 # ARIA color scheme
-ARIA_THEME = Theme({
-    # Primary colors
-    "aria.primary": "cyan",
-    "aria.secondary": "blue",
-    "aria.accent": "magenta",
-
-    # Status colors
-    "aria.success": "green",
-    "aria.error": "red bold",
-    "aria.warning": "yellow",
-    "aria.info": "blue",
-
-    # Message roles
-    "aria.user": "cyan bold",
-    "aria.assistant": "green bold",
-    "aria.system": "dim",
-    "aria.tool": "magenta",
-
-    # Special elements
-    "aria.thinking": "yellow italic",
-    "aria.code": "cyan",
-    "aria.header": "cyan bold",
-    "aria.footer": "dim",
-})
+ARIA_THEME = Theme(
+    {
+        # Primary colors
+        "aria.primary": "cyan",
+        "aria.secondary": "blue",
+        "aria.accent": "magenta",
+        # Status colors
+        "aria.success": "green",
+        "aria.error": "red bold",
+        "aria.warning": "yellow",
+        "aria.info": "blue",
+        # Message roles
+        "aria.user": "cyan bold",
+        "aria.assistant": "green bold",
+        "aria.system": "dim",
+        "aria.tool": "magenta",
+        # Special elements
+        "aria.thinking": "yellow italic",
+        "aria.code": "cyan",
+        "aria.header": "cyan bold",
+        "aria.footer": "dim",
+    }
+)
 
 
 class ARIAConsole:
@@ -84,13 +83,21 @@ class ARIAConsole:
     def welcome(self) -> None:
         """Display the ARIA welcome banner."""
         banner = Text()
-        banner.append("╔═══════════════════════════════════════════════════════════╗\n", style="aria.primary")
-        banner.append("║                                                           ║\n", style="aria.primary")
+        banner.append(
+            "╔═══════════════════════════════════════════════════════════╗\n", style="aria.primary"
+        )
+        banner.append(
+            "║                                                           ║\n", style="aria.primary"
+        )
         banner.append("║           ", style="aria.primary")
         banner.append("ARIA", style="aria.primary bold")
         banner.append(" - AI Research & Intelligence Assistant        ║\n", style="aria.primary")
-        banner.append("║                                                           ║\n", style="aria.primary")
-        banner.append("╚═══════════════════════════════════════════════════════════╝", style="aria.primary")
+        banner.append(
+            "║                                                           ║\n", style="aria.primary"
+        )
+        banner.append(
+            "╚═══════════════════════════════════════════════════════════╝", style="aria.primary"
+        )
 
         self.console.print(banner)
         self.console.print(
@@ -147,6 +154,7 @@ class ARIAConsole:
         )
         if args and self.verbose:
             import json
+
             args_json = json.dumps(args, indent=2)
             self.console.print(
                 Syntax(args_json, "json", theme="monokai", padding=1),
@@ -291,16 +299,16 @@ class ARIAConsole:
         """
         # Simple heuristic: check for common markdown patterns
         markdown_indicators = [
-            "# ",      # Headers
+            "# ",  # Headers
             "## ",
-            "* ",      # Lists
+            "* ",  # Lists
             "- ",
-            "```",     # Code blocks
-            "[",       # Links
+            "```",  # Code blocks
+            "[",  # Links
             "](",
-            "**",      # Bold
+            "**",  # Bold
             "__",
-            "*",       # Italic (but not at start to avoid false positives)
+            "*",  # Italic (but not at start to avoid false positives)
         ]
 
         return any(indicator in text for indicator in markdown_indicators)

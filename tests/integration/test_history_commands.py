@@ -102,9 +102,10 @@ class TestHistoryCommands:
         # Capture output
         f = io.StringIO()
 
-        with patch("aria.main.get_console") as mock_get_console, \
-             patch("aria.main.get_settings") as mock_get_settings:
-
+        with (
+            patch("aria.main.get_console") as mock_get_console,
+            patch("aria.main.get_settings") as mock_get_settings,
+        ):
             # Mock settings
             mock_settings = MagicMock()
             mock_settings.conversation_db_path = store.db_path
@@ -129,9 +130,10 @@ class TestHistoryCommands:
         store, sessions = temp_conversation_store_with_data
         session = sessions[0]
 
-        with patch("aria.main.get_console") as mock_get_console, \
-             patch("aria.main.get_settings") as mock_get_settings:
-
+        with (
+            patch("aria.main.get_console") as mock_get_console,
+            patch("aria.main.get_settings") as mock_get_settings,
+        ):
             # Mock settings
             mock_settings = MagicMock()
             mock_settings.conversation_db_path = store.db_path
@@ -155,9 +157,10 @@ class TestHistoryCommands:
 
         store, sessions = temp_conversation_store_with_data
 
-        with patch("aria.main.get_console") as mock_get_console, \
-             patch("aria.main.get_settings") as mock_get_settings:
-
+        with (
+            patch("aria.main.get_console") as mock_get_console,
+            patch("aria.main.get_settings") as mock_get_settings,
+        ):
             # Mock settings
             mock_settings = MagicMock()
             mock_settings.conversation_db_path = store.db_path
@@ -182,9 +185,10 @@ class TestHistoryCommands:
         store, sessions = temp_conversation_store_with_data
         session = sessions[2]  # Use the last session
 
-        with patch("aria.main.get_console") as mock_get_console, \
-             patch("aria.main.get_settings") as mock_get_settings:
-
+        with (
+            patch("aria.main.get_console") as mock_get_console,
+            patch("aria.main.get_settings") as mock_get_settings,
+        ):
             # Mock settings
             mock_settings = MagicMock()
             mock_settings.conversation_db_path = store.db_path
@@ -212,9 +216,10 @@ class TestHistoryCommands:
 
         output_file = tmp_path / "export.md"
 
-        with patch("aria.main.get_console") as mock_get_console, \
-             patch("aria.main.get_settings") as mock_get_settings:
-
+        with (
+            patch("aria.main.get_console") as mock_get_console,
+            patch("aria.main.get_settings") as mock_get_settings,
+        ):
             # Mock settings
             mock_settings = MagicMock()
             mock_settings.conversation_db_path = store.db_path
@@ -247,9 +252,10 @@ class TestHistoryCommands:
         store = ConversationStore(db_path)
         await store.initialize()
 
-        with patch("aria.main.get_console") as mock_get_console, \
-             patch("aria.main.get_settings") as mock_get_settings:
-
+        with (
+            patch("aria.main.get_console") as mock_get_console,
+            patch("aria.main.get_settings") as mock_get_settings,
+        ):
             # Mock settings
             mock_settings = MagicMock()
             mock_settings.conversation_db_path = store.db_path
@@ -278,9 +284,10 @@ class TestHistoryCommands:
         store = ConversationStore(db_path)
         await store.initialize()
 
-        with patch("aria.main.get_console") as mock_get_console, \
-             patch("aria.main.get_settings") as mock_get_settings:
-
+        with (
+            patch("aria.main.get_console") as mock_get_console,
+            patch("aria.main.get_settings") as mock_get_settings,
+        ):
             # Mock settings
             mock_settings = MagicMock()
             mock_settings.conversation_db_path = store.db_path
@@ -304,9 +311,10 @@ class TestHistoryCommands:
 
         store, sessions = temp_conversation_store_with_data
 
-        with patch("aria.main.get_console") as mock_get_console, \
-             patch("aria.main.get_settings") as mock_get_settings:
-
+        with (
+            patch("aria.main.get_console") as mock_get_console,
+            patch("aria.main.get_settings") as mock_get_settings,
+        ):
             # Mock settings
             mock_settings = MagicMock()
             mock_settings.conversation_db_path = store.db_path
@@ -317,7 +325,9 @@ class TestHistoryCommands:
             mock_get_console.return_value = mock_console
 
             # Run the command with query that won't match
-            await _history_search(query="nonexistent_query_12345", session_id=None, limit=10, no_color=True)
+            await _history_search(
+                query="nonexistent_query_12345", session_id=None, limit=10, no_color=True
+            )
 
             # Verify console was called (should show "no matches" message)
             assert mock_console.console.print.called

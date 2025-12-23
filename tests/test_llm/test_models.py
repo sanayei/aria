@@ -145,9 +145,7 @@ class TestChatResponse:
         assert response1.has_tool_calls is False
 
         # Response with tool calls
-        tool_call = ToolCall(
-            function=ToolFunction(name="test", arguments={})
-        )
+        tool_call = ToolCall(function=ToolFunction(name="test", arguments={}))
         response2 = ChatResponse(
             model="test",
             message=ChatMessage.assistant("Calling tool", tool_calls=[tool_call]),

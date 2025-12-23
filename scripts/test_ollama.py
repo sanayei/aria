@@ -71,9 +71,7 @@ async def test_list_models(client: OllamaClient) -> bool:
         for model in models:
             size_str = f"{model.size_gb:.2f} GB" if model.size_gb else "Unknown"
             modified_str = (
-                model.modified_at.strftime("%Y-%m-%d %H:%M")
-                if model.modified_at
-                else "Unknown"
+                model.modified_at.strftime("%Y-%m-%d %H:%M") if model.modified_at else "Unknown"
             )
             table.add_row(model.name, size_str, modified_str)
 
@@ -84,9 +82,7 @@ async def test_list_models(client: OllamaClient) -> bool:
             console.print(f"[green]✓[/green] Default model '{client.model}' is available")
             return True
         else:
-            console.print(
-                f"[yellow]⚠[/yellow] Default model '{client.model}' not found"
-            )
+            console.print(f"[yellow]⚠[/yellow] Default model '{client.model}' not found")
             console.print(f"  Run: ollama pull {client.model}")
             return False
 
@@ -109,11 +105,13 @@ async def test_simple_chat(client: OllamaClient) -> bool:
                 temperature=0.7,
             )
 
-        console.print(Panel(
-            response,
-            title="Response",
-            border_style="green",
-        ))
+        console.print(
+            Panel(
+                response,
+                title="Response",
+                border_style="green",
+            )
+        )
 
         # Show metadata
         messages = [ChatMessage.user(prompt)]
@@ -186,14 +184,10 @@ async def test_tool_calling(client: OllamaClient) -> bool:
         # Check model capabilities
         capabilities = client.get_model_capabilities()
         if not capabilities.supports_tools:
-            console.print(
-                f"[yellow]⚠[/yellow] Model '{client.model}' may not support tools"
-            )
+            console.print(f"[yellow]⚠[/yellow] Model '{client.model}' may not support tools")
 
         # Send a request that should trigger tool use
-        messages = [
-            ChatMessage.user("What's the weather like in Tokyo? Use Celsius.")
-        ]
+        messages = [ChatMessage.user("What's the weather like in Tokyo? Use Celsius.")]
 
         console.print("  Prompt: [italic]What's the weather like in Tokyo? Use Celsius.[/italic]")
 
@@ -219,7 +213,9 @@ async def test_tool_calling(client: OllamaClient) -> bool:
                 "[yellow]⚠[/yellow] Model did not make a tool call (returned text instead)"
             )
             console.print(f"\n  Response: {response.message.content[:200]}...")
-            console.print("\n  [dim]This is expected for some models that don't support tools well.[/dim]")
+            console.print(
+                "\n  [dim]This is expected for some models that don't support tools well.[/dim]"
+            )
             return True  # Still counts as success since the call worked
 
     except Exception as e:
@@ -229,11 +225,13 @@ async def test_tool_calling(client: OllamaClient) -> bool:
 
 async def main():
     """Run all tests."""
-    console.print(Panel.fit(
-        "[bold cyan]Ollama Client Test Suite[/bold cyan]\n"
-        "Testing connectivity and functionality",
-        border_style="cyan",
-    ))
+    console.print(
+        Panel.fit(
+            "[bold cyan]Ollama Client Test Suite[/bold cyan]\n"
+            "Testing connectivity and functionality",
+            border_style="cyan",
+        )
+    )
 
     # Load settings
     settings = get_settings()
@@ -264,9 +262,7 @@ async def main():
 
             # Stop if critical tests fail
             if test_name in ["Health Check", "List Models"] and not result:
-                console.print(
-                    f"\n[red]Critical test '{test_name}' failed. Stopping.[/red]"
-                )
+                console.print(f"\n[red]Critical test '{test_name}' failed. Stopping.[/red]")
                 break
 
     # Summary
@@ -283,7 +279,9 @@ async def main():
     console.print(f"\n[bold]Results: {passed}/{total} tests passed[/bold]")
 
     if passed == total:
-        console.print("\n[bold green]🎉 All tests passed! Ollama client is working correctly.[/bold green]")
+        console.print(
+            "\n[bold green]🎉 All tests passed! Ollama client is working correctly.[/bold green]"
+        )
         return 0
     else:
         console.print("\n[bold yellow]⚠ Some tests failed. Check the output above.[/bold yellow]")

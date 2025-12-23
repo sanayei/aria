@@ -185,10 +185,7 @@ class TestDocumentOperations:
     async def test_add_documents_large_batch(self, temp_vector_store):
         """Test adding large batch with batching."""
         # Create 250 documents (should be split into 3 batches of 100)
-        documents = [
-            Document(content=f"Document {i}", metadata={"index": i})
-            for i in range(250)
-        ]
+        documents = [Document(content=f"Document {i}", metadata={"index": i}) for i in range(250)]
 
         doc_ids = await temp_vector_store.add_documents(documents, batch_size=100)
 
@@ -282,8 +279,7 @@ class TestSearch:
         """Test search respects limit."""
         # Add 10 documents
         documents = [
-            Document(content=f"Document number {i}", metadata={"index": i})
-            for i in range(10)
+            Document(content=f"Document number {i}", metadata={"index": i}) for i in range(10)
         ]
         await temp_vector_store.add_documents(documents)
 

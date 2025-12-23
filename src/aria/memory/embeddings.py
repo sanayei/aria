@@ -108,15 +108,19 @@ class OllamaEmbeddings(EmbeddingProvider):
         try:
             async with httpx.AsyncClient(timeout=30.0) as client:
                 response = await client.post(
-                    f"{self._host}/api/embeddings",
-                    json={"model": self._model, "prompt": text},
+                    f"{self._host}/api/embed",
+                    json={"model": self._model, "input": text},
                 )
                 response.raise_for_status()
                 data = response.json()
 
-                embedding = data.get("embedding")
+                embedding = data.get("embeddings")
                 if not embedding:
                     raise EmbeddingError("No embedding in Ollama response")
+
+                # Ollama returns list of embeddings, take the first one
+                if isinstance(embedding, list) and len(embedding) > 0:
+                    embedding = embedding[0]
 
                 # Cache dimension on first call
                 if self._dimension is None:
@@ -229,9 +233,7 @@ class SentenceTransformerEmbeddings(EmbeddingProvider):
                 logger.info(f"Loading sentence transformer model '{self._model_name}'...")
                 self._model = SentenceTransformer(self._model_name)
                 self._dimension = self._model.get_sentence_embedding_dimension()
-                logger.info(
-                    f"Loaded model '{self._model_name}' with dimension {self._dimension}"
-                )
+                logger.info(f"Loaded model '{self._model_name}' with dimension {self._dimension}")
 
             except ImportError as e:
                 raise EmbeddingError(
@@ -322,9 +324,7 @@ class SentenceTransformerEmbeddings(EmbeddingProvider):
         return self._model_name
 
 
-def get_embedding_provider(
-    provider: str = "ollama", model: str | None = None
-) -> EmbeddingProvider:
+def get_embedding_provider(provider: str = "ollama", model: str | None = None) -> EmbeddingProvider:
     """Factory function to get an embedding provider.
 
     Args:
@@ -345,6 +345,5 @@ def get_embedding_provider(
         return SentenceTransformerEmbeddings(model=model)
     else:
         raise ValueError(
-            f"Unknown embedding provider: {provider}. "
-            "Choose 'ollama' or 'sentence-transformers'."
+            f"Unknown embedding provider: {provider}. Choose 'ollama' or 'sentence-transformers'."
         )

@@ -16,6 +16,7 @@ logger = logging.getLogger(__name__)
 # Import log manager for saving operation logs
 try:
     from aria.tools.organization.log_manager import save_organization_log
+
     _LOG_MANAGER_AVAILABLE = True
 except ImportError:
     _LOG_MANAGER_AVAILABLE = False
@@ -40,9 +41,7 @@ CATEGORY_FOLDERS = {
 class OrganizeFilesParams(BaseModel):
     """Parameters for organizing files in a directory."""
 
-    source_path: str = Field(
-        description="Directory containing files to organize"
-    )
+    source_path: str = Field(description="Directory containing files to organize")
     destination_path: str | None = Field(
         default=None,
         description="Where to create organized structure (default: same as source)",
@@ -167,51 +166,59 @@ class OrganizeFilesTool(BaseTool[OrganizeFilesParams]):
 
                 # Check if already in correct location
                 if file_path == destination:
-                    operations.append(FileOperation(
-                        action="skip",
-                        source=str(file_path),
-                        destination=str(destination),
-                        category=self._get_file_category(file_path),
-                        reason="Already in correct location",
-                        status="skipped",
-                    ))
+                    operations.append(
+                        FileOperation(
+                            action="skip",
+                            source=str(file_path),
+                            destination=str(destination),
+                            category=self._get_file_category(file_path),
+                            reason="Already in correct location",
+                            status="skipped",
+                        )
+                    )
                     continue
 
                 # Handle conflicts
                 if destination.exists() and file_path != destination:
                     if params.conflict_resolution == "skip":
-                        operations.append(FileOperation(
-                            action="skip",
-                            source=str(file_path),
-                            destination=str(destination),
-                            category=self._get_file_category(file_path),
-                            reason="Destination exists (conflict)",
-                            status="skipped",
-                        ))
+                        operations.append(
+                            FileOperation(
+                                action="skip",
+                                source=str(file_path),
+                                destination=str(destination),
+                                category=self._get_file_category(file_path),
+                                reason="Destination exists (conflict)",
+                                status="skipped",
+                            )
+                        )
                         continue
                     elif params.conflict_resolution == "rename":
                         destination = self._find_unique_destination(destination)
 
                 # Create operation
-                operations.append(FileOperation(
-                    action="move",
-                    source=str(file_path),
-                    destination=str(destination),
-                    category=self._get_file_category(file_path),
-                    status="pending",
-                ))
+                operations.append(
+                    FileOperation(
+                        action="move",
+                        source=str(file_path),
+                        destination=str(destination),
+                        category=self._get_file_category(file_path),
+                        status="pending",
+                    )
+                )
 
             # If dry run, return planned operations
             if params.dry_run:
                 summary = self._generate_summary(operations, dest_path)
-                return ToolResult.success_result(data={
-                    "source_path": str(source_path),
-                    "destination_path": str(dest_path),
-                    "scheme": params.organization_scheme,
-                    "dry_run": True,
-                    "operations": [op.model_dump() for op in operations],
-                    "summary": summary,
-                })
+                return ToolResult.success_result(
+                    data={
+                        "source_path": str(source_path),
+                        "destination_path": str(dest_path),
+                        "scheme": params.organization_scheme,
+                        "dry_run": True,
+                        "operations": [op.model_dump() for op in operations],
+                        "summary": summary,
+                    }
+                )
 
             # Execute actual moves
             executed_operations = await self._execute_moves(operations)

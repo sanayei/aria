@@ -41,9 +41,7 @@ def pydantic_to_json_schema(
 
         # Update required fields
         if "required" in schema:
-            schema["required"] = [
-                f for f in schema["required"] if f not in exclude_fields
-            ]
+            schema["required"] = [f for f in schema["required"] if f not in exclude_fields]
 
     return schema
 

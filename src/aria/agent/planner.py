@@ -50,23 +50,61 @@ class TaskPlanner:
         # Keywords that suggest tool usage
         self._tool_keywords = {
             # Time/date related
-            "time", "date", "clock", "when", "today", "now", "current",
+            "time",
+            "date",
+            "clock",
+            "when",
+            "today",
+            "now",
+            "current",
             # System info
-            "system", "platform", "version", "os", "computer",
+            "system",
+            "platform",
+            "version",
+            "os",
+            "computer",
             # File operations
-            "file", "directory", "folder", "path", "read", "write", "create", "delete",
+            "file",
+            "directory",
+            "folder",
+            "path",
+            "read",
+            "write",
+            "create",
+            "delete",
             # Email
-            "email", "send", "message", "mail",
+            "email",
+            "send",
+            "message",
+            "mail",
             # Web/search
-            "search", "google", "web", "internet", "url", "website",
+            "search",
+            "google",
+            "web",
+            "internet",
+            "url",
+            "website",
             # Actions
-            "do", "execute", "run", "perform", "make", "create",
+            "do",
+            "execute",
+            "run",
+            "perform",
+            "make",
+            "create",
         }
 
         # Keywords for conversational/informational requests
         self._conversational_keywords = {
-            "what", "how", "why", "explain", "tell me", "describe",
-            "can you", "could you", "would you", "help me understand",
+            "what",
+            "how",
+            "why",
+            "explain",
+            "tell me",
+            "describe",
+            "can you",
+            "could you",
+            "would you",
+            "help me understand",
         }
 
     def analyze_request(self, user_message: str) -> TaskAnalysis:
@@ -125,9 +163,7 @@ class TaskPlanner:
             bool: True if tools likely needed
         """
         # Check for tool-related keywords
-        tool_keyword_count = sum(
-            1 for keyword in self._tool_keywords if keyword in message
-        )
+        tool_keyword_count = sum(1 for keyword in self._tool_keywords if keyword in message)
 
         # Strong indicators that tools are needed
         strong_indicators = [
@@ -142,9 +178,7 @@ class TaskPlanner:
             "search for",
         ]
 
-        has_strong_indicator = any(
-            indicator in message for indicator in strong_indicators
-        )
+        has_strong_indicator = any(indicator in message for indicator in strong_indicators)
 
         # Check for action verbs
         action_verbs = ["send", "create", "delete", "run", "execute", "make", "do"]
@@ -189,15 +223,11 @@ class TaskPlanner:
             "all",
         ]
 
-        has_multi_step = any(
-            indicator in message for indicator in multi_step_indicators
-        )
+        has_multi_step = any(indicator in message for indicator in multi_step_indicators)
 
         # Check for conditional logic
         conditional_indicators = ["if", "unless", "when", "only if", "depending on"]
-        has_conditional = any(
-            indicator in message for indicator in conditional_indicators
-        )
+        has_conditional = any(indicator in message for indicator in conditional_indicators)
 
         # Determine complexity
         if has_conditional or (has_multi_step and word_count > 30):

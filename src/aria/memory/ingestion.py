@@ -91,6 +91,98 @@ class DocumentIngester:
         file_hash = str(file_path).replace("/", "_").replace("\\", "_")
         return f"doc_{file_hash}_{chunk_index}"
 
+    async def ingest_text(
+        self,
+        text: str,
+        file_path: Path | str,
+        metadata: dict[str, Any] | None = None,
+        tags: list[str] | None = None,
+    ) -> IngestionResult:
+        """Ingest pre-extracted text into the vector store.
+
+        This is useful for documents where text has already been extracted
+        (e.g., via OCR) and you want to skip the extraction step.
+
+        Args:
+            text: Pre-extracted text content
+            file_path: Path to associate with the text (for tracking)
+            metadata: Optional metadata to attach to chunks
+            tags: Optional tags for categorization
+
+        Returns:
+            IngestionResult: Result of ingestion
+        """
+        start_time = datetime.now()
+        file_path = Path(file_path)
+
+        try:
+            logger.info(f"Ingesting pre-extracted text for: {file_path}")
+
+            # Prepare metadata
+            meta = metadata or {}
+            meta["file_path"] = str(file_path)
+            meta["file_name"] = file_path.name
+            meta["file_type"] = file_path.suffix.lower()
+            meta["ingested_at"] = datetime.now().isoformat()
+
+            if tags:
+                meta["tags"] = ",".join(tags)
+
+            # Chunk the text directly
+            chunks = self._chunker.chunk_text(
+                text=text,
+                metadata=meta,
+                source_file=str(file_path),
+            )
+
+            if not chunks:
+                return IngestionResult(
+                    file_path=str(file_path),
+                    success=False,
+                    chunks_created=0,
+                    error="No chunks created (empty text)",
+                    processing_time_ms=int((datetime.now() - start_time).total_seconds() * 1000),
+                )
+
+            # Convert chunks to Documents for vector store
+            documents = []
+            for chunk in chunks:
+                doc_id = self._create_doc_id(file_path, chunk.chunk_index)
+                documents.append(
+                    Document(
+                        doc_id=doc_id,
+                        content=chunk.content,
+                        metadata=chunk.metadata,
+                    )
+                )
+
+            # Ingest into vector store
+            await self._vector_store.add_documents(documents, batch_size=100)
+
+            duration_ms = int((datetime.now() - start_time).total_seconds() * 1000)
+
+            logger.info(f"Ingested {len(chunks)} chunks from pre-extracted text")
+
+            return IngestionResult(
+                file_path=str(file_path),
+                success=True,
+                chunks_created=len(chunks),
+                error=None,
+                processing_time_ms=duration_ms,
+            )
+
+        except Exception as e:
+            logger.error(f"Failed to ingest text for {file_path}: {e}")
+            duration_ms = int((datetime.now() - start_time).total_seconds() * 1000)
+
+            return IngestionResult(
+                file_path=str(file_path),
+                success=False,
+                chunks_created=0,
+                error=str(e),
+                processing_time_ms=duration_ms,
+            )
+
     async def ingest_file(
         self,
         file_path: Path | str,
@@ -142,9 +234,7 @@ class DocumentIngester:
                     success=False,
                     chunks_created=0,
                     error="No chunks created (unsupported file type or empty file)",
-                    processing_time_ms=int(
-                        (datetime.now() - start_time).total_seconds() * 1000
-                    ),
+                    processing_time_ms=int((datetime.now() - start_time).total_seconds() * 1000),
                 )
 
             # Convert chunks to Documents for vector store
@@ -337,7 +427,9 @@ class DocumentIngester:
                             result.metadata.get("ingested_at", datetime.now().isoformat())
                         ),
                         file_size_bytes=result.metadata.get("file_size", 0),
-                        tags=result.metadata.get("tags", "").split(",") if result.metadata.get("tags") else [],
+                        tags=result.metadata.get("tags", "").split(",")
+                        if result.metadata.get("tags")
+                        else [],
                     )
                 else:
                     docs_map[file_path].chunk_count += 1

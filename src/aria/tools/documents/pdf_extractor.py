@@ -422,9 +422,7 @@ class PDFExtractor:
 
             # Check page counts
             if len(doc1) != len(doc2):
-                structural_differences.append(
-                    f"Page count differs: {len(doc1)} vs {len(doc2)}"
-                )
+                structural_differences.append(f"Page count differs: {len(doc1)} vs {len(doc2)}")
 
             # Determine added/removed pages
             added_pages = []
@@ -463,9 +461,7 @@ class PDFExtractor:
                 # Structure comparison
                 if comparison_type in ["structure", "full"]:
                     if page1.rect != page2.rect:
-                        structural_differences.append(
-                            f"Page {page_num + 1}: Different dimensions"
-                        )
+                        structural_differences.append(f"Page {page_num + 1}: Different dimensions")
 
             # Calculate overall text similarity
             text_similarity = matching_chars / total_chars if total_chars > 0 else 1.0

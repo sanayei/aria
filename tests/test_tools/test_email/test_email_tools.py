@@ -98,9 +98,10 @@ class TestListEmailsTool:
         tool = ListEmailsTool()
 
         # Mock the Gmail client
-        with patch.object(tool, '_get_gmail_client') as mock_get_client, \
-             patch.object(tool, '_get_email_cache') as mock_get_cache:
-
+        with (
+            patch.object(tool, "_get_gmail_client") as mock_get_client,
+            patch.object(tool, "_get_email_cache") as mock_get_cache,
+        ):
             mock_client = AsyncMock()
             mock_client.list_messages = AsyncMock(return_value=[mock_email_summary])
             mock_get_client.return_value = mock_client
@@ -124,9 +125,10 @@ class TestListEmailsTool:
         """Test listing when no emails found."""
         tool = ListEmailsTool()
 
-        with patch.object(tool, '_get_gmail_client') as mock_get_client, \
-             patch.object(tool, '_get_email_cache') as mock_get_cache:
-
+        with (
+            patch.object(tool, "_get_gmail_client") as mock_get_client,
+            patch.object(tool, "_get_email_cache") as mock_get_cache,
+        ):
             mock_client = AsyncMock()
             mock_client.list_messages = AsyncMock(return_value=[])
             mock_get_client.return_value = mock_client
@@ -146,7 +148,7 @@ class TestListEmailsTool:
         """Test error handling."""
         tool = ListEmailsTool()
 
-        with patch.object(tool, '_get_gmail_client') as mock_get_client:
+        with patch.object(tool, "_get_gmail_client") as mock_get_client:
             mock_client = AsyncMock()
             mock_client.list_messages = AsyncMock(side_effect=Exception("API Error"))
             mock_get_client.return_value = mock_client
@@ -185,9 +187,10 @@ class TestSearchEmailsTool:
         """Test successful email search."""
         tool = SearchEmailsTool()
 
-        with patch.object(tool, '_get_gmail_client') as mock_get_client, \
-             patch.object(tool, '_get_email_cache') as mock_get_cache:
-
+        with (
+            patch.object(tool, "_get_gmail_client") as mock_get_client,
+            patch.object(tool, "_get_email_cache") as mock_get_cache,
+        ):
             mock_client = AsyncMock()
             mock_client.search_messages = AsyncMock(return_value=[mock_email_summary])
             mock_get_client.return_value = mock_client
@@ -207,9 +210,10 @@ class TestSearchEmailsTool:
         """Test search with no results."""
         tool = SearchEmailsTool()
 
-        with patch.object(tool, '_get_gmail_client') as mock_get_client, \
-             patch.object(tool, '_get_email_cache') as mock_get_cache:
-
+        with (
+            patch.object(tool, "_get_gmail_client") as mock_get_client,
+            patch.object(tool, "_get_email_cache") as mock_get_cache,
+        ):
             mock_client = AsyncMock()
             mock_client.search_messages = AsyncMock(return_value=[])
             mock_get_client.return_value = mock_client
@@ -252,7 +256,7 @@ class TestReadEmailTool:
         """Test successful email reading."""
         tool = ReadEmailTool()
 
-        with patch.object(tool, '_get_gmail_client') as mock_get_client:
+        with patch.object(tool, "_get_gmail_client") as mock_get_client:
             mock_client = AsyncMock()
             mock_client.get_message = AsyncMock(return_value=mock_email_detail)
             mock_get_client.return_value = mock_client
@@ -270,7 +274,7 @@ class TestReadEmailTool:
         """Test reading and marking email as read."""
         tool = ReadEmailTool()
 
-        with patch.object(tool, '_get_gmail_client') as mock_get_client:
+        with patch.object(tool, "_get_gmail_client") as mock_get_client:
             mock_client = AsyncMock()
             mock_client.get_message = AsyncMock(return_value=mock_email_detail)
             mock_client.mark_as_read = AsyncMock(return_value=True)
@@ -288,7 +292,7 @@ class TestReadEmailTool:
         """Test error handling."""
         tool = ReadEmailTool()
 
-        with patch.object(tool, '_get_gmail_client') as mock_get_client:
+        with patch.object(tool, "_get_gmail_client") as mock_get_client:
             mock_client = AsyncMock()
             mock_client.get_message = AsyncMock(side_effect=Exception("API Error"))
             mock_get_client.return_value = mock_client
@@ -316,7 +320,7 @@ class TestLabelEmailTool:
         input_data = {
             "email_id": "test-email-1",
             "add_labels": ["IMPORTANT"],
-            "remove_labels": ["UNREAD"]
+            "remove_labels": ["UNREAD"],
         }
         validated = LabelEmailParams(**input_data)
         assert validated.email_id == "test-email-1"
@@ -328,7 +332,7 @@ class TestLabelEmailTool:
         """Test adding labels to email."""
         tool = LabelEmailTool()
 
-        with patch.object(tool, '_get_gmail_client') as mock_get_client:
+        with patch.object(tool, "_get_gmail_client") as mock_get_client:
             mock_client = AsyncMock()
             mock_client.add_labels = AsyncMock(return_value=True)
             mock_get_client.return_value = mock_client
@@ -346,7 +350,7 @@ class TestLabelEmailTool:
         """Test removing labels from email."""
         tool = LabelEmailTool()
 
-        with patch.object(tool, '_get_gmail_client') as mock_get_client:
+        with patch.object(tool, "_get_gmail_client") as mock_get_client:
             mock_client = AsyncMock()
             mock_client.remove_labels = AsyncMock(return_value=True)
             mock_get_client.return_value = mock_client
@@ -381,7 +385,7 @@ class TestArchiveEmailTool:
         """Test successful email archiving."""
         tool = ArchiveEmailTool()
 
-        with patch.object(tool, '_get_gmail_client') as mock_get_client:
+        with patch.object(tool, "_get_gmail_client") as mock_get_client:
             mock_client = AsyncMock()
             mock_client.archive_message = AsyncMock(return_value=True)
             mock_get_client.return_value = mock_client
@@ -409,7 +413,7 @@ class TestCreateDraftTool:
         input_data = {
             "to": ["recipient@example.com"],
             "subject": "Test Subject",
-            "body": "Test body"
+            "body": "Test body",
         }
         validated = CreateDraftParams(**input_data)
         assert validated.to == ["recipient@example.com"]
@@ -421,15 +425,13 @@ class TestCreateDraftTool:
         """Test successful draft creation."""
         tool = CreateDraftTool()
 
-        with patch.object(tool, '_get_gmail_client') as mock_get_client:
+        with patch.object(tool, "_get_gmail_client") as mock_get_client:
             mock_client = AsyncMock()
             mock_client.create_draft = AsyncMock(return_value="draft-123")
             mock_get_client.return_value = mock_client
 
             input_data = CreateDraftParams(
-                to=["recipient@example.com"],
-                subject="Test",
-                body="Test body"
+                to=["recipient@example.com"], subject="Test", body="Test body"
             )
             result = await tool.execute(input_data)
 
@@ -454,7 +456,7 @@ class TestSendEmailTool:
         input_data = {
             "to": ["recipient@example.com"],
             "subject": "Test Subject",
-            "body": "Test body"
+            "body": "Test body",
         }
         validated = SendEmailParams(**input_data)
         assert validated.to == ["recipient@example.com"]
@@ -466,15 +468,13 @@ class TestSendEmailTool:
         """Test successful email sending."""
         tool = SendEmailTool()
 
-        with patch.object(tool, '_get_gmail_client') as mock_get_client:
+        with patch.object(tool, "_get_gmail_client") as mock_get_client:
             mock_client = AsyncMock()
             mock_client.send_message = AsyncMock(return_value="msg-123")
             mock_get_client.return_value = mock_client
 
             input_data = SendEmailParams(
-                to=["recipient@example.com"],
-                subject="Test",
-                body="Test body"
+                to=["recipient@example.com"], subject="Test", body="Test body"
             )
             result = await tool.execute(input_data)
 
@@ -489,7 +489,8 @@ class TestSendEmailTool:
         params = SendEmailParams(
             to=["recipient@example.com"],
             subject="Test Subject",
-            body="This is a test email body that should be truncated in the confirmation message if it's too long. " * 10
+            body="This is a test email body that should be truncated in the confirmation message if it's too long. "
+            * 10,
         )
         confirmation = tool.get_confirmation_message(params)
         assert "recipient@example.com" in confirmation

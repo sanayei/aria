@@ -39,6 +39,7 @@ class ToolCallRecord(NamedTuple):
     This is used to track tool calls during agent execution so they
     can be persisted to the conversation history database.
     """
+
     tool_name: str
     tool_input: dict[str, Any]
     result: ToolResult
@@ -92,6 +93,7 @@ class Agent:
         # Create approval handler if not provided
         if approval_handler is None:
             from aria.approval import ApprovalHandler
+
             approval_handler = ApprovalHandler(console)
 
         self.approval_handler = approval_handler
@@ -197,7 +199,10 @@ class Agent:
                 tool_output = {"data": tool_call_record.result.data}
             else:
                 # Check if it was denied or just an error
-                if tool_call_record.result.error and "denied" in tool_call_record.result.error.lower():
+                if (
+                    tool_call_record.result.error
+                    and "denied" in tool_call_record.result.error.lower()
+                ):
                     status = "denied"
                 else:
                     status = "error"
@@ -268,7 +273,12 @@ class Agent:
         logger.debug(
             "Tools prepared",
             tool_count=len(tools),
-            tool_names=[t.function.get("name", "unknown") if isinstance(t.function, dict) else t.function.name for t in tools],
+            tool_names=[
+                t.function.get("name", "unknown")
+                if isinstance(t.function, dict)
+                else t.function.name
+                for t in tools
+            ],
         )
 
         # Track tool calls for conversation history
@@ -289,9 +299,7 @@ class Agent:
             try:
                 # Call LLM with tools
                 with self.console.thinking(f"Thinking... (iteration {iteration})"):
-                    async with AsyncTimer(
-                        f"LLM call (iteration {iteration})", logger
-                    ) as llm_timer:
+                    async with AsyncTimer(f"LLM call (iteration {iteration})", logger) as llm_timer:
                         response = await self.client.chat_with_tools(
                             messages=messages,
                             tools=tools,
@@ -300,9 +308,7 @@ class Agent:
 
                 # Check for tool calls
                 if response.has_tool_calls:
-                    tool_names_called = [
-                        tc.function.name for tc in response.message.tool_calls
-                    ]
+                    tool_names_called = [tc.function.name for tc in response.message.tool_calls]
                     logger.info(
                         "Tool calls requested",
                         count=len(response.message.tool_calls),
@@ -329,12 +335,14 @@ class Agent:
                         tool_exec_elapsed = time.perf_counter() - tool_exec_start
 
                         # Record tool call for conversation history
-                        tool_call_records.append(ToolCallRecord(
-                            tool_name=tool_name,
-                            tool_input=arguments,
-                            result=result,
-                            execution_time_ms=tool_exec_elapsed * 1000,
-                        ))
+                        tool_call_records.append(
+                            ToolCallRecord(
+                                tool_name=tool_name,
+                                tool_input=arguments,
+                                result=result,
+                                execution_time_ms=tool_exec_elapsed * 1000,
+                            )
+                        )
 
                         logger.info(
                             f"Tool {tool_name} complete",

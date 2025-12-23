@@ -112,9 +112,7 @@ class ActionClassifier:
                 if tool_factors:
                     factors.extend(tool_factors)
             except Exception as e:
-                logger.warning(
-                    f"Failed to get risk factors from tool {tool.name}: {e}"
-                )
+                logger.warning(f"Failed to get risk factors from tool {tool.name}: {e}")
 
         # Add parameter-based factors
         param_factors = self._analyze_parameters(tool, params)
@@ -179,9 +177,7 @@ class ActionClassifier:
         for key, value in param_dict.items():
             if key in bulk_indicators and isinstance(value, int):
                 if value > 100:
-                    factors.append(
-                        f"Large batch operation ({key}={value} items)"
-                    )
+                    factors.append(f"Large batch operation ({key}={value} items)")
                 elif value > 10:
                     factors.append(f"Batch operation ({key}={value} items)")
 

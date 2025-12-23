@@ -43,14 +43,16 @@ class ListOrganizationLogsTool(BaseTool[ListOrganizationLogsParams]):
             logs = list_organization_logs()
 
             if not logs:
-                return ToolResult.success_result(data={
-                    "logs": [],
-                    "total_logs": 0,
-                    "message": "No organization logs found",
-                })
+                return ToolResult.success_result(
+                    data={
+                        "logs": [],
+                        "total_logs": 0,
+                        "message": "No organization logs found",
+                    }
+                )
 
             # Limit results
-            logs = logs[:params.limit]
+            logs = logs[: params.limit]
 
             # Format log data for output
             log_data = []
@@ -60,22 +62,26 @@ class ListOrganizationLogsTool(BaseTool[ListOrganizationLogsParams]):
                 log_filename = f"{timestamp_safe}_organize.json"
                 log_path = Path.home() / ".aria" / "organization_logs" / log_filename
 
-                log_data.append({
-                    "timestamp": log.timestamp,
-                    "log_file": str(log_path),
-                    "source_path": log.source_path,
-                    "destination_path": log.destination_path,
-                    "scheme": log.scheme,
-                    "total_files": log.total_operations,
-                    "completed": log.completed_operations,
-                    "failed": log.failed_operations,
-                })
+                log_data.append(
+                    {
+                        "timestamp": log.timestamp,
+                        "log_file": str(log_path),
+                        "source_path": log.source_path,
+                        "destination_path": log.destination_path,
+                        "scheme": log.scheme,
+                        "total_files": log.total_operations,
+                        "completed": log.completed_operations,
+                        "failed": log.failed_operations,
+                    }
+                )
 
-            return ToolResult.success_result(data={
-                "logs": log_data,
-                "total_logs": len(log_data),
-                "showing": len(log_data),
-            })
+            return ToolResult.success_result(
+                data={
+                    "logs": log_data,
+                    "total_logs": len(log_data),
+                    "showing": len(log_data),
+                }
+            )
 
         except Exception as e:
             logger.exception("Error listing organization logs")

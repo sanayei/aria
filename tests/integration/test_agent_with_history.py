@@ -79,9 +79,7 @@ class TestAgentWithHistory:
         """Test resuming an existing session."""
         # Create a session first
         session = await temp_conversation_store.create_session("Existing Session")
-        await temp_conversation_store.add_message(
-            session.id, "user", "Previous message"
-        )
+        await temp_conversation_store.add_message(session.id, "user", "Previous message")
 
         # Create agent
         mock_client = AsyncMock(spec=OllamaClient)
@@ -161,9 +159,7 @@ class TestAgentWithHistory:
         # Create session with some history
         session = await temp_conversation_store.create_session("Test")
         await temp_conversation_store.add_message(session.id, "user", "First message")
-        await temp_conversation_store.add_message(
-            session.id, "assistant", "First response"
-        )
+        await temp_conversation_store.add_message(session.id, "assistant", "First response")
 
         # Create mock client
         mock_client = AsyncMock(spec=OllamaClient)
@@ -200,9 +196,7 @@ class TestAgentWithHistory:
         assert len(messages) >= 4  # At least system + 2 history + current
 
     @pytest.mark.asyncio
-    async def test_chat_without_conversation_store(
-        self, mock_console, mock_registry
-    ):
+    async def test_chat_without_conversation_store(self, mock_console, mock_registry):
         """Test that chat() falls back to run() without conversation store."""
         # Create mock client
         mock_client = AsyncMock(spec=OllamaClient)
@@ -268,10 +262,7 @@ class TestAgentWithHistory:
         tool_call = LLMToolCall(
             id="test-call-1",
             type="function",
-            function=ToolFunction(
-                name="echo",
-                arguments={"message": "test message"}
-            )
+            function=ToolFunction(name="echo", arguments={"message": "test message"}),
         )
         tool_response = ChatResponse(
             message=ChatMessage.assistant("", tool_calls=[tool_call]),
@@ -327,9 +318,7 @@ class TestConversationContext:
     """Tests for conversation context formatting."""
 
     @pytest.mark.asyncio
-    async def test_context_to_chat_messages(
-        self, temp_conversation_store: ConversationStore
-    ):
+    async def test_context_to_chat_messages(self, temp_conversation_store: ConversationStore):
         """Test converting conversation context to chat messages."""
         from aria.memory.context import context_to_chat_messages
 

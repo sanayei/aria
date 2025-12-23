@@ -311,13 +311,16 @@ class ConversationIndexer:
             cutoff_date = None
             if days_back:
                 from datetime import UTC
+
                 cutoff_date = datetime.now(UTC) - timedelta(days=days_back)
 
             for result in results:
                 # Parse metadata
                 meta = result.metadata
 
-                timestamp = datetime.fromisoformat(meta.get("timestamp", datetime.now().isoformat()))
+                timestamp = datetime.fromisoformat(
+                    meta.get("timestamp", datetime.now().isoformat())
+                )
 
                 # Filter by days_back if specified
                 if cutoff_date and timestamp < cutoff_date:
@@ -369,17 +372,13 @@ class ConversationIndexer:
             )
 
             # Filter out current session
-            filtered_results = [
-                r for r in all_results
-                if r.session_id != current_session_id
-            ]
+            filtered_results = [r for r in all_results if r.session_id != current_session_id]
 
             # Limit to max_results
             relevant_context = filtered_results[:max_results]
 
             logger.debug(
-                f"Found {len(relevant_context)} relevant context messages "
-                f"for query: '{query[:50]}'"
+                f"Found {len(relevant_context)} relevant context messages for query: '{query[:50]}'"
             )
 
             return relevant_context

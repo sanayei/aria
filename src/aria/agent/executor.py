@@ -127,9 +127,7 @@ class ToolExecutor:
                     f"Requesting confirmation for tool: {tool_name}",
                     risk_level=tool.risk_level.value,
                 )
-                approval_result = await self.approval_handler.request_approval(
-                    tool, params
-                )
+                approval_result = await self.approval_handler.request_approval(tool, params)
             else:
                 # LOW - auto-approve
                 logger.debug(
@@ -137,6 +135,7 @@ class ToolExecutor:
                     risk_level=tool.risk_level.value,
                 )
                 from aria.approval.handler import ApprovalResult
+
                 approval_result = ApprovalResult.approve()
 
             approval_elapsed = time.perf_counter() - approval_start
@@ -219,9 +218,7 @@ class ToolExecutor:
 
             # Stop if a tool fails critically
             if not result.success and result.error and "denied" in result.error.lower():
-                logger.warning(
-                    f"Stopping tool execution chain due to denial of '{tool_name}'"
-                )
+                logger.warning(f"Stopping tool execution chain due to denial of '{tool_name}'")
                 break
 
         return results

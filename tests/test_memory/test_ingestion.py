@@ -43,7 +43,9 @@ class TestDocumentIngester:
         """Test ingesting a single TXT file."""
         # Create test file
         test_file = tmp_path / "test.txt"
-        test_file.write_text("This is a test document.\n\nWith multiple paragraphs.\n\nFor testing.")
+        test_file.write_text(
+            "This is a test document.\n\nWith multiple paragraphs.\n\nFor testing."
+        )
 
         result = await ingester.ingest_file(
             file_path=test_file,
@@ -130,9 +132,7 @@ class TestDocumentIngester:
         assert result.total_chunks > 0
 
     @pytest.mark.asyncio
-    async def test_ingest_directory_nonrecursive(
-        self, ingester: DocumentIngester, tmp_path: Path
-    ):
+    async def test_ingest_directory_nonrecursive(self, ingester: DocumentIngester, tmp_path: Path):
         """Test batch ingesting directory without recursion."""
         # Create test files
         (tmp_path / "doc1.txt").write_text("Document 1 content")
@@ -174,9 +174,7 @@ class TestDocumentIngester:
     @pytest.mark.asyncio
     async def test_remove_nonexistent_document(self, ingester: DocumentIngester):
         """Test removing nonexistent document."""
-        removed = await ingester.remove_document(
-            file_path=Path("/nonexistent/file.txt")
-        )
+        removed = await ingester.remove_document(file_path=Path("/nonexistent/file.txt"))
         # Should return False (no documents to remove)
         assert removed is False
 
@@ -206,13 +204,13 @@ class TestDocumentIngester:
             assert doc.file_size_bytes > 0
 
     @pytest.mark.asyncio
-    async def test_get_document_chunks(
-        self, ingester: DocumentIngester, tmp_path: Path
-    ):
+    async def test_get_document_chunks(self, ingester: DocumentIngester, tmp_path: Path):
         """Test retrieving chunks for a specific document."""
         # Ingest a document
         test_file = tmp_path / "test.txt"
-        test_file.write_text("This is test content.\n\nWith multiple parts.\n\nFor testing retrieval.")
+        test_file.write_text(
+            "This is test content.\n\nWith multiple parts.\n\nFor testing retrieval."
+        )
 
         ingest_result = await ingester.ingest_file(
             file_path=test_file,
@@ -230,9 +228,7 @@ class TestDocumentIngester:
             assert len(chunk.content) > 0
 
     @pytest.mark.asyncio
-    async def test_metadata_preservation(
-        self, ingester: DocumentIngester, tmp_path: Path
-    ):
+    async def test_metadata_preservation(self, ingester: DocumentIngester, tmp_path: Path):
         """Test that metadata is preserved through ingestion."""
         test_file = tmp_path / "test.txt"
         test_file.write_text("Test content")
@@ -258,9 +254,7 @@ class TestDocumentIngester:
             assert chunk.metadata["tags"] == "important,test"
 
     @pytest.mark.asyncio
-    async def test_reingest_document(
-        self, ingester: DocumentIngester, tmp_path: Path
-    ):
+    async def test_reingest_document(self, ingester: DocumentIngester, tmp_path: Path):
         """Test re-ingesting a document (should update)."""
         test_file = tmp_path / "test.txt"
         test_file.write_text("Original content")
@@ -316,7 +310,9 @@ class TestDocumentIngester:
 
         test_file = tmp_path / "test.txt"
         # Create text with multiple paragraphs to ensure chunking
-        test_file.write_text("Paragraph one with some text.\n\nParagraph two with more text.\n\nParagraph three continues.\n\nParagraph four adds more.\n\nParagraph five finishes it.")
+        test_file.write_text(
+            "Paragraph one with some text.\n\nParagraph two with more text.\n\nParagraph three continues.\n\nParagraph four adds more.\n\nParagraph five finishes it."
+        )
 
         result = await ingester.ingest_file(
             file_path=test_file,

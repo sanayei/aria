@@ -4,6 +4,7 @@ This module provides persistent storage for conversation history, sessions,
 messages, and tool calls using SQLite, as well as semantic search via ChromaDB.
 """
 
+from aria.memory.archive import ArchiveDocument, ArchiveIndex, ArchiveStatistics
 from aria.memory.chunker import DocumentChunk, DocumentChunker
 from aria.memory.context import context_to_chat_messages, messages_to_chat_messages
 from aria.memory.conversation import ConversationStore
@@ -56,7 +57,10 @@ __all__ = [
     "ConversationIndexer",
     "DocumentIngester",
     "DocumentChunker",
+    "ArchiveIndex",
     # Models
+    "ArchiveDocument",
+    "ArchiveStatistics",
     "ConversationContext",
     "Message",
     "MessageRole",

@@ -12,22 +12,17 @@ logger = get_logger("aria.tools.search.web")
 
 class WebSearchParams(BaseModel):
     """Input for WebSearchTool."""
-    query: str = Field(
-        description="Search query string"
-    )
+
+    query: str = Field(description="Search query string")
     max_results: int = Field(
-        default=5,
-        ge=1,
-        le=20,
-        description="Maximum number of results to return"
+        default=5, ge=1, le=20, description="Maximum number of results to return"
     )
     region: str = Field(
-        default="wt-wt",
-        description="Region code (e.g., 'wt-wt' for worldwide, 'us-en' for US)"
+        default="wt-wt", description="Region code (e.g., 'wt-wt' for worldwide, 'us-en' for US)"
     )
     time_range: str | None = Field(
         default=None,
-        description="Time range filter: 'd' (day), 'w' (week), 'm' (month), 'y' (year)"
+        description="Time range filter: 'd' (day), 'w' (week), 'm' (month), 'y' (year)",
     )
 
 
@@ -132,18 +127,14 @@ class WebSearchTool(BaseTool[WebSearchParams]):
 
 class FetchWebPageParams(BaseModel):
     """Input for FetchWebPageTool."""
-    url: str = Field(
-        description="URL of the web page to fetch"
-    )
+
+    url: str = Field(description="URL of the web page to fetch")
     extract_text: bool = Field(
         default=True,
-        description="If True, extract and clean text content; if False, return raw HTML"
+        description="If True, extract and clean text content; if False, return raw HTML",
     )
     max_length: int = Field(
-        default=10000,
-        ge=100,
-        le=50000,
-        description="Maximum characters to return"
+        default=10000, ge=100, le=50000, description="Maximum characters to return"
     )
 
 

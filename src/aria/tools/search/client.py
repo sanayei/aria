@@ -13,6 +13,7 @@ logger = get_logger("aria.tools.search.client")
 
 class SearchClientError(Exception):
     """Exception raised when search operations fail."""
+
     pass
 
 
@@ -129,6 +130,7 @@ class DuckDuckGoClient:
         """
         try:
             from urllib.parse import urlparse
+
             parsed = urlparse(url)
             domain = parsed.netloc or parsed.path
             # Remove 'www.' prefix if present

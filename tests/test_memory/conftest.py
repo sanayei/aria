@@ -69,9 +69,7 @@ async def store_with_messages(store_with_session):
 
     messages = []
     messages.append(await store.add_message(session.id, "user", "Hello, ARIA!"))
-    messages.append(
-        await store.add_message(session.id, "assistant", "Hello! How can I help you?")
-    )
+    messages.append(await store.add_message(session.id, "assistant", "Hello! How can I help you?"))
     messages.append(await store.add_message(session.id, "user", "What's the weather?"))
 
     yield store, session, messages

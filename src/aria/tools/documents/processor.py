@@ -86,6 +86,7 @@ class DocumentProcessor:
             document_date=classification.document_date,
             sender=classification.sender,
             summary=classification.summary,
+            tags=classification.tags,
             confidence=confidence,
             suggested_filename=filename,
             suggested_destination=destination,
@@ -154,12 +155,7 @@ class DocumentProcessor:
         Returns:
             Full destination path
         """
-        return (
-            self.settings.documents_output_dir
-            / person.lower()
-            / category
-            / filename
-        )
+        return self.settings.documents_output_dir / person.lower() / category / filename
 
     @staticmethod
     def _slugify(text: str) -> str:

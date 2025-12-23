@@ -171,7 +171,9 @@ def multiselect(
     for i, option in enumerate(options, 1):
         console.print(f"  {i}. {option}")
 
-    console.print("\n[dim]Enter numbers or names separated by commas, or 'all' for all options[/dim]")
+    console.print(
+        "\n[dim]Enter numbers or names separated by commas, or 'all' for all options[/dim]"
+    )
 
     while True:
         choice = Prompt.ask(

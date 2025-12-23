@@ -63,29 +63,30 @@ class UndoOrganizationTool(BaseTool[UndoOrganizationParams]):
                 # Use most recent log
                 log = get_most_recent_log()
                 if log is None:
-                    return ToolResult.error_result(
-                        "No organization logs found. Cannot undo."
-                    )
+                    return ToolResult.error_result("No organization logs found. Cannot undo.")
 
             # Filter operations that were actually completed
             completed_ops = [
-                op for op in log.operations
+                op
+                for op in log.operations
                 if op.get("status") == "completed" and op.get("action") == "move"
             ]
 
             if not completed_ops:
-                return ToolResult.success_result(data={
-                    "dry_run": params.dry_run,
-                    "can_undo": [],
-                    "cannot_undo": [],
-                    "summary": {
-                        "can_undo": 0,
-                        "cannot_undo": 0,
-                        "undone": 0,
-                        "failed": 0,
-                    },
-                    "message": "No completed move operations to undo",
-                })
+                return ToolResult.success_result(
+                    data={
+                        "dry_run": params.dry_run,
+                        "can_undo": [],
+                        "cannot_undo": [],
+                        "summary": {
+                            "can_undo": 0,
+                            "cannot_undo": 0,
+                            "undone": 0,
+                            "failed": 0,
+                        },
+                        "message": "No completed move operations to undo",
+                    }
+                )
 
             # Check which operations can be undone
             can_undo: List[Dict[str, Any]] = []
@@ -97,30 +98,36 @@ class UndoOrganizationTool(BaseTool[UndoOrganizationParams]):
 
                 # Check if destination still exists
                 if not destination.exists():
-                    cannot_undo.append({
-                        "source": str(source),
-                        "destination": str(destination),
-                        "reason": "Destination file no longer exists",
-                        "status": "cannot_undo",
-                    })
+                    cannot_undo.append(
+                        {
+                            "source": str(source),
+                            "destination": str(destination),
+                            "reason": "Destination file no longer exists",
+                            "status": "cannot_undo",
+                        }
+                    )
                     continue
 
                 # Check if source location is available
                 if source.exists():
-                    cannot_undo.append({
-                        "source": str(source),
-                        "destination": str(destination),
-                        "reason": "Source location already occupied",
-                        "status": "cannot_undo",
-                    })
+                    cannot_undo.append(
+                        {
+                            "source": str(source),
+                            "destination": str(destination),
+                            "reason": "Source location already occupied",
+                            "status": "cannot_undo",
+                        }
+                    )
                     continue
 
                 # Can undo this operation
-                can_undo.append({
-                    "source": str(source),
-                    "destination": str(destination),
-                    "status": "pending",
-                })
+                can_undo.append(
+                    {
+                        "source": str(source),
+                        "destination": str(destination),
+                        "status": "pending",
+                    }
+                )
 
             # If dry run, return what would be done
             if params.dry_run:
@@ -129,15 +136,17 @@ class UndoOrganizationTool(BaseTool[UndoOrganizationParams]):
                     "cannot_undo": len(cannot_undo),
                 }
 
-                return ToolResult.success_result(data={
-                    "dry_run": True,
-                    "log_timestamp": log.timestamp,
-                    "original_scheme": log.scheme,
-                    "original_source": log.source_path,
-                    "can_undo": can_undo,
-                    "cannot_undo": cannot_undo,
-                    "summary": summary,
-                })
+                return ToolResult.success_result(
+                    data={
+                        "dry_run": True,
+                        "log_timestamp": log.timestamp,
+                        "original_scheme": log.scheme,
+                        "original_source": log.source_path,
+                        "can_undo": can_undo,
+                        "cannot_undo": cannot_undo,
+                        "summary": summary,
+                    }
+                )
 
             # Execute undo operations
             undone_ops = []
@@ -174,16 +183,18 @@ class UndoOrganizationTool(BaseTool[UndoOrganizationParams]):
                 "failed": len(failed_ops),
             }
 
-            return ToolResult.success_result(data={
-                "dry_run": False,
-                "log_timestamp": log.timestamp,
-                "original_scheme": log.scheme,
-                "original_source": log.source_path,
-                "undone": undone_ops,
-                "failed": failed_ops,
-                "cannot_undo": cannot_undo,
-                "summary": summary,
-            })
+            return ToolResult.success_result(
+                data={
+                    "dry_run": False,
+                    "log_timestamp": log.timestamp,
+                    "original_scheme": log.scheme,
+                    "original_source": log.source_path,
+                    "undone": undone_ops,
+                    "failed": failed_ops,
+                    "cannot_undo": cannot_undo,
+                    "summary": summary,
+                }
+            )
 
         except ValueError as e:
             return ToolResult.error_result(str(e))

@@ -15,6 +15,7 @@ class AttachmentInfo(BaseModel):
 
     This is metadata only - actual attachment data must be fetched separately.
     """
+
     filename: str = Field(description="Name of the attachment file")
     mime_type: str = Field(description="MIME type of the attachment")
     size_bytes: int = Field(description="Size of attachment in bytes", ge=0)
@@ -27,6 +28,7 @@ class EmailSummary(BaseModel):
     This contains the minimal information needed to display emails in a list,
     without fetching the full email body.
     """
+
     id: str = Field(description="Gmail message ID")
     thread_id: str = Field(description="Gmail thread ID")
     subject: str = Field(description="Email subject line")
@@ -34,8 +36,7 @@ class EmailSummary(BaseModel):
     snippet: str = Field(description="Short preview of email content (~200 chars)")
     date: datetime = Field(description="Email sent/received date")
     labels: list[str] = Field(
-        default_factory=list,
-        description="Gmail labels (INBOX, UNREAD, etc.)"
+        default_factory=list, description="Gmail labels (INBOX, UNREAD, etc.)"
     )
     is_unread: bool = Field(default=False, description="Whether email is unread")
     has_attachments: bool = Field(default=False, description="Whether email has attachments")
@@ -53,6 +54,7 @@ class EmailDetail(BaseModel):
     This is the complete email representation including body, recipients,
     and all headers. Use for displaying or analyzing individual emails.
     """
+
     # Core identification (same as EmailSummary)
     id: str = Field(description="Gmail message ID")
     thread_id: str = Field(description="Gmail thread ID")
@@ -60,58 +62,37 @@ class EmailDetail(BaseModel):
     # Headers
     subject: str = Field(description="Email subject line")
     sender: str = Field(description="Sender email address (or name <email>)")
-    to: list[str] = Field(
-        default_factory=list,
-        description="List of recipient email addresses"
-    )
-    cc: list[str] = Field(
-        default_factory=list,
-        description="List of CC recipient email addresses"
-    )
+    to: list[str] = Field(default_factory=list, description="List of recipient email addresses")
+    cc: list[str] = Field(default_factory=list, description="List of CC recipient email addresses")
     bcc: list[str] = Field(
-        default_factory=list,
-        description="List of BCC recipient email addresses (if available)"
+        default_factory=list, description="List of BCC recipient email addresses (if available)"
     )
     reply_to: str | None = Field(
-        default=None,
-        description="Reply-To address if different from sender"
+        default=None, description="Reply-To address if different from sender"
     )
 
     # Content
-    body_text: str | None = Field(
-        default=None,
-        description="Plain text body content"
-    )
-    body_html: str | None = Field(
-        default=None,
-        description="HTML body content"
-    )
+    body_text: str | None = Field(default=None, description="Plain text body content")
+    body_html: str | None = Field(default=None, description="HTML body content")
     snippet: str = Field(description="Short preview of email content")
 
     # Metadata
     date: datetime = Field(description="Email sent/received date")
     labels: list[str] = Field(
-        default_factory=list,
-        description="Gmail labels (INBOX, UNREAD, etc.)"
+        default_factory=list, description="Gmail labels (INBOX, UNREAD, etc.)"
     )
     is_unread: bool = Field(default=False, description="Whether email is unread")
 
     # Attachments
     attachments: list[AttachmentInfo] = Field(
-        default_factory=list,
-        description="List of attachment metadata"
+        default_factory=list, description="List of attachment metadata"
     )
 
     # Additional metadata
     internal_date: datetime | None = Field(
-        default=None,
-        description="Gmail internal date (when received by Gmail servers)"
+        default=None, description="Gmail internal date (when received by Gmail servers)"
     )
-    size_estimate: int | None = Field(
-        default=None,
-        description="Estimated size in bytes",
-        ge=0
-    )
+    size_estimate: int | None = Field(default=None, description="Estimated size in bytes", ge=0)
 
     @property
     def has_attachments(self) -> bool:
@@ -142,10 +123,9 @@ class EmailThread(BaseModel):
     Gmail groups related emails into threads. This model represents
     a complete thread with all its messages.
     """
+
     thread_id: str = Field(description="Gmail thread ID")
-    messages: list[EmailDetail] = Field(
-        description="List of emails in the thread, ordered by date"
-    )
+    messages: list[EmailDetail] = Field(description="List of emails in the thread, ordered by date")
 
     @property
     def subject(self) -> str:
@@ -179,16 +159,13 @@ class GmailQuery(BaseModel):
         - "subject:invoice after:2024/01/01"
         - "has:attachment is:unread"
     """
+
     query: str = Field(description="Gmail search query string")
     max_results: int = Field(
-        default=10,
-        description="Maximum number of results to return",
-        ge=1,
-        le=500
+        default=10, description="Maximum number of results to return", ge=1, le=500
     )
     include_spam_trash: bool = Field(
-        default=False,
-        description="Include emails from spam and trash"
+        default=False, description="Include emails from spam and trash"
     )
 
     def to_gmail_params(self) -> dict[str, Any]:
@@ -211,15 +188,9 @@ class EmailStats(BaseModel):
 
     Useful for summarizing email counts, unread messages, etc.
     """
+
     total_messages: int = Field(default=0, ge=0)
     unread_messages: int = Field(default=0, ge=0)
     threads: int = Field(default=0, ge=0)
-    labels: dict[str, int] = Field(
-        default_factory=dict,
-        description="Count of messages per label"
-    )
-    size_estimate: int = Field(
-        default=0,
-        ge=0,
-        description="Total estimated size in bytes"
-    )
+    labels: dict[str, int] = Field(default_factory=dict, description="Count of messages per label")
+    size_estimate: int = Field(default=0, ge=0, description="Total estimated size in bytes")

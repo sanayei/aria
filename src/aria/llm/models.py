@@ -49,7 +49,9 @@ class ToolDefinition(BaseModel):
     function: dict[str, Any] = Field(..., description="Function schema (JSON Schema format)")
 
     @classmethod
-    def from_schema(cls, name: str, description: str, parameters: dict[str, Any]) -> "ToolDefinition":
+    def from_schema(
+        cls, name: str, description: str, parameters: dict[str, Any]
+    ) -> "ToolDefinition":
         """Create a ToolDefinition from schema components.
 
         Args:
@@ -202,6 +204,10 @@ class ChatRequest(BaseModel):
         description="Available tools for the LLM",
     )
     stream: bool = Field(default=False, description="Enable streaming responses")
+    format: str | None = Field(
+        default=None,
+        description="Response format ('json' for JSON-only output)",
+    )
     options: dict[str, Any] = Field(
         default_factory=dict,
         description="Model-specific options (temperature, etc.)",
@@ -221,6 +227,9 @@ class ChatRequest(BaseModel):
 
         if self.tools:
             result["tools"] = [tool.model_dump() for tool in self.tools]
+
+        if self.format:
+            result["format"] = self.format
 
         if self.options:
             result["options"] = self.options
@@ -419,6 +428,13 @@ DEFAULT_MODEL_CAPABILITIES = {
         supports_tools=True,
         supports_vision=False,
         recommended_temperature=0.7,
+    ),
+    "qwen2.5:14b": ModelCapabilities(
+        name="qwen2.5:14b",
+        context_length=32768,
+        supports_tools=True,
+        supports_vision=False,
+        recommended_temperature=0.1,  # Low temperature for classification
     ),
     "llama3": ModelCapabilities(
         name="llama3",

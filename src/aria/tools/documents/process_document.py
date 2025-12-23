@@ -71,6 +71,7 @@ class ProcessDocumentTool(BaseTool[ProcessDocumentParams]):
                 "document_date": doc.document_date.isoformat() if doc.document_date else None,
                 "sender": doc.sender,
                 "summary": doc.summary,
+                "tags": doc.tags,
                 "confidence": doc.confidence,
                 "suggested_filename": doc.suggested_filename,
                 "suggested_destination": str(doc.suggested_destination),

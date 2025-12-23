@@ -28,6 +28,7 @@ logger = get_logger("aria.tools.email.client")
 
 class GmailClientError(Exception):
     """Exception raised when Gmail client operations fail."""
+
     pass
 
 
@@ -182,11 +183,9 @@ class GmailClient:
             service = await self._get_service()
 
             # Get full message with metadata
-            msg = service.users().messages().get(
-                userId="me",
-                id=message_id,
-                format="full"
-            ).execute()
+            msg = (
+                service.users().messages().get(userId="me", id=message_id, format="full").execute()
+            )
 
             return self._parse_message_detail(msg)
 
@@ -213,11 +212,9 @@ class GmailClient:
             service = await self._get_service()
 
             # Get thread
-            thread = service.users().threads().get(
-                userId="me",
-                id=thread_id,
-                format="full"
-            ).execute()
+            thread = (
+                service.users().threads().get(userId="me", id=thread_id, format="full").execute()
+            )
 
             messages = []
             for msg_data in thread.get("messages", []):
@@ -252,9 +249,7 @@ class GmailClient:
             service = await self._get_service()
 
             service.users().messages().modify(
-                userId="me",
-                id=message_id,
-                body={"removeLabelIds": ["UNREAD"]}
+                userId="me", id=message_id, body={"removeLabelIds": ["UNREAD"]}
             ).execute()
 
             logger.info(f"Marked message {message_id} as read")
@@ -282,12 +277,17 @@ class GmailClient:
         service = await self._get_service()
 
         # Get message with metadata format (faster than full)
-        msg = service.users().messages().get(
-            userId="me",
-            id=message_id,
-            format="metadata",
-            metadataHeaders=["From", "Subject", "Date"]
-        ).execute()
+        msg = (
+            service.users()
+            .messages()
+            .get(
+                userId="me",
+                id=message_id,
+                format="metadata",
+                metadataHeaders=["From", "Subject", "Date"],
+            )
+            .execute()
+        )
 
         return self._parse_message_summary(msg)
 
@@ -342,10 +342,7 @@ class GmailClient:
         # Parse internal date
         internal_date = None
         if "internalDate" in msg_data:
-            internal_date = datetime.fromtimestamp(
-                int(msg_data["internalDate"]) / 1000,
-                tz=UTC
-            )
+            internal_date = datetime.fromtimestamp(int(msg_data["internalDate"]) / 1000, tz=UTC)
 
         # Get labels
         labels = msg_data.get("labelIds", [])
@@ -451,12 +448,14 @@ class GmailClient:
                 mime_type = part.get("mimeType", "application/octet-stream")
 
                 if attachment_id:
-                    attachments.append(AttachmentInfo(
-                        filename=filename,
-                        mime_type=mime_type,
-                        size_bytes=size,
-                        attachment_id=attachment_id,
-                    ))
+                    attachments.append(
+                        AttachmentInfo(
+                            filename=filename,
+                            mime_type=mime_type,
+                            size_bytes=size,
+                            attachment_id=attachment_id,
+                        )
+                    )
 
             # Recurse into multipart
             if part.get("mimeType", "").startswith("multipart/"):
@@ -475,6 +474,7 @@ class GmailClient:
         Returns:
             bool: True if message has attachments
         """
+
         def check_parts(part: dict[str, Any]) -> bool:
             """Recursively check for attachments."""
             # Check if this part has a filename
@@ -529,9 +529,7 @@ class GmailClient:
             service = await self._get_service()
 
             service.users().messages().modify(
-                userId="me",
-                id=message_id,
-                body={"addLabelIds": label_ids}
+                userId="me", id=message_id, body={"addLabelIds": label_ids}
             ).execute()
 
             logger.info(f"Added labels {label_ids} to message {message_id}")
@@ -561,9 +559,7 @@ class GmailClient:
             service = await self._get_service()
 
             service.users().messages().modify(
-                userId="me",
-                id=message_id,
-                body={"removeLabelIds": label_ids}
+                userId="me", id=message_id, body={"removeLabelIds": label_ids}
             ).execute()
 
             logger.info(f"Removed labels {label_ids} from message {message_id}")
@@ -605,10 +601,7 @@ class GmailClient:
             result = service.users().labels().list(userId="me").execute()
             labels = result.get("labels", [])
 
-            return [
-                {"id": label["id"], "name": label["name"]}
-                for label in labels
-            ]
+            return [{"id": label["id"], "name": label["name"]} for label in labels]
 
         except HttpError as e:
             logger.error(f"Gmail API error in list_labels: {e}")
@@ -661,10 +654,7 @@ class GmailClient:
                 draft_body["message"]["threadId"] = reply_to_id
 
             # Create draft
-            draft = service.users().drafts().create(
-                userId="me",
-                body=draft_body
-            ).execute()
+            draft = service.users().drafts().create(userId="me", body=draft_body).execute()
 
             draft_id = draft["id"]
             logger.info(f"Created draft {draft_id}")
@@ -721,10 +711,7 @@ class GmailClient:
                 send_body["threadId"] = reply_to_id
 
             # Send message
-            result = service.users().messages().send(
-                userId="me",
-                body=send_body
-            ).execute()
+            result = service.users().messages().send(userId="me", body=send_body).execute()
 
             message_id = result["id"]
             logger.info(f"Sent message {message_id}")
@@ -749,6 +736,7 @@ class GmailClient:
         try:
             # Parse using email.utils
             from email.utils import parsedate_to_datetime
+
             dt = parsedate_to_datetime(date_str)
             # Convert to UTC if timezone-aware
             if dt.tzinfo is not None:

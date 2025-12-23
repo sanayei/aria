@@ -48,10 +48,7 @@ class DocumentChunker:
         self.chunk_overlap = chunk_overlap
         self.separator = separator
 
-        logger.debug(
-            f"Initialized DocumentChunker: size={chunk_size}, "
-            f"overlap={chunk_overlap}"
-        )
+        logger.debug(f"Initialized DocumentChunker: size={chunk_size}, overlap={chunk_overlap}")
 
     def chunk_text(
         self,
@@ -89,7 +86,7 @@ class DocumentChunker:
                 # Start new chunk with overlap from previous chunk
                 if self.chunk_overlap > 0:
                     # Take last chunk_overlap characters for context
-                    overlap_text = current_chunk[-self.chunk_overlap:]
+                    overlap_text = current_chunk[-self.chunk_overlap :]
                     current_chunk = overlap_text + self.separator + para
                 else:
                     current_chunk = para

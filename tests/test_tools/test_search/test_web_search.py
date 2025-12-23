@@ -59,7 +59,7 @@ class TestWebSearchTool:
             ),
         ]
 
-        with patch.object(tool, '_get_client') as mock_get_client:
+        with patch.object(tool, "_get_client") as mock_get_client:
             mock_client = MagicMock()
             mock_client.search = AsyncMock(return_value=mock_results)
             mock_get_client.return_value = mock_client
@@ -79,7 +79,7 @@ class TestWebSearchTool:
         """Test search with no results."""
         tool = WebSearchTool()
 
-        with patch.object(tool, '_get_client') as mock_get_client:
+        with patch.object(tool, "_get_client") as mock_get_client:
             mock_client = MagicMock()
             mock_client.search = AsyncMock(return_value=[])
             mock_get_client.return_value = mock_client
@@ -96,7 +96,7 @@ class TestWebSearchTool:
         """Test error handling."""
         tool = WebSearchTool()
 
-        with patch.object(tool, '_get_client') as mock_get_client:
+        with patch.object(tool, "_get_client") as mock_get_client:
             mock_client = MagicMock()
             mock_client.search = AsyncMock(side_effect=Exception("Search failed"))
             mock_get_client.return_value = mock_client
@@ -158,7 +158,7 @@ class TestFetchWebPageTool:
             truncated=False,
         )
 
-        with patch.object(tool, '_get_fetcher') as mock_get_fetcher:
+        with patch.object(tool, "_get_fetcher") as mock_get_fetcher:
             mock_fetcher = MagicMock()
             mock_fetcher.fetch = AsyncMock(return_value=mock_content)
             mock_get_fetcher.return_value = mock_fetcher
@@ -179,7 +179,7 @@ class TestFetchWebPageTool:
         """Test error handling."""
         tool = FetchWebPageTool()
 
-        with patch.object(tool, '_get_fetcher') as mock_get_fetcher:
+        with patch.object(tool, "_get_fetcher") as mock_get_fetcher:
             mock_fetcher = MagicMock()
             mock_fetcher.fetch = AsyncMock(side_effect=Exception("HTTP 404"))
             mock_get_fetcher.return_value = mock_fetcher

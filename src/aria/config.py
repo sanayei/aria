@@ -177,6 +177,22 @@ class Settings(BaseSettings):
         default=Path.home() / "documents",
         description="Output directory for organized documents",
     )
+    scan_directory: Path = Field(
+        default=Path("/mnt/scan"),
+        description="Directory to scan for new documents to process",
+    )
+    archive_directory: Path = Field(
+        default=Path.home() / "Documents" / "Archive",
+        description="Archive directory for organized documents with semantic search",
+    )
+    processed_originals_directory: Path = Field(
+        default=Path("/mnt/archive"),
+        description="Directory to move original scanned files after successful processing",
+    )
+    archive_db_path: Path | None = Field(
+        default=None,
+        description="Path to archive index database (defaults to data/cache/archive.db)",
+    )
     family_members: list[str] = Field(
         default=["Amir", "Munira", "Maral", "Gazelle"],
         description="Family members for document classification",
@@ -195,8 +211,36 @@ class Settings(BaseSettings):
         ],
         description="Document categories for classification",
     )
+    classification_model: str = Field(
+        default="qwen2.5:14b",
+        description="Model for document classification (optimized for speed)",
+    )
+    max_parallel_ocr: int = Field(
+        default=3,
+        description="Maximum parallel OCR processes (1-6)",
+        ge=1,
+        le=6,
+    )
+    enable_parallel_processing: bool = Field(
+        default=True,
+        description="Enable parallel document processing",
+    )
 
-    @field_validator("aria_data_dir", "aria_log_file", "db_path", "conversation_db_path", "chroma_path", "gmail_credentials_dir", "documents_source_dir", "documents_output_dir", mode="before")
+    @field_validator(
+        "aria_data_dir",
+        "aria_log_file",
+        "db_path",
+        "conversation_db_path",
+        "chroma_path",
+        "gmail_credentials_dir",
+        "documents_source_dir",
+        "documents_output_dir",
+        "scan_directory",
+        "archive_directory",
+        "processed_originals_directory",
+        "archive_db_path",
+        mode="before",
+    )
     @classmethod
     def expand_paths(cls, v: str | Path | None) -> Path | None:
         """Expand relative paths to absolute paths."""
@@ -230,6 +274,15 @@ class Settings(BaseSettings):
         if v is None:
             data_dir = info.data.get("aria_data_dir", Path("./data"))
             return data_dir / "cache" / "conversations.db"
+        return v
+
+    @field_validator("archive_db_path", mode="after")
+    @classmethod
+    def set_default_archive_db_path(cls, v: Path | None, info) -> Path:
+        """Set default archive database path if not specified."""
+        if v is None:
+            data_dir = info.data.get("aria_data_dir", Path("./data"))
+            return data_dir / "cache" / "archive.db"
         return v
 
     def ensure_directories(self) -> None:

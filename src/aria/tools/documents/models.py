@@ -33,6 +33,10 @@ class ClassificationResult(BaseModel):
         description="Organization/company that sent the document",
     )
     summary: str = Field(description="One-sentence summary of the document")
+    tags: list[str] = Field(
+        default_factory=list,
+        description="Relevant searchable tags (5-10 tags)",
+    )
 
 
 class ProcessedDocument(BaseModel):
@@ -51,6 +55,10 @@ class ProcessedDocument(BaseModel):
         description="Document sender/organization",
     )
     summary: str = Field(description="Document summary")
+    tags: list[str] = Field(
+        default_factory=list,
+        description="Relevant searchable tags",
+    )
     confidence: float = Field(
         description="OCR confidence score",
         ge=0.0,

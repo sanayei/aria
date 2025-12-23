@@ -186,9 +186,7 @@ class ConversationStore:
             logger.error("Failed to get session", session_id=session_id, error=str(e))
             raise DatabaseError(f"Failed to get session: {e}") from e
 
-    async def list_sessions(
-        self, limit: int = 20, offset: int = 0
-    ) -> list[SessionSummary]:
+    async def list_sessions(self, limit: int = 20, offset: int = 0) -> list[SessionSummary]:
         """List sessions ordered by most recent activity.
 
         Args:
@@ -269,9 +267,7 @@ class ConversationStore:
         try:
             async with aiosqlite.connect(self.db_path) as db:
                 await db.execute("PRAGMA foreign_keys = ON")
-                cursor = await db.execute(
-                    "DELETE FROM sessions WHERE id = ?", (session_id,)
-                )
+                cursor = await db.execute("DELETE FROM sessions WHERE id = ?", (session_id,))
                 await db.commit()
 
                 deleted = cursor.rowcount > 0
@@ -354,9 +350,7 @@ class ConversationStore:
             logger.error("Failed to add message", session_id=session_id, error=str(e))
             raise DatabaseError(f"Failed to add message: {e}") from e
 
-    async def get_messages(
-        self, session_id: str, limit: int | None = None
-    ) -> list[Message]:
+    async def get_messages(self, session_id: str, limit: int | None = None) -> list[Message]:
         """Get messages from a session.
 
         Args:
@@ -402,9 +396,7 @@ class ConversationStore:
             logger.error("Failed to get messages", session_id=session_id, error=str(e))
             raise DatabaseError(f"Failed to get messages: {e}") from e
 
-    async def get_context(
-        self, session_id: str, max_messages: int = 50
-    ) -> ConversationContext:
+    async def get_context(self, session_id: str, max_messages: int = 50) -> ConversationContext:
         """Get conversation context for a session.
 
         Args:
@@ -737,9 +729,7 @@ class ConversationStore:
             logger.error("Failed to get tool call", tool_call_id=tool_call_id, error=str(e))
             raise DatabaseError(f"Failed to get tool call: {e}") from e
 
-    async def _get_tool_calls_for_messages(
-        self, message_ids: list[str]
-    ) -> list[ToolCall]:
+    async def _get_tool_calls_for_messages(self, message_ids: list[str]) -> list[ToolCall]:
         """Get all tool calls for a list of message IDs."""
         if not message_ids:
             return []
