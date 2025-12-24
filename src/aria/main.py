@@ -1660,7 +1660,7 @@ async def run_archive_search(
             person=person,
             category=category,
             year=year,
-            tags=tags if tags else None,
+            tags=tags,  # Already a list (empty if no --tags provided)
             max_results=limit,
         )
 
@@ -1673,7 +1673,7 @@ async def run_archive_search(
             sys.exit(1)
 
         data = result.data
-        documents = data.get("documents", [])
+        documents = data.get("results", [])  # Fixed: was "documents", should be "results"
 
         # Show results
         console.console.print(
@@ -1686,15 +1686,23 @@ async def run_archive_search(
 
         for i, doc in enumerate(documents, 1):
             # Format document info
-            console.console.print(f"[cyan bold]{i}. {doc['original_filename']}[/cyan bold]")
-            console.console.print(f"   ID: [dim]{doc['id'][:16]}...[/dim]")
+            from pathlib import Path
+
+            filename = Path(doc["archived_path"]).name
+            console.console.print(f"[cyan bold]{i}. {filename}[/cyan bold]")
+            console.console.print(f"   Path: [dim]{doc['archived_path']}[/dim]")
             console.console.print(f"   Person: {doc['person']} | Category: {doc['category']}")
             if doc.get("document_date"):
                 console.console.print(f"   Date: {doc['document_date']}")
+            if doc.get("sender"):
+                console.console.print(f"   Sender: {doc['sender']}")
+            if doc.get("summary"):
+                console.console.print(f"   Summary: {doc['summary']}")
             if doc.get("tags"):
                 console.console.print(f"   Tags: {', '.join(doc['tags'][:5])}")
-            if doc.get("excerpt"):
-                console.console.print(f"   [dim]...{doc['excerpt']}...[/dim]")
+            if doc.get("excerpt") and verbose:
+                # Show matching text excerpt in verbose mode
+                console.console.print(f"   [dim]Excerpt: {doc['excerpt']}[/dim]")
             if doc.get("relevance_score"):
                 console.console.print(f"   Relevance: {doc['relevance_score']:.2f}")
             console.console.print()

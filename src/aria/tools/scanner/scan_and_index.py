@@ -42,7 +42,7 @@ class ScanAndIndexParams(BaseModel):
         description="If True, show what would happen without actually processing",
     )
     move_originals: bool = Field(
-        default=True,
+        default=False,
         description="Move original files to processed directory after successful indexing",
     )
     max_files: int | None = Field(

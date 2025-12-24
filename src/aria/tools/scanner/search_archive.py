@@ -68,32 +68,29 @@ class SearchArchivedDocumentsTool(BaseTool[SearchArchivedDocumentsParams]):
     async def execute(self, params: SearchArchivedDocumentsParams) -> ToolResult:
         """Execute archive search."""
         try:
-            # Build metadata filter for ChromaDB
-            metadata_filter = {}
+            # Build metadata filter for ChromaDB (only non-date filters)
+            # Note: ChromaDB comparison operators only work with numeric values,
+            # so we'll do year filtering post-search in Python
+            filter_conditions = []
 
             if params.person:
-                metadata_filter["person"] = params.person
+                filter_conditions.append({"person": params.person})
 
             if params.category:
-                metadata_filter["category"] = params.category
+                filter_conditions.append({"category": params.category})
 
-            if params.year:
-                # Filter by year prefix in document_date
-                metadata_filter["document_date"] = {
-                    "$gte": f"{params.year}-01-01",
-                    "$lte": f"{params.year}-12-31",
-                }
-
-            if params.tags:
-                # Tags are stored as comma-separated, search for any match
-                # This is a simplification - may need refinement
-                pass  # ChromaDB filtering on array elements is limited
+            # Combine all filter conditions with $and
+            metadata_filter = None
+            if len(filter_conditions) == 1:
+                metadata_filter = filter_conditions[0]
+            elif len(filter_conditions) > 1:
+                metadata_filter = {"$and": filter_conditions}
 
             # Perform semantic search
             search_results = await self._vector_store.search(
                 query=params.query,
-                limit=params.max_results * 2,  # Get extra to account for filtering
-                metadata_filter=metadata_filter if metadata_filter else None,
+                limit=params.max_results * 3,  # Get extra to account for post-filtering
+                filter=metadata_filter,
             )
 
             # Deduplicate by archived_path and build result list
@@ -107,12 +104,27 @@ class SearchArchivedDocumentsTool(BaseTool[SearchArchivedDocumentsParams]):
 
                 seen_paths.add(archived_path)
 
-                # Optional tag filtering (post-search since ChromaDB doesn't support it well)
+                # Year filtering (post-search since ChromaDB doesn't support date comparison)
+                if params.year:
+                    document_date = result.metadata.get("document_date")
+                    if document_date:
+                        # Extract year from YYYY-MM-DD format
+                        try:
+                            doc_year = int(document_date.split("-")[0])
+                            if doc_year != params.year:
+                                continue
+                        except (ValueError, IndexError):
+                            # Skip documents with invalid date format
+                            continue
+                    else:
+                        # Skip documents without a date if year filter is specified
+                        continue
+
+                # Tag filtering (post-search since ChromaDB doesn't support it well)
                 if params.tags:
                     doc_tags = result.metadata.get("tags", "").split(",")
                     if not any(tag in doc_tags for tag in params.tags):
                         continue
-
                 results.append(
                     {
                         "archived_path": archived_path,

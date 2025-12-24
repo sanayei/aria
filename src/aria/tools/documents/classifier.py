@@ -33,6 +33,34 @@ class DocumentClassifier:
         self.settings = settings
         self.classification_model = settings.classification_model
 
+    def _normalize_person_name(self, person: str) -> str:
+        """Normalize person name to lowercase first name only.
+
+        Handles cases like "Amir Sanayei" -> "amir", "FIROOZ" -> "firooz".
+        Validates against family_members list.
+
+        Args:
+            person: Person name from LLM (may include last name)
+
+        Returns:
+            Normalized lowercase first name or "unknown"
+        """
+        if not person or person.lower() == "unknown":
+            return "unknown"
+
+        # Extract first name (split on space, take first part)
+        first_name = person.strip().split()[0].lower()
+
+        # Validate against family members list (case-insensitive)
+        family_lower = [name.lower() for name in self.settings.family_members]
+
+        if first_name in family_lower:
+            return first_name
+
+        # If not in list, return unknown
+        logger.warning(f"Person '{person}' not in family members list, using 'unknown'")
+        return "unknown"
+
     def _prepare_classification_input(self, ocr_text: str, max_chars: int = 3000) -> str:
         """Prepare OCR text for classification by intelligently truncating.
 
@@ -195,7 +223,7 @@ class DocumentClassifier:
                 # Parse document_date if present
                 doc_date = None
                 if data.get("document_date"):
-                    try:
+                    try:  # noqa: SIM105
                         doc_date = date.fromisoformat(data["document_date"])
                     except (ValueError, TypeError):
                         # Invalid date format, leave as None
@@ -208,16 +236,19 @@ class DocumentClassifier:
                 # Normalize tags: lowercase, strip whitespace
                 tags = [tag.strip().lower() for tag in tags if isinstance(tag, str)]
 
+                # Normalize person name (lowercase first name only)
+                normalized_person = self._normalize_person_name(data["person"])
+
                 # Success!
                 logger.info(
                     "Document classified successfully",
-                    person=data["person"],
+                    person=normalized_person,
                     category=data["category"],
                     attempt=attempt + 1,
                 )
 
                 return ClassificationResult(
-                    person=data["person"],
+                    person=normalized_person,
                     category=data["category"],
                     document_date=doc_date,
                     sender=data.get("sender"),

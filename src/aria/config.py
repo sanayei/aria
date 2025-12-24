@@ -194,7 +194,7 @@ class Settings(BaseSettings):
         description="Path to archive index database (defaults to data/cache/archive.db)",
     )
     family_members: list[str] = Field(
-        default=["Amir", "Munira", "Maral", "Gazelle"],
+        default=["Amir", "Munira", "Maral", "Gazelle", "Firooz", "Simzar", "Hamila", "Mohammad"],
         description="Family members for document classification",
     )
     document_categories: list[str] = Field(
@@ -203,10 +203,17 @@ class Settings(BaseSettings):
             "financial",
             "tax",
             "insurance",
-            "correspondence",
             "legal",
+            "government",
+            "housing",
+            "employment",
             "education",
             "utilities",
+            "subscriptions",
+            "correspondence",
+            "marketing",
+            "receipts",
+            "social-services",
             "other",
         ],
         description="Document categories for classification",
@@ -224,6 +231,10 @@ class Settings(BaseSettings):
     enable_parallel_processing: bool = Field(
         default=True,
         description="Enable parallel document processing",
+    )
+    move_originals: bool = Field(
+        default=False,
+        description="Move original scanned files after processing (disable to prevent permission errors)",
     )
 
     @field_validator(
