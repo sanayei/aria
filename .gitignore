@@ -92,6 +92,8 @@ temp/
 
 # Documentation build
 docs/_build/
+# docs/build/
+docs/source/_autosummary/
 
 # ARIA-specific
 # ChromaDB vector store

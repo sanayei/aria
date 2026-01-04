@@ -75,6 +75,10 @@ dev = [
     "mypy>=1.13",              # Type checking
     "pre-commit>=4.0",         # Git hooks
     "ipython>=8.30",           # Better REPL for debugging
+    "sphinx>=8.2.3",
+    "sphinx-rtd-theme>=3.0.2",
+    "sphinx-autodoc-typehints>=3.5.2",
+    "myst-parser>=4.0.1",
 ]
 
 [build-system]
