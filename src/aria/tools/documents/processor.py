@@ -90,6 +90,7 @@ class DocumentProcessor:
             confidence=confidence,
             suggested_filename=filename,
             suggested_destination=destination,
+            extraction_model=self.settings.classification_model,
             metadata={
                 "page_count": ocr_data.get("page_count", 1),
                 "char_count": ocr_data.get("char_count", 0),

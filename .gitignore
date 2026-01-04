@@ -84,6 +84,8 @@ tmp/
 temp/
 *.tmp
 *.temp
+*.backup
+*~
 
 # Jupyter notebooks (if used for experimentation)
 .ipynb_checkpoints/

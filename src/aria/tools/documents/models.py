@@ -66,6 +66,10 @@ class ProcessedDocument(BaseModel):
     )
     suggested_filename: str = Field(description="Generated filename")
     suggested_destination: Path = Field(description="Full destination path")
+    extraction_model: str | None = Field(
+        default=None,
+        description="Model used for classification/extraction",
+    )
     metadata: dict = Field(
         default_factory=dict,
         description="Additional metadata",

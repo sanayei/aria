@@ -26,7 +26,14 @@
       "Bash($HOME/.local/bin/uv add:*)",
       "Bash($HOME/.local/bin/uv remove:*)",
       "Bash(touch:*)",
-      "Bash(python3:*)"
+      "Bash(python3:*)",
+      "Bash(timeout 10 $HOME/.local/bin/uv run uvicorn:*)",
+      "Bash(timeout 10 ~/.local/bin/uv run uvicorn:*)",
+      "Bash(~/.local/bin/uv add:*)",
+      "Bash(sqlite3:*)",
+      "Bash(git check-ignore:*)",
+      "Bash(git ls-tree:*)",
+      "Bash(git add:*)"
     ]
   }
 }

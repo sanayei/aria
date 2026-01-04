@@ -30,12 +30,19 @@ dependencies = [
     # Document Processing & OCR
     "surya-ocr>=0.6",          # OCR with GPU acceleration for scanned documents
     "pdf2image>=1.17",         # Convert PDF pages to images for OCR
-    "Pillow>=10.2,<11.0",
+    "pillow>=10.2,<11.0",
     "beautifulsoup4>=4.14.3",
     "lxml>=6.0.2",
     "ddgs>=9.9.3",
     "sentence-transformers>=5.2.0",
     "pymupdf>=1.26.7",
+    "fastapi>=0.127.0",
+    "uvicorn[standard]>=0.38.0",
+    "python-multipart>=0.0.21",
+    "python-jose>=3.5.0",
+    "passlib[argon2]>=1.7.4",
+    "jinja2>=3.1.6",
+    "bcrypt>=4.0.0",
 ]
 
 [project.optional-dependencies]

@@ -39,6 +39,13 @@ class ArchiveDocument(BaseModel):
         default_factory=list, description="ChromaDB document IDs for chunks"
     )
 
+    # Processing metadata
+    extraction_model: str | None = Field(default=None, description="Model used for extraction/classification")
+
+    # Edit tracking
+    last_edited_at: str | None = Field(default=None, description="Last edit timestamp (ISO format)")
+    last_edited_by: str | None = Field(default=None, description="Username of last editor")
+
 
 class ArchiveStatistics(BaseModel):
     """Statistics about the archive."""
@@ -108,6 +115,22 @@ class ArchiveIndex:
                 )
             """)
 
+            # Add new columns if they don't exist (migration)
+            cursor.execute("PRAGMA table_info(archived_documents)")
+            columns = {row[1] for row in cursor.fetchall()}
+
+            if "extraction_model" not in columns:
+                cursor.execute("ALTER TABLE archived_documents ADD COLUMN extraction_model TEXT")
+                logger.info("Added extraction_model column to archived_documents table")
+
+            if "last_edited_at" not in columns:
+                cursor.execute("ALTER TABLE archived_documents ADD COLUMN last_edited_at TEXT")
+                logger.info("Added last_edited_at column to archived_documents table")
+
+            if "last_edited_by" not in columns:
+                cursor.execute("ALTER TABLE archived_documents ADD COLUMN last_edited_by TEXT")
+                logger.info("Added last_edited_by column to archived_documents table")
+
             # Create indexes for common queries
             cursor.execute("CREATE INDEX IF NOT EXISTS idx_person ON archived_documents(person)")
             cursor.execute(
@@ -146,8 +169,9 @@ class ArchiveIndex:
                     INSERT OR REPLACE INTO archived_documents
                     (id, original_filename, original_path, archived_path, person,
                      category, document_date, sender, summary, tags,
-                     ocr_confidence, processed_at, file_size_bytes, chroma_doc_ids)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                     ocr_confidence, processed_at, file_size_bytes, chroma_doc_ids,
+                     extraction_model, last_edited_at, last_edited_by)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """,
                     (
                         document.id,
@@ -164,6 +188,9 @@ class ArchiveIndex:
                         document.processed_at,
                         document.file_size_bytes,
                         json.dumps(document.chroma_doc_ids),
+                        document.extraction_model,
+                        document.last_edited_at,
+                        document.last_edited_by,
                     ),
                 )
                 conn.commit()
@@ -199,6 +226,83 @@ class ArchiveIndex:
                 conn.close()
 
         return await asyncio.to_thread(_query)
+
+    async def get_document_by_path(self, archived_path: str) -> ArchiveDocument | None:
+        """Retrieve a document by archived path.
+
+        Args:
+            archived_path: Path in archive directory
+
+        Returns:
+            ArchiveDocument if found, None otherwise
+        """
+        if not self._initialized:
+            await self.initialize()
+
+        def _query():
+            conn = sqlite3.connect(self._db_path)
+            conn.row_factory = sqlite3.Row
+            try:
+                cursor = conn.cursor()
+                cursor.execute(
+                    "SELECT * FROM archived_documents WHERE archived_path = ?", (archived_path,)
+                )
+                row = cursor.fetchone()
+                if row:
+                    return self._row_to_document(row)
+                return None
+            finally:
+                conn.close()
+
+        return await asyncio.to_thread(_query)
+
+    async def update_document(self, doc_id: str, updates: dict[str, any]) -> bool:
+        """Update document metadata.
+
+        Args:
+            doc_id: Document ID
+            updates: Dictionary of fields to update
+
+        Returns:
+            True if updated, False if document not found
+        """
+        if not self._initialized:
+            await self.initialize()
+
+        def _update():
+            conn = sqlite3.connect(self._db_path)
+            try:
+                cursor = conn.cursor()
+
+                # Build update query dynamically
+                set_clauses = []
+                params = []
+
+                for key, value in updates.items():
+                    if key == "tags":
+                        set_clauses.append(f"{key} = ?")
+                        params.append(json.dumps(value))
+                    else:
+                        set_clauses.append(f"{key} = ?")
+                        params.append(value)
+
+                if not set_clauses:
+                    return False
+
+                params.append(doc_id)
+                query = f"UPDATE archived_documents SET {', '.join(set_clauses)} WHERE id = ?"
+
+                cursor.execute(query, params)
+                conn.commit()
+
+                updated = cursor.rowcount > 0
+                if updated:
+                    logger.debug(f"Updated document '{doc_id}' with fields: {list(updates.keys())}")
+                return updated
+            finally:
+                conn.close()
+
+        return await asyncio.to_thread(_update)
 
     async def search(
         self,
@@ -417,6 +521,39 @@ class ArchiveIndex:
 
         return await asyncio.to_thread(_query)
 
+    async def get_all_tags(self) -> list[str]:
+        """Get all unique tags from all documents.
+
+        Returns:
+            List of unique tag strings
+        """
+        if not self._initialized:
+            await self.initialize()
+
+        def _query():
+            conn = sqlite3.connect(self._db_path)
+            try:
+                cursor = conn.cursor()
+
+                # Get all tags (stored as JSON arrays)
+                cursor.execute("SELECT tags FROM archived_documents WHERE tags IS NOT NULL")
+                rows = cursor.fetchall()
+
+                # Parse JSON and collect unique tags
+                all_tags = set()
+                for row in rows:
+                    tags_json = row[0]
+                    if tags_json:
+                        import json
+                        tags = json.loads(tags_json)
+                        all_tags.update(tags)
+
+                return sorted(list(all_tags))
+            finally:
+                conn.close()
+
+        return await asyncio.to_thread(_query)
+
     def _row_to_document(self, row: sqlite3.Row) -> ArchiveDocument:
         """Convert database row to ArchiveDocument.
 
@@ -426,6 +563,13 @@ class ArchiveIndex:
         Returns:
             ArchiveDocument instance
         """
+        # Helper to safely get column value with default
+        def get_value(row, key, default=None):
+            try:
+                return row[key]
+            except (KeyError, IndexError):
+                return default
+
         return ArchiveDocument(
             id=row["id"],
             original_filename=row["original_filename"],
@@ -441,4 +585,7 @@ class ArchiveIndex:
             processed_at=row["processed_at"],
             file_size_bytes=row["file_size_bytes"],
             chroma_doc_ids=json.loads(row["chroma_doc_ids"]) if row["chroma_doc_ids"] else [],
+            extraction_model=get_value(row, "extraction_model"),
+            last_edited_at=get_value(row, "last_edited_at"),
+            last_edited_by=get_value(row, "last_edited_by"),
         )

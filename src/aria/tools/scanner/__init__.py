@@ -1,5 +1,6 @@
 """Document scanning and indexing tools."""
 
+from aria.tools.scanner.deduplicate import DeduplicateParams, DeduplicateTool
 from aria.tools.scanner.scan_and_index import ScanAndIndexParams, ScanAndIndexTool
 from aria.tools.scanner.search_archive import (
     ArchiveStatisticsParams,
@@ -16,6 +17,9 @@ __all__ = [
     # Scanning and indexing
     "ScanAndIndexTool",
     "ScanAndIndexParams",
+    # Deduplication
+    "DeduplicateTool",
+    "DeduplicateParams",
     # Archive search
     "SearchArchivedDocumentsTool",
     "SearchArchivedDocumentsParams",

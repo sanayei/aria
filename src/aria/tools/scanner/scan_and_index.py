@@ -49,6 +49,10 @@ class ScanAndIndexParams(BaseModel):
         default=None,
         description="Maximum number of files to process (for testing)",
     )
+    deduplicate_after: bool = Field(
+        default=False,
+        description="Run deduplication after processing to move any remaining duplicates",
+    )
 
 
 class ScanAndIndexTool(BaseTool[ScanAndIndexParams]):
@@ -306,6 +310,7 @@ class ScanAndIndexTool(BaseTool[ScanAndIndexParams]):
                             processed_at=datetime.now().isoformat(),
                             file_size_bytes=doc.source_path.stat().st_size,
                             chroma_doc_ids=chroma_doc_ids,
+                            extraction_model=doc.extraction_model,
                         )
 
                         await self.archive_index.add_document(archive_doc)
@@ -370,6 +375,29 @@ class ScanAndIndexTool(BaseTool[ScanAndIndexParams]):
                 for doc in processed_docs
             ]
 
+            # Run deduplication if requested
+            dedupe_result = None
+            if params.deduplicate_after:
+                logger.info("Running deduplication after processing...")
+                from aria.tools.scanner.deduplicate import DeduplicateTool, DeduplicateParams
+
+                dedupe_tool = DeduplicateTool(
+                    archive_index=self.archive_index,
+                    settings=self.settings,
+                )
+                dedupe_params = DeduplicateParams(
+                    source_directory=str(source_dir),
+                    file_pattern=params.file_pattern,
+                    preview_only=False,  # Always execute when part of pipeline
+                    check_by="filename",  # Use fast filename check
+                )
+                dedupe_result = await dedupe_tool.execute(dedupe_params)
+
+                if dedupe_result.success:
+                    logger.info(
+                        f"Deduplication complete: deleted {dedupe_result.data.get('deleted_count', 0)} duplicates"
+                    )
+
             return ToolResult.success_result(
                 data={
                     "source_dir": str(source_dir),
@@ -384,6 +412,7 @@ class ScanAndIndexTool(BaseTool[ScanAndIndexParams]):
                     "category_counts": dict(category_counts),
                     "documents": doc_list,
                     "failures": failed,
+                    "deduplication": dedupe_result.data if dedupe_result and dedupe_result.success else None,
                 }
             )
 

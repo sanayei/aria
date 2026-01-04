@@ -491,6 +491,56 @@ class VectorStore:
             logger.error(f"Failed to clear collection: {e}")
             raise VectorStoreError(f"Failed to clear collection: {e}") from e
 
+    async def update_metadata(self, doc_id: str, metadata_updates: dict[str, Any]) -> None:
+        """Update metadata for a document.
+
+        Args:
+            doc_id: Document ID
+            metadata_updates: Dictionary of metadata fields to update
+
+        Raises:
+            VectorStoreError: If update fails
+        """
+        await self._ensure_initialized()
+
+        try:
+            # Get current document to merge metadata
+            result = await asyncio.to_thread(
+                self._collection.get,  # type: ignore
+                ids=[doc_id],
+                include=["metadatas"],
+            )
+
+            if not result["ids"]:
+                logger.warning(f"Document {doc_id} not found for metadata update")
+                return
+
+            # Merge existing metadata with updates
+            current_metadata = result["metadatas"][0] if result["metadatas"] else {}
+
+            # Convert tags list to comma-separated string if present
+            processed_updates = {}
+            for key, value in metadata_updates.items():
+                if key == "tags" and isinstance(value, list):
+                    processed_updates[key] = ",".join(value)
+                else:
+                    processed_updates[key] = value
+
+            updated_metadata = {**current_metadata, **processed_updates}
+
+            # Update in ChromaDB
+            await asyncio.to_thread(
+                self._collection.update,  # type: ignore
+                ids=[doc_id],
+                metadatas=[updated_metadata],
+            )
+
+            logger.debug(f"Updated metadata for document {doc_id}: {list(metadata_updates.keys())}")
+
+        except Exception as e:
+            logger.error(f"Failed to update metadata for {doc_id}: {e}")
+            raise VectorStoreError(f"Failed to update metadata: {e}") from e
+
     async def close(self) -> None:
         """Close the ChromaDB client and release resources."""
         if self._client:

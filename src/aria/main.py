@@ -1438,8 +1438,9 @@ async def run_scan_process(
     pattern: str,
     limit: int | None,
     execute: bool,
-    verbose: bool,
-    no_color: bool,
+    deduplicate_after: bool = False,
+    verbose: bool = False,
+    no_color: bool = False,
 ) -> None:
     """Run the scan and process command."""
     from aria.tools.scanner import ScanAndIndexTool, ScanAndIndexParams
@@ -1505,6 +1506,7 @@ async def run_scan_process(
                 file_pattern=pattern,
                 max_files=limit,
                 preview_only=not execute,
+                deduplicate_after=deduplicate_after,
             )
 
             # Show header
@@ -1604,6 +1606,144 @@ async def run_scan_process(
         sys.exit(0)
     except Exception as e:
         console.error(f"Scan command failed: {e}")
+        if verbose:
+            import traceback
+
+            traceback.print_exc()
+        sys.exit(1)
+
+
+async def run_scan_deduplicate(
+    directory: str | None,
+    pattern: str,
+    check_by: str,
+    execute: bool,
+    verbose: bool,
+    no_color: bool,
+) -> None:
+    """Run the deduplication command."""
+    from aria.tools.scanner.deduplicate import DeduplicateTool, DeduplicateParams
+    from aria.memory import ArchiveIndex
+
+    console = get_console(no_color=no_color, verbose=verbose)
+    settings = get_settings()
+
+    # Setup signal handlers for graceful shutdown
+    setup_signal_handlers(console)
+
+    # Use configured directory if not specified
+    scan_dir = directory if directory else str(settings.scan_directory)
+
+    try:
+        # Initialize archive index
+        console.info("Initializing archive index...")
+
+        archive_index = ArchiveIndex(db_path=settings.archive_db_path)
+        await archive_index.initialize()
+
+        # Create deduplicate tool
+        dedupe_tool = DeduplicateTool(
+            archive_index=archive_index,
+            settings=settings,
+        )
+
+        # Create parameters
+        params = DeduplicateParams(
+            source_directory=scan_dir,
+            file_pattern=pattern,
+            preview_only=not execute,
+            check_by=check_by,
+        )
+
+        # Show header
+        mode = "[yellow]PREVIEW MODE[/yellow]" if not execute else "[red]EXECUTE MODE[/red]"
+        console.console.print(f"\n[bold cyan]Deduplication Scanner[/bold cyan] {mode}\n")
+        console.console.print(f"Directory: {scan_dir}")
+        console.console.print(f"Pattern: {pattern}")
+        console.console.print(f"Check by: {check_by}")
+        console.console.print()
+
+        # Run deduplication
+        with console.thinking("Checking for duplicates..."):
+            result = await dedupe_tool.execute(params)
+
+        if not result.success:
+            console.error(f"Deduplication failed: {result.error}")
+            sys.exit(1)
+
+        data = result.data
+
+        # Show results
+        if not execute or data.get("preview_only"):
+            # Preview mode
+            console.console.print(
+                Panel(
+                    f"[bold]Preview Results[/bold]\n\n"
+                    f"Files found: {data.get('found_count', 0)}\n"
+                    f"Duplicates: {data.get('duplicate_count', 0)}\n"
+                    f"Would delete: {data.get('duplicate_count', 0)} duplicate files (already in archive)\n\n"
+                    f"[yellow]Use --execute to actually delete the duplicates[/yellow]",
+                    title="Deduplication Preview",
+                    border_style="yellow",
+                )
+            )
+        else:
+            # Execute mode
+            console.console.print(
+                Panel(
+                    f"[bold]Deduplication Complete[/bold]\n\n"
+                    f"Files found: {data.get('found_count', 0)}\n"
+                    f"Duplicates found: {data.get('duplicate_count', 0)}\n"
+                    f"Files deleted: {data.get('deleted_count', 0)}\n"
+                    f"Failed: {data.get('failed_count', 0)}",
+                    title="Deduplication Results",
+                    border_style="green",
+                )
+            )
+
+        # Show duplicate details
+        duplicates = data.get("duplicates", [])
+        if duplicates:
+            console.console.print("\n[bold]Duplicate Files:[/bold]\n")
+            table = Table(show_header=True, header_style="bold magenta", box=box.ROUNDED)
+            table.add_column("Filename", style="cyan")
+            table.add_column("Person", style="green")
+            table.add_column("Category", style="yellow")
+            table.add_column("Processed", style="dim")
+
+            for dup in duplicates:
+                filename = dup.get("filename", "")
+                person = dup.get("person", "-")
+                category = dup.get("category", "-")
+                processed_at = dup.get("processed_at", "-")
+
+                # Show if deleted
+                if dup.get("deleted"):
+                    filename = f"{filename} [green]✓ deleted[/green]"
+
+                table.add_row(filename, person, category, processed_at)
+
+            console.console.print(table)
+            console.console.print()
+
+        # Show failures if any
+        failures = data.get("failures", [])
+        if failures:
+            console.console.print("\n[bold red]Failed to delete:[/bold red]\n")
+            for fail in failures:
+                console.console.print(f"  [red]✗[/red] {fail['file']}: {fail['error']}")
+            console.console.print()
+
+        console.success("Deduplication complete!")
+
+    except asyncio.CancelledError:
+        console.console.print("\n[yellow]Operation cancelled[/yellow]")
+        sys.exit(130)
+    except EOFError:
+        console.console.print("\n[yellow]EOF received, exiting...[/yellow]")
+        sys.exit(0)
+    except Exception as e:
+        console.error(f"Deduplication command failed: {e}")
         if verbose:
             import traceback
 
@@ -2027,6 +2167,7 @@ def scan():
 @click.option("--pattern", default="*.pdf", help="File pattern to scan (default: *.pdf)")
 @click.option("--limit", type=int, default=None, help="Maximum files to process")
 @click.option("--execute", is_flag=True, help="Actually process files (default is preview)")
+@click.option("--deduplicate", is_flag=True, help="Run deduplication after processing")
 @click.option("--verbose", "-v", is_flag=True, help="Enable verbose output")
 @click.option("--no-color", is_flag=True, help="Disable colored output")
 def scan_process(
@@ -2034,12 +2175,14 @@ def scan_process(
     pattern: str,
     limit: int | None,
     execute: bool,
+    deduplicate: bool,
     verbose: bool,
     no_color: bool,
 ):
     """Scan and process documents into the archive.
 
     By default runs in preview mode. Use --execute to actually process files.
+    Use --deduplicate to automatically move any remaining duplicates after processing.
     """
     asyncio.run(
         run_scan_process(
@@ -2047,6 +2190,7 @@ def scan_process(
             pattern=pattern,
             limit=limit,
             execute=execute,
+            deduplicate_after=deduplicate,
             verbose=verbose,
             no_color=no_color,
         )
@@ -2073,6 +2217,53 @@ def scan_preview(
             pattern=pattern,
             limit=limit,
             execute=False,
+            verbose=verbose,
+            no_color=no_color,
+        )
+    )
+
+
+@scan.command("deduplicate")
+@click.argument("directory", type=click.Path(exists=True), required=False)
+@click.option("--pattern", default="*.pdf", help="File pattern to check (default: *.pdf)")
+@click.option(
+    "--check-by",
+    type=click.Choice(["filename", "hash"]),
+    default="filename",
+    help="Deduplication method (default: filename)",
+)
+@click.option("--execute", is_flag=True, help="Actually move files (default is preview)")
+@click.option("--verbose", "-v", is_flag=True, help="Enable verbose output")
+@click.option("--no-color", is_flag=True, help="Disable colored output")
+def scan_deduplicate(
+    directory: str | None,
+    pattern: str,
+    check_by: str,
+    execute: bool,
+    verbose: bool,
+    no_color: bool,
+):
+    """Check for already-processed files and delete duplicates.
+
+    This command scans the source directory for files that have already been
+    processed and exist in the archive. Duplicates are deleted from the source
+    directory to avoid re-processing (they're already safely archived).
+
+    By default runs in preview mode. Use --execute to actually delete files.
+
+    Examples:
+
+        aria scan deduplicate
+        aria scan deduplicate --execute
+        aria scan deduplicate --check-by hash --execute
+        aria scan deduplicate /path/to/scan --execute
+    """
+    asyncio.run(
+        run_scan_deduplicate(
+            directory=directory,
+            pattern=pattern,
+            check_by=check_by,
+            execute=execute,
             verbose=verbose,
             no_color=no_color,
         )
