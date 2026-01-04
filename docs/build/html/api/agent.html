@@ -1,0 +1,1167 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agent &mdash; ARIA 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Tools" href="tools.html" />
+    <link rel="prev" title="custom workflows" href="../tutorials/custom_workflows.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            ARIA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#installation-steps">Installation Steps</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#clone-the-repository">1. Clone the Repository</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#install-dependencies">2. Install Dependencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#configure-environment">3. Configure Environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#pull-llm-model">4. Pull LLM Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#initialize-database">5. Initialize Database</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#verify-installation">Verify Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#ollama-connection-issues">Ollama Connection Issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#gpu-not-detected">GPU Not Detected</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../installation.html#import-errors">Import Errors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart.html#first-run">1. First Run</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart.html#basic-commands">2. Basic Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../quickstart.html#ask-a-question">Ask a Question</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../quickstart.html#web-search">Web Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../quickstart.html#email-management-requires-gmail-setup">Email Management (requires Gmail setup)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart.html#document-processing">3. Document Processing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../quickstart.html#scan-and-index-documents">Scan and Index Documents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../quickstart.html#search-archived-documents">Search Archived Documents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart.html#web-interface">4. Web Interface</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../quickstart.html#start-the-web-server">Start the Web Server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../quickstart.html#access-the-interface">Access the Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart.html#common-workflows">5. Common Workflows</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../quickstart.html#daily-email-summary">Daily Email Summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../quickstart.html#document-search">Document Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../quickstart.html#file-organization">File Organization</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart.html#command-reference">Command Reference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../quickstart.html#cli-commands">CLI Commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../quickstart.html#chat-commands">Chat Commands</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart.html#configuration-tips">Configuration Tips</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../quickstart.html#adjust-llm-temperature">Adjust LLM Temperature</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../quickstart.html#enable-auto-approval">Enable Auto-Approval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../quickstart.html#customize-document-categories">Customize Document Categories</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart.html#next-steps">Next Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quickstart.html#getting-help">Getting Help</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration.html">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#environment-variables">Environment Variables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#ollama-configuration">Ollama Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#application-settings">Application Settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#database-configuration">Database Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#vector-store-configuration">Vector Store Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#gmail-configuration">Gmail Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#tool-execution-settings">Tool Execution Settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#agent-settings">Agent Settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#web-application-security">Web Application Security</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#programmatic-configuration">Programmatic Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#custom-settings">Custom Settings</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#document-classification">Document Classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#archive-structure">Archive Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#performance-tuning">Performance Tuning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#llm-performance">LLM Performance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#vector-store-performance">Vector Store Performance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#database-performance">Database Performance</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#logging">Logging</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#log-levels">Log Levels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#log-files">Log Files</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#advanced-configuration">Advanced Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#custom-embeddings-model">Custom Embeddings Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration.html#custom-ocr-settings">Custom OCR Settings</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#environment-specific-configs">Environment-Specific Configs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#validation">Validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../configuration.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/overview.html">User Guide Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/overview.html#core-features">Core Features</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/overview.html#document-management">📄 Document Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/overview.html#email-management">✉️ Email Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/overview.html#web-interface">🌐 Web Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/overview.html#ai-agent">🤖 AI Agent</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/overview.html#getting-started">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/overview.html#detailed-guides">Detailed Guides</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/file_management.html">File Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/document_analysis.html">Document Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/email_management.html">Email Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/web_interface.html">Web Interface</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/scanning_documents.html">scanning documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/setting_up_gmail.html">setting up gmail</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/using_web_interface.html">using web interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/custom_workflows.html">custom workflows</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Agent</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-aria.agent.core">Core Agent</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#aria.agent.core.AgentError"><code class="docutils literal notranslate"><span class="pre">AgentError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aria.agent.core.ToolCallRecord"><code class="docutils literal notranslate"><span class="pre">ToolCallRecord</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#aria.agent.core.ToolCallRecord.tool_name"><code class="docutils literal notranslate"><span class="pre">ToolCallRecord.tool_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aria.agent.core.ToolCallRecord.tool_input"><code class="docutils literal notranslate"><span class="pre">ToolCallRecord.tool_input</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aria.agent.core.ToolCallRecord.result"><code class="docutils literal notranslate"><span class="pre">ToolCallRecord.result</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aria.agent.core.ToolCallRecord.execution_time_ms"><code class="docutils literal notranslate"><span class="pre">ToolCallRecord.execution_time_ms</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#aria.agent.core.Agent"><code class="docutils literal notranslate"><span class="pre">Agent</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#aria.agent.core.Agent.__init__"><code class="docutils literal notranslate"><span class="pre">Agent.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aria.agent.core.Agent.start_session"><code class="docutils literal notranslate"><span class="pre">Agent.start_session()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aria.agent.core.Agent.chat"><code class="docutils literal notranslate"><span class="pre">Agent.chat()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aria.agent.core.Agent.run"><code class="docutils literal notranslate"><span class="pre">Agent.run()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aria.agent.core.Agent.stream_response"><code class="docutils literal notranslate"><span class="pre">Agent.stream_response()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-aria.agent.planner">Planner</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#aria.agent.planner.TaskAnalysis"><code class="docutils literal notranslate"><span class="pre">TaskAnalysis</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#aria.agent.planner.TaskAnalysis.requires_tools"><code class="docutils literal notranslate"><span class="pre">TaskAnalysis.requires_tools</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aria.agent.planner.TaskAnalysis.complexity"><code class="docutils literal notranslate"><span class="pre">TaskAnalysis.complexity</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aria.agent.planner.TaskAnalysis.suggested_approach"><code class="docutils literal notranslate"><span class="pre">TaskAnalysis.suggested_approach</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aria.agent.planner.TaskAnalysis.confidence"><code class="docutils literal notranslate"><span class="pre">TaskAnalysis.confidence</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aria.agent.planner.TaskAnalysis.model_config"><code class="docutils literal notranslate"><span class="pre">TaskAnalysis.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#aria.agent.planner.TaskPlanner"><code class="docutils literal notranslate"><span class="pre">TaskPlanner</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#aria.agent.planner.TaskPlanner.__init__"><code class="docutils literal notranslate"><span class="pre">TaskPlanner.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aria.agent.planner.TaskPlanner.analyze_request"><code class="docutils literal notranslate"><span class="pre">TaskPlanner.analyze_request()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-aria.agent.executor">Executor</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#aria.agent.executor.ToolExecutionError"><code class="docutils literal notranslate"><span class="pre">ToolExecutionError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aria.agent.executor.ToolExecutor"><code class="docutils literal notranslate"><span class="pre">ToolExecutor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#aria.agent.executor.ToolExecutor.__init__"><code class="docutils literal notranslate"><span class="pre">ToolExecutor.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aria.agent.executor.ToolExecutor.execute"><code class="docutils literal notranslate"><span class="pre">ToolExecutor.execute()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aria.agent.executor.ToolExecutor.execute_multiple"><code class="docutils literal notranslate"><span class="pre">ToolExecutor.execute_multiple()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aria.agent.executor.ToolExecutor.get_execution_summary"><code class="docutils literal notranslate"><span class="pre">ToolExecutor.get_execution_summary()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-aria.agent.prompts">Prompts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#aria.agent.prompts.format_tool_result"><code class="docutils literal notranslate"><span class="pre">format_tool_result()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aria.agent.prompts.format_tool_error"><code class="docutils literal notranslate"><span class="pre">format_tool_error()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aria.agent.prompts.format_available_tools"><code class="docutils literal notranslate"><span class="pre">format_available_tools()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aria.agent.prompts.format_thinking_message"><code class="docutils literal notranslate"><span class="pre">format_thinking_message()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aria.agent.prompts.format_approval_denied_message"><code class="docutils literal notranslate"><span class="pre">format_approval_denied_message()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aria.agent.prompts.create_system_message_with_tools"><code class="docutils literal notranslate"><span class="pre">create_system_message_with_tools()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">Tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tools.html#module-aria.tools.base">Base Tool</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tools.html#aria.tools.base.RiskLevel"><code class="docutils literal notranslate"><span class="pre">RiskLevel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.base.RiskLevel.LOW"><code class="docutils literal notranslate"><span class="pre">RiskLevel.LOW</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.base.RiskLevel.MEDIUM"><code class="docutils literal notranslate"><span class="pre">RiskLevel.MEDIUM</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.base.RiskLevel.HIGH"><code class="docutils literal notranslate"><span class="pre">RiskLevel.HIGH</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.base.RiskLevel.CRITICAL"><code class="docutils literal notranslate"><span class="pre">RiskLevel.CRITICAL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.base.RiskLevel.requires_confirmation"><code class="docutils literal notranslate"><span class="pre">RiskLevel.requires_confirmation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.base.RiskLevel.requires_double_confirmation"><code class="docutils literal notranslate"><span class="pre">RiskLevel.requires_double_confirmation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.base.RiskLevel.__str__"><code class="docutils literal notranslate"><span class="pre">RiskLevel.__str__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tools.html#aria.tools.base.ToolResult"><code class="docutils literal notranslate"><span class="pre">ToolResult</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.base.ToolResult.success"><code class="docutils literal notranslate"><span class="pre">ToolResult.success</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.base.ToolResult.data"><code class="docutils literal notranslate"><span class="pre">ToolResult.data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.base.ToolResult.error"><code class="docutils literal notranslate"><span class="pre">ToolResult.error</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.base.ToolResult.metadata"><code class="docutils literal notranslate"><span class="pre">ToolResult.metadata</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.base.ToolResult.success_result"><code class="docutils literal notranslate"><span class="pre">ToolResult.success_result()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.base.ToolResult.error_result"><code class="docutils literal notranslate"><span class="pre">ToolResult.error_result()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.base.ToolResult.__str__"><code class="docutils literal notranslate"><span class="pre">ToolResult.__str__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.base.ToolResult.model_config"><code class="docutils literal notranslate"><span class="pre">ToolResult.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tools.html#aria.tools.base.BaseTool"><code class="docutils literal notranslate"><span class="pre">BaseTool</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.base.BaseTool.name"><code class="docutils literal notranslate"><span class="pre">BaseTool.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.base.BaseTool.description"><code class="docutils literal notranslate"><span class="pre">BaseTool.description</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.base.BaseTool.risk_level"><code class="docutils literal notranslate"><span class="pre">BaseTool.risk_level</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.base.BaseTool.parameters_schema"><code class="docutils literal notranslate"><span class="pre">BaseTool.parameters_schema</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.base.BaseTool.__init__"><code class="docutils literal notranslate"><span class="pre">BaseTool.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.base.BaseTool.requires_confirmation"><code class="docutils literal notranslate"><span class="pre">BaseTool.requires_confirmation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.base.BaseTool.requires_double_confirmation"><code class="docutils literal notranslate"><span class="pre">BaseTool.requires_double_confirmation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.base.BaseTool.execute"><code class="docutils literal notranslate"><span class="pre">BaseTool.execute()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.base.BaseTool.get_confirmation_message"><code class="docutils literal notranslate"><span class="pre">BaseTool.get_confirmation_message()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.base.BaseTool.validate_params"><code class="docutils literal notranslate"><span class="pre">BaseTool.validate_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.base.BaseTool.to_ollama_tool"><code class="docutils literal notranslate"><span class="pre">BaseTool.to_ollama_tool()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.base.BaseTool.run"><code class="docutils literal notranslate"><span class="pre">BaseTool.run()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.base.BaseTool.__repr__"><code class="docutils literal notranslate"><span class="pre">BaseTool.__repr__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tools.html#aria.tools.base.create_params_schema"><code class="docutils literal notranslate"><span class="pre">create_params_schema()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tools.html#document-tools">Document Tools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tools.html#module-aria.tools.documents.processor">Document Processing</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.documents.processor.DocumentProcessor"><code class="docutils literal notranslate"><span class="pre">DocumentProcessor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tools.html#module-aria.tools.documents.classifier">Document Classifier</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.documents.classifier.DocumentClassifier"><code class="docutils literal notranslate"><span class="pre">DocumentClassifier</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tools.html#module-aria.tools.documents.ocr">OCR</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.documents.ocr.OCRParams"><code class="docutils literal notranslate"><span class="pre">OCRParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.documents.ocr.OCRTool"><code class="docutils literal notranslate"><span class="pre">OCRTool</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tools.html#scanner-tools">Scanner Tools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tools.html#module-aria.tools.scanner.scan_and_index">Scan and Index</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.scanner.scan_and_index.ScanAndIndexParams"><code class="docutils literal notranslate"><span class="pre">ScanAndIndexParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.scanner.scan_and_index.ScanAndIndexTool"><code class="docutils literal notranslate"><span class="pre">ScanAndIndexTool</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tools.html#module-aria.tools.scanner.deduplicate">Deduplicate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.scanner.deduplicate.compute_file_hash"><code class="docutils literal notranslate"><span class="pre">compute_file_hash()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.scanner.deduplicate.DeduplicateParams"><code class="docutils literal notranslate"><span class="pre">DeduplicateParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.scanner.deduplicate.DeduplicateTool"><code class="docutils literal notranslate"><span class="pre">DeduplicateTool</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tools.html#email-tools">Email Tools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tools.html#gmail-client">Gmail Client</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tools.html#id1">Email Tools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.email.tools.ListEmailsParams"><code class="docutils literal notranslate"><span class="pre">ListEmailsParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.email.tools.ListEmailsTool"><code class="docutils literal notranslate"><span class="pre">ListEmailsTool</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.email.tools.SearchEmailsParams"><code class="docutils literal notranslate"><span class="pre">SearchEmailsParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.email.tools.SearchEmailsTool"><code class="docutils literal notranslate"><span class="pre">SearchEmailsTool</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.email.tools.ReadEmailParams"><code class="docutils literal notranslate"><span class="pre">ReadEmailParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.email.tools.ReadEmailTool"><code class="docutils literal notranslate"><span class="pre">ReadEmailTool</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.email.tools.LabelEmailParams"><code class="docutils literal notranslate"><span class="pre">LabelEmailParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.email.tools.LabelEmailTool"><code class="docutils literal notranslate"><span class="pre">LabelEmailTool</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.email.tools.ArchiveEmailParams"><code class="docutils literal notranslate"><span class="pre">ArchiveEmailParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.email.tools.ArchiveEmailTool"><code class="docutils literal notranslate"><span class="pre">ArchiveEmailTool</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.email.tools.CreateDraftParams"><code class="docutils literal notranslate"><span class="pre">CreateDraftParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.email.tools.CreateDraftTool"><code class="docutils literal notranslate"><span class="pre">CreateDraftTool</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.email.tools.SendEmailParams"><code class="docutils literal notranslate"><span class="pre">SendEmailParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.email.tools.SendEmailTool"><code class="docutils literal notranslate"><span class="pre">SendEmailTool</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tools.html#search-tools">Search Tools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tools.html#module-aria.tools.search.web">Web Search</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.search.web.WebSearchParams"><code class="docutils literal notranslate"><span class="pre">WebSearchParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.search.web.WebSearchTool"><code class="docutils literal notranslate"><span class="pre">WebSearchTool</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.search.web.FetchWebPageParams"><code class="docutils literal notranslate"><span class="pre">FetchWebPageParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools.html#aria.tools.search.web.FetchWebPageTool"><code class="docutils literal notranslate"><span class="pre">FetchWebPageTool</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tools.html#local-search">Local Search</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">Memory &amp; Storage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="memory.html#module-aria.memory.archive">Archive Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveDocument"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveDocument.id"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveDocument.original_filename"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.original_filename</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveDocument.original_path"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.original_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveDocument.archived_path"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.archived_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveDocument.person"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.person</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveDocument.category"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.category</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveDocument.document_date"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.document_date</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveDocument.sender"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.sender</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveDocument.summary"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.summary</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveDocument.tags"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.tags</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveDocument.ocr_confidence"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.ocr_confidence</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveDocument.processed_at"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.processed_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveDocument.file_size_bytes"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.file_size_bytes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveDocument.chroma_doc_ids"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.chroma_doc_ids</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveDocument.extraction_model"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.extraction_model</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveDocument.last_edited_at"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.last_edited_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveDocument.last_edited_by"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.last_edited_by</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveDocument.model_config"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveStatistics"><code class="docutils literal notranslate"><span class="pre">ArchiveStatistics</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveStatistics.total_documents"><code class="docutils literal notranslate"><span class="pre">ArchiveStatistics.total_documents</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveStatistics.documents_by_person"><code class="docutils literal notranslate"><span class="pre">ArchiveStatistics.documents_by_person</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveStatistics.documents_by_category"><code class="docutils literal notranslate"><span class="pre">ArchiveStatistics.documents_by_category</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveStatistics.documents_by_year"><code class="docutils literal notranslate"><span class="pre">ArchiveStatistics.documents_by_year</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveStatistics.total_size_bytes"><code class="docutils literal notranslate"><span class="pre">ArchiveStatistics.total_size_bytes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveStatistics.earliest_document"><code class="docutils literal notranslate"><span class="pre">ArchiveStatistics.earliest_document</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveStatistics.latest_document"><code class="docutils literal notranslate"><span class="pre">ArchiveStatistics.latest_document</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveStatistics.model_config"><code class="docutils literal notranslate"><span class="pre">ArchiveStatistics.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveIndex"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveIndex.__init__"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveIndex.initialize"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.initialize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveIndex.add_document"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.add_document()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveIndex.get_document"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.get_document()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveIndex.get_document_by_path"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.get_document_by_path()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveIndex.update_document"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.update_document()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveIndex.search"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.search()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveIndex.list_by_person"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.list_by_person()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveIndex.list_by_category"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.list_by_category()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveIndex.list_by_date_range"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.list_by_date_range()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveIndex.get_statistics"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.get_statistics()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.archive.ArchiveIndex.get_all_tags"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.get_all_tags()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="memory.html#module-aria.memory.vectors">Vector Store</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="memory.html#aria.memory.vectors.VectorStoreError"><code class="docutils literal notranslate"><span class="pre">VectorStoreError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="memory.html#aria.memory.vectors.Document"><code class="docutils literal notranslate"><span class="pre">Document</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.vectors.Document.content"><code class="docutils literal notranslate"><span class="pre">Document.content</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.vectors.Document.metadata"><code class="docutils literal notranslate"><span class="pre">Document.metadata</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.vectors.Document.doc_id"><code class="docutils literal notranslate"><span class="pre">Document.doc_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.vectors.Document.with_id"><code class="docutils literal notranslate"><span class="pre">Document.with_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.vectors.Document.model_config"><code class="docutils literal notranslate"><span class="pre">Document.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="memory.html#aria.memory.vectors.SearchResult"><code class="docutils literal notranslate"><span class="pre">SearchResult</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.vectors.SearchResult.doc_id"><code class="docutils literal notranslate"><span class="pre">SearchResult.doc_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.vectors.SearchResult.content"><code class="docutils literal notranslate"><span class="pre">SearchResult.content</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.vectors.SearchResult.metadata"><code class="docutils literal notranslate"><span class="pre">SearchResult.metadata</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.vectors.SearchResult.score"><code class="docutils literal notranslate"><span class="pre">SearchResult.score</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.vectors.SearchResult.distance"><code class="docutils literal notranslate"><span class="pre">SearchResult.distance</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.vectors.SearchResult.model_config"><code class="docutils literal notranslate"><span class="pre">SearchResult.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="memory.html#aria.memory.vectors.CollectionStats"><code class="docutils literal notranslate"><span class="pre">CollectionStats</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.vectors.CollectionStats.name"><code class="docutils literal notranslate"><span class="pre">CollectionStats.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.vectors.CollectionStats.count"><code class="docutils literal notranslate"><span class="pre">CollectionStats.count</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.vectors.CollectionStats.dimension"><code class="docutils literal notranslate"><span class="pre">CollectionStats.dimension</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.vectors.CollectionStats.model_config"><code class="docutils literal notranslate"><span class="pre">CollectionStats.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="memory.html#aria.memory.vectors.VectorStore"><code class="docutils literal notranslate"><span class="pre">VectorStore</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.vectors.VectorStore.__init__"><code class="docutils literal notranslate"><span class="pre">VectorStore.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.vectors.VectorStore.initialize"><code class="docutils literal notranslate"><span class="pre">VectorStore.initialize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.vectors.VectorStore.add_document"><code class="docutils literal notranslate"><span class="pre">VectorStore.add_document()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.vectors.VectorStore.add_documents"><code class="docutils literal notranslate"><span class="pre">VectorStore.add_documents()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.vectors.VectorStore.delete_document"><code class="docutils literal notranslate"><span class="pre">VectorStore.delete_document()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.vectors.VectorStore.search"><code class="docutils literal notranslate"><span class="pre">VectorStore.search()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.vectors.VectorStore.search_by_embedding"><code class="docutils literal notranslate"><span class="pre">VectorStore.search_by_embedding()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.vectors.VectorStore.get_document"><code class="docutils literal notranslate"><span class="pre">VectorStore.get_document()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.vectors.VectorStore.get_stats"><code class="docutils literal notranslate"><span class="pre">VectorStore.get_stats()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.vectors.VectorStore.clear"><code class="docutils literal notranslate"><span class="pre">VectorStore.clear()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.vectors.VectorStore.update_metadata"><code class="docutils literal notranslate"><span class="pre">VectorStore.update_metadata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.vectors.VectorStore.close"><code class="docutils literal notranslate"><span class="pre">VectorStore.close()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="memory.html#module-aria.memory.conversation">Conversation Store</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="memory.html#aria.memory.conversation.ConversationStore"><code class="docutils literal notranslate"><span class="pre">ConversationStore</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.conversation.ConversationStore.__init__"><code class="docutils literal notranslate"><span class="pre">ConversationStore.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.conversation.ConversationStore.initialize"><code class="docutils literal notranslate"><span class="pre">ConversationStore.initialize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.conversation.ConversationStore.create_session"><code class="docutils literal notranslate"><span class="pre">ConversationStore.create_session()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.conversation.ConversationStore.get_session"><code class="docutils literal notranslate"><span class="pre">ConversationStore.get_session()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.conversation.ConversationStore.list_sessions"><code class="docutils literal notranslate"><span class="pre">ConversationStore.list_sessions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.conversation.ConversationStore.update_session"><code class="docutils literal notranslate"><span class="pre">ConversationStore.update_session()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.conversation.ConversationStore.delete_session"><code class="docutils literal notranslate"><span class="pre">ConversationStore.delete_session()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.conversation.ConversationStore.add_message"><code class="docutils literal notranslate"><span class="pre">ConversationStore.add_message()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.conversation.ConversationStore.get_messages"><code class="docutils literal notranslate"><span class="pre">ConversationStore.get_messages()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.conversation.ConversationStore.get_context"><code class="docutils literal notranslate"><span class="pre">ConversationStore.get_context()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.conversation.ConversationStore.add_tool_call"><code class="docutils literal notranslate"><span class="pre">ConversationStore.add_tool_call()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.conversation.ConversationStore.update_tool_call"><code class="docutils literal notranslate"><span class="pre">ConversationStore.update_tool_call()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.conversation.ConversationStore.search_messages"><code class="docutils literal notranslate"><span class="pre">ConversationStore.search_messages()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.conversation.ConversationStore.get_recent_sessions"><code class="docutils literal notranslate"><span class="pre">ConversationStore.get_recent_sessions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html#aria.memory.conversation.ConversationStore.close"><code class="docutils literal notranslate"><span class="pre">ConversationStore.close()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="memory.html#knowledge-base">Knowledge Base</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="web.html">Web Application</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="web.html#application">Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="web.html#authentication">Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="web.html#module-aria.web.database">User Database</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="web.html#aria.web.database.UserDatabase"><code class="docutils literal notranslate"><span class="pre">UserDatabase</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.database.UserDatabase.__init__"><code class="docutils literal notranslate"><span class="pre">UserDatabase.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.database.UserDatabase.initialize"><code class="docutils literal notranslate"><span class="pre">UserDatabase.initialize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.database.UserDatabase.close"><code class="docutils literal notranslate"><span class="pre">UserDatabase.close()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.database.UserDatabase.verify_password"><code class="docutils literal notranslate"><span class="pre">UserDatabase.verify_password()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.database.UserDatabase.create_user"><code class="docutils literal notranslate"><span class="pre">UserDatabase.create_user()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.database.UserDatabase.get_user_by_username"><code class="docutils literal notranslate"><span class="pre">UserDatabase.get_user_by_username()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.database.UserDatabase.get_user_by_id"><code class="docutils literal notranslate"><span class="pre">UserDatabase.get_user_by_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.database.UserDatabase.update_last_login"><code class="docutils literal notranslate"><span class="pre">UserDatabase.update_last_login()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.database.UserDatabase.list_users"><code class="docutils literal notranslate"><span class="pre">UserDatabase.list_users()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.database.UserDatabase.update_user"><code class="docutils literal notranslate"><span class="pre">UserDatabase.update_user()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.database.UserDatabase.delete_user"><code class="docutils literal notranslate"><span class="pre">UserDatabase.delete_user()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.database.UserDatabase.user_exists"><code class="docutils literal notranslate"><span class="pre">UserDatabase.user_exists()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="web.html#module-aria.web.models">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="web.html#aria.web.models.UserRole"><code class="docutils literal notranslate"><span class="pre">UserRole</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.UserRole.ADMIN"><code class="docutils literal notranslate"><span class="pre">UserRole.ADMIN</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.UserRole.POWER_USER"><code class="docutils literal notranslate"><span class="pre">UserRole.POWER_USER</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.UserRole.FAMILY_MEMBER"><code class="docutils literal notranslate"><span class="pre">UserRole.FAMILY_MEMBER</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.UserRole.VIEWER"><code class="docutils literal notranslate"><span class="pre">UserRole.VIEWER</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.UserRole.ALL_ROLES"><code class="docutils literal notranslate"><span class="pre">UserRole.ALL_ROLES</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="web.html#aria.web.models.UserPermissions"><code class="docutils literal notranslate"><span class="pre">UserPermissions</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.UserPermissions.allowed_persons"><code class="docutils literal notranslate"><span class="pre">UserPermissions.allowed_persons</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.UserPermissions.denied_persons"><code class="docutils literal notranslate"><span class="pre">UserPermissions.denied_persons</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.UserPermissions.allowed_categories"><code class="docutils literal notranslate"><span class="pre">UserPermissions.allowed_categories</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.UserPermissions.denied_categories"><code class="docutils literal notranslate"><span class="pre">UserPermissions.denied_categories</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.UserPermissions.can_view"><code class="docutils literal notranslate"><span class="pre">UserPermissions.can_view</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.UserPermissions.can_download"><code class="docutils literal notranslate"><span class="pre">UserPermissions.can_download</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.UserPermissions.can_search_all"><code class="docutils literal notranslate"><span class="pre">UserPermissions.can_search_all</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.UserPermissions.can_manage_users"><code class="docutils literal notranslate"><span class="pre">UserPermissions.can_manage_users</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.UserPermissions.can_rescan"><code class="docutils literal notranslate"><span class="pre">UserPermissions.can_rescan</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.UserPermissions.can_delete"><code class="docutils literal notranslate"><span class="pre">UserPermissions.can_delete</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.UserPermissions.can_create_tags"><code class="docutils literal notranslate"><span class="pre">UserPermissions.can_create_tags</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.UserPermissions.model_config"><code class="docutils literal notranslate"><span class="pre">UserPermissions.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="web.html#aria.web.models.User"><code class="docutils literal notranslate"><span class="pre">User</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.User.id"><code class="docutils literal notranslate"><span class="pre">User.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.User.username"><code class="docutils literal notranslate"><span class="pre">User.username</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.User.full_name"><code class="docutils literal notranslate"><span class="pre">User.full_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.User.role"><code class="docutils literal notranslate"><span class="pre">User.role</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.User.permissions"><code class="docutils literal notranslate"><span class="pre">User.permissions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.User.created_at"><code class="docutils literal notranslate"><span class="pre">User.created_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.User.last_login"><code class="docutils literal notranslate"><span class="pre">User.last_login</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.User.is_active"><code class="docutils literal notranslate"><span class="pre">User.is_active</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.User.get_default_permissions"><code class="docutils literal notranslate"><span class="pre">User.get_default_permissions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.User.model_config"><code class="docutils literal notranslate"><span class="pre">User.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="web.html#aria.web.models.UserInDB"><code class="docutils literal notranslate"><span class="pre">UserInDB</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.UserInDB.password_hash"><code class="docutils literal notranslate"><span class="pre">UserInDB.password_hash</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.UserInDB.model_config"><code class="docutils literal notranslate"><span class="pre">UserInDB.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="web.html#aria.web.models.UserCreate"><code class="docutils literal notranslate"><span class="pre">UserCreate</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.UserCreate.username"><code class="docutils literal notranslate"><span class="pre">UserCreate.username</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.UserCreate.password"><code class="docutils literal notranslate"><span class="pre">UserCreate.password</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.UserCreate.full_name"><code class="docutils literal notranslate"><span class="pre">UserCreate.full_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.UserCreate.role"><code class="docutils literal notranslate"><span class="pre">UserCreate.role</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.UserCreate.permissions"><code class="docutils literal notranslate"><span class="pre">UserCreate.permissions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.UserCreate.model_config"><code class="docutils literal notranslate"><span class="pre">UserCreate.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="web.html#aria.web.models.UserUpdate"><code class="docutils literal notranslate"><span class="pre">UserUpdate</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.UserUpdate.full_name"><code class="docutils literal notranslate"><span class="pre">UserUpdate.full_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.UserUpdate.role"><code class="docutils literal notranslate"><span class="pre">UserUpdate.role</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.UserUpdate.permissions"><code class="docutils literal notranslate"><span class="pre">UserUpdate.permissions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.UserUpdate.is_active"><code class="docutils literal notranslate"><span class="pre">UserUpdate.is_active</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.UserUpdate.password"><code class="docutils literal notranslate"><span class="pre">UserUpdate.password</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.UserUpdate.model_config"><code class="docutils literal notranslate"><span class="pre">UserUpdate.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="web.html#aria.web.models.Token"><code class="docutils literal notranslate"><span class="pre">Token</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.Token.access_token"><code class="docutils literal notranslate"><span class="pre">Token.access_token</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.Token.token_type"><code class="docutils literal notranslate"><span class="pre">Token.token_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.Token.model_config"><code class="docutils literal notranslate"><span class="pre">Token.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="web.html#aria.web.models.TokenData"><code class="docutils literal notranslate"><span class="pre">TokenData</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.TokenData.username"><code class="docutils literal notranslate"><span class="pre">TokenData.username</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.TokenData.model_config"><code class="docutils literal notranslate"><span class="pre">TokenData.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="web.html#aria.web.models.LoginRequest"><code class="docutils literal notranslate"><span class="pre">LoginRequest</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.LoginRequest.username"><code class="docutils literal notranslate"><span class="pre">LoginRequest.username</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.LoginRequest.password"><code class="docutils literal notranslate"><span class="pre">LoginRequest.password</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="web.html#aria.web.models.LoginRequest.model_config"><code class="docutils literal notranslate"><span class="pre">LoginRequest.model_config</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="web.html#api-endpoints">API Endpoints</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="web.html#authentication-api">Authentication API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="web.html#documents-api">Documents API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="web.html#admin-api">Admin API</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../development/architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/testing.html">Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/extending.html">Extending</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ARIA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Agent</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/agent.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="agent">
+<h1>Agent<a class="headerlink" href="#agent" title="Link to this heading"></a></h1>
+<p>The agent module contains the core ReAct (Reason + Act) agent implementation.</p>
+<section id="module-aria.agent.core">
+<span id="core-agent"></span><h2>Core Agent<a class="headerlink" href="#module-aria.agent.core" title="Link to this heading"></a></h2>
+<p>Core agent implementation using the ReAct pattern.</p>
+<p>This module provides the main Agent class that orchestrates the
+Thought → Action → Observation loop using LLM and tools.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="aria.agent.core.AgentError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aria.agent.core.</span></span><span class="sig-name descname"><span class="pre">AgentError</span></span><a class="reference internal" href="../_modules/aria/agent/core.html#AgentError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aria.agent.core.AgentError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
+<p>Exception raised when agent execution fails.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="aria.agent.core.ToolCallRecord">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aria.agent.core.</span></span><span class="sig-name descname"><span class="pre">ToolCallRecord</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tool_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tool_input</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">execution_time_ms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aria/agent/core.html#ToolCallRecord"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aria.agent.core.ToolCallRecord" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NamedTuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></a></p>
+<p>Record of a tool call execution.</p>
+<p>This is used to track tool calls during agent execution so they
+can be persisted to the conversation history database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tool_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>tool_input</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a><em>]</em>)</p></li>
+<li><p><strong>result</strong> (<a class="reference internal" href="tools.html#aria.tools.base.ToolResult" title="aria.tools.base.ToolResult"><em>ToolResult</em></a>)</p></li>
+<li><p><strong>execution_time_ms</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em> | </em><em>None</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aria.agent.core.ToolCallRecord.tool_name">
+<span class="sig-name descname"><span class="pre">tool_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#aria.agent.core.ToolCallRecord.tool_name" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aria.agent.core.ToolCallRecord.tool_input">
+<span class="sig-name descname"><span class="pre">tool_input</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a><span class="pre">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a><span class="pre">,</span> <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#aria.agent.core.ToolCallRecord.tool_input" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aria.agent.core.ToolCallRecord.result">
+<span class="sig-name descname"><span class="pre">result</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="tools.html#aria.tools.base.ToolResult" title="aria.tools.base.ToolResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ToolResult</span></code></a></em><a class="headerlink" href="#aria.agent.core.ToolCallRecord.result" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aria.agent.core.ToolCallRecord.execution_time_ms">
+<span class="sig-name descname"><span class="pre">execution_time_ms</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> <span class="pre">|</span> <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></em><a class="headerlink" href="#aria.agent.core.ToolCallRecord.execution_time_ms" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 3</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="aria.agent.core.Agent">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aria.agent.core.</span></span><span class="sig-name descname"><span class="pre">Agent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">registry</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">console</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">approval_handler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conversation_store</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aria/agent/core.html#Agent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aria.agent.core.Agent" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>ARIA agent implementing the ReAct pattern.</p>
+<p>The agent follows the Thought → Action → Observation → Thought cycle:
+1. Receives user input and analyzes it
+2. Calls LLM to decide on actions (tool use or direct response)
+3. Executes tools if needed (with approval handling)
+4. Observes tool results and incorporates them
+5. Decides if more actions are needed or provides final response</p>
+<p>The agent handles:
+- Tool execution with risk-based approval
+- Multi-step reasoning and tool chaining
+- Streaming responses
+- Error recovery
+- Safety limits (max iterations)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>client</strong> (<em>OllamaClient</em>)</p></li>
+<li><p><strong>registry</strong> (<em>ToolRegistry</em>)</p></li>
+<li><p><strong>console</strong> (<em>ARIAConsole</em>)</p></li>
+<li><p><strong>approval_handler</strong> (<em>ApprovalHandler</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>max_iterations</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>)</p></li>
+<li><p><strong>conversation_store</strong> (<a class="reference internal" href="memory.html#aria.memory.conversation.ConversationStore" title="aria.memory.conversation.ConversationStore"><em>ConversationStore</em></a><em> | </em><em>None</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="aria.agent.core.Agent.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">registry</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">console</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">approval_handler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conversation_store</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aria/agent/core.html#Agent.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aria.agent.core.Agent.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initialize the agent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>client</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">OllamaClient</span></code></span>) – Ollama client for LLM calls</p></li>
+<li><p><strong>registry</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ToolRegistry</span></code></span>) – Tool registry for available tools</p></li>
+<li><p><strong>console</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ARIAConsole</span></code></span>) – Console for user interaction</p></li>
+<li><p><strong>approval_handler</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ApprovalHandler</span></code> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Handler for tool approvals (creates default if None)</p></li>
+<li><p><strong>max_iterations</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Maximum number of ReAct loop iterations</p></li>
+<li><p><strong>conversation_store</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="memory.html#aria.memory.conversation.ConversationStore" title="aria.memory.conversation.ConversationStore"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConversationStore</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Optional conversation store for history persistence</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aria.agent.core.Agent.start_session">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">start_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aria/agent/core.html#Agent.start_session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aria.agent.core.Agent.start_session" title="Link to this definition"></a></dt>
+<dd><p>Start a new session or resume an existing one.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>session_id</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Optional session ID to resume. If None, creates new session.</p></li>
+<li><p><strong>title</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Optional title for new session</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The session ID</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#aria.agent.core.AgentError" title="aria.agent.core.AgentError"><strong>AgentError</strong></a> – If conversation store is not configured</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aria.agent.core.Agent.chat">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">chat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_message</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aria/agent/core.html#Agent.chat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aria.agent.core.Agent.chat" title="Link to this definition"></a></dt>
+<dd><p>Process a message with automatic history persistence.</p>
+<p>This is a convenience method that:
+1. Loads conversation history from the current session
+2. Saves the user message
+3. Runs the agent
+4. Saves the assistant response and tool calls
+5. Returns the response</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>user_message</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – The user’s input message</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The agent’s response</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#aria.agent.core.AgentError" title="aria.agent.core.AgentError"><strong>AgentError</strong></a> – If no session is active or conversation store not configured</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aria.agent.core.Agent.run">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conversation_history</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aria/agent/core.html#Agent.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aria.agent.core.Agent.run" title="Link to this definition"></a></dt>
+<dd><p>Run the agent on a user message.</p>
+<p>Executes the ReAct loop:
+1. Build context with system prompt and history
+2. Call LLM with available tools
+3. If tool calls in response:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Execute tools (with approval)</p></li>
+<li><p>Add results to context</p></li>
+<li><p>Call LLM again with results</p></li>
+<li><p>Repeat until no more tool calls or max iterations</p></li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><p>Return final text response and tool call records</p></li>
+</ol>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user_message</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – The user’s input message</p></li>
+<li><p><strong>conversation_history</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ChatMessage</span></code>] | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Previous conversation messages (optional)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The agent’s final response and tool call records</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)">tuple</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="#aria.agent.core.ToolCallRecord" title="aria.agent.core.ToolCallRecord">ToolCallRecord</a>]]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#aria.agent.core.AgentError" title="aria.agent.core.AgentError"><strong>AgentError</strong></a> – If agent execution fails</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aria.agent.core.Agent.stream_response">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">stream_response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conversation_history</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aria/agent/core.html#Agent.stream_response"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aria.agent.core.Agent.stream_response" title="Link to this definition"></a></dt>
+<dd><p>Stream the agent’s response in real-time.</p>
+<p>Note: This is a simpler version that doesn’t support tool use yet.
+For tool-using responses, use run() instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user_message</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – The user’s input message</p></li>
+<li><p><strong>conversation_history</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ChatMessage</span></code>] | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Previous conversation messages (optional)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Yields<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> – Chunks of the response</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.AsyncIterator" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AsyncIterator</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-aria.agent.planner">
+<span id="planner"></span><h2>Planner<a class="headerlink" href="#module-aria.agent.planner" title="Link to this heading"></a></h2>
+<p>Task planning and analysis for the ARIA agent.</p>
+<p>This module provides simple task analysis to help the agent understand
+user requests and plan appropriate responses.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="aria.agent.planner.TaskAnalysis">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aria.agent.planner.</span></span><span class="sig-name descname"><span class="pre">TaskAnalysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aria/agent/planner.html#TaskAnalysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aria.agent.planner.TaskAnalysis" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" title="(in Pydantic Validation v0.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<p>Analysis of a user’s task/request.</p>
+<p>Provides insights into what the user wants and how complex it might be.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>requires_tools</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>)</p></li>
+<li><p><strong>complexity</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><em>Literal</em></a><em>[</em><em>'simple'</em><em>, </em><em>'moderate'</em><em>, </em><em>'complex'</em><em>]</em>)</p></li>
+<li><p><strong>suggested_approach</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>confidence</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aria.agent.planner.TaskAnalysis.requires_tools">
+<span class="sig-name descname"><span class="pre">requires_tools</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></em><a class="headerlink" href="#aria.agent.planner.TaskAnalysis.requires_tools" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aria.agent.planner.TaskAnalysis.complexity">
+<span class="sig-name descname"><span class="pre">complexity</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Literal</span></code></a><span class="pre">[</span><code class="docutils literal notranslate"><span class="pre">'simple'</span></code><span class="pre">,</span> <code class="docutils literal notranslate"><span class="pre">'moderate'</span></code><span class="pre">,</span> <code class="docutils literal notranslate"><span class="pre">'complex'</span></code><span class="pre">]</span></em><a class="headerlink" href="#aria.agent.planner.TaskAnalysis.complexity" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aria.agent.planner.TaskAnalysis.suggested_approach">
+<span class="sig-name descname"><span class="pre">suggested_approach</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></em><a class="headerlink" href="#aria.agent.planner.TaskAnalysis.suggested_approach" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aria.agent.planner.TaskAnalysis.confidence">
+<span class="sig-name descname"><span class="pre">confidence</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></em><a class="headerlink" href="#aria.agent.planner.TaskAnalysis.confidence" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="aria.agent.planner.TaskAnalysis.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#aria.agent.planner.TaskAnalysis.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="aria.agent.planner.TaskPlanner">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aria.agent.planner.</span></span><span class="sig-name descname"><span class="pre">TaskPlanner</span></span><a class="reference internal" href="../_modules/aria/agent/planner.html#TaskPlanner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aria.agent.planner.TaskPlanner" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Simple task planner using heuristics.</p>
+<p>This planner uses pattern matching and keywords to analyze tasks.
+In the future, this could be enhanced with LLM-based analysis.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="aria.agent.planner.TaskPlanner.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aria/agent/planner.html#TaskPlanner.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aria.agent.planner.TaskPlanner.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initialize the task planner.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aria.agent.planner.TaskPlanner.analyze_request">
+<span class="sig-name descname"><span class="pre">analyze_request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_message</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aria/agent/planner.html#TaskPlanner.analyze_request"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aria.agent.planner.TaskPlanner.analyze_request" title="Link to this definition"></a></dt>
+<dd><p>Analyze a user request to determine approach.</p>
+<p>Uses simple heuristics to assess:
+- Whether tools are likely needed
+- Task complexity
+- Suggested approach</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>user_message</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – The user’s message/request</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Analysis of the task</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#aria.agent.planner.TaskAnalysis" title="aria.agent.planner.TaskAnalysis">TaskAnalysis</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-aria.agent.executor">
+<span id="executor"></span><h2>Executor<a class="headerlink" href="#module-aria.agent.executor" title="Link to this heading"></a></h2>
+<p>Tool execution with approval handling for the ARIA agent.</p>
+<p>This module provides the ToolExecutor class which handles executing tools
+with the appropriate approval flows based on risk level.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="aria.agent.executor.ToolExecutionError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aria.agent.executor.</span></span><span class="sig-name descname"><span class="pre">ToolExecutionError</span></span><a class="reference internal" href="../_modules/aria/agent/executor.html#ToolExecutionError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aria.agent.executor.ToolExecutionError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
+<p>Exception raised when tool execution fails.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="aria.agent.executor.ToolExecutor">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">aria.agent.executor.</span></span><span class="sig-name descname"><span class="pre">ToolExecutor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">registry</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">approval_handler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">console</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aria/agent/executor.html#ToolExecutor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aria.agent.executor.ToolExecutor" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Executes tools with risk-based approval handling.</p>
+<p>The executor manages the complete lifecycle of tool execution:
+1. Tool lookup and validation
+2. Parameter validation
+3. Risk assessment and approval (if needed)
+4. Execution
+5. Result formatting and display</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>registry</strong> (<em>ToolRegistry</em>)</p></li>
+<li><p><strong>approval_handler</strong> (<em>ApprovalHandler</em>)</p></li>
+<li><p><strong>console</strong> (<em>ARIAConsole</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="aria.agent.executor.ToolExecutor.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">registry</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">approval_handler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">console</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aria/agent/executor.html#ToolExecutor.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aria.agent.executor.ToolExecutor.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initialize the tool executor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>registry</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ToolRegistry</span></code></span>) – Tool registry for looking up tools</p></li>
+<li><p><strong>approval_handler</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ApprovalHandler</span></code></span>) – Handler for user approvals</p></li>
+<li><p><strong>console</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ARIAConsole</span></code></span>) – Console for displaying execution progress</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aria.agent.executor.ToolExecutor.execute">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tool_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arguments</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aria/agent/executor.html#ToolExecutor.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aria.agent.executor.ToolExecutor.execute" title="Link to this definition"></a></dt>
+<dd><p>Execute a tool with approval handling.</p>
+<p>Steps:
+1. Get tool from registry
+2. Validate parameters
+3. Check if approval needed
+4. Request approval if needed
+5. Execute tool
+6. Display results</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tool_name</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Name of the tool to execute</p></li>
+<li><p><strong>arguments</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span>) – Raw arguments for the tool</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Result of the execution</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="tools.html#aria.tools.base.ToolResult" title="aria.tools.base.ToolResult">ToolResult</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#aria.agent.executor.ToolExecutionError" title="aria.agent.executor.ToolExecutionError"><strong>ToolExecutionError</strong></a> – If tool execution fails</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aria.agent.executor.ToolExecutor.execute_multiple">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">execute_multiple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tool_calls</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aria/agent/executor.html#ToolExecutor.execute_multiple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aria.agent.executor.ToolExecutor.execute_multiple" title="Link to this definition"></a></dt>
+<dd><p>Execute multiple tools in sequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tool_calls</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]]]</span>) – List of (tool_name, arguments) tuples</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Results from each tool execution</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="tools.html#aria.tools.base.ToolResult" title="aria.tools.base.ToolResult">ToolResult</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="aria.agent.executor.ToolExecutor.get_execution_summary">
+<span class="sig-name descname"><span class="pre">get_execution_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">results</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aria/agent/executor.html#ToolExecutor.get_execution_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aria.agent.executor.ToolExecutor.get_execution_summary" title="Link to this definition"></a></dt>
+<dd><p>Generate a summary of multiple tool executions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>results</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="tools.html#aria.tools.base.ToolResult" title="aria.tools.base.ToolResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ToolResult</span></code></a>]</span>) – List of tool results</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Human-readable summary</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-aria.agent.prompts">
+<span id="prompts"></span><h2>Prompts<a class="headerlink" href="#module-aria.agent.prompts" title="Link to this heading"></a></h2>
+<p>System prompts and templates for the ARIA agent.</p>
+<p>This module contains the system prompts that define ARIA’s behavior,
+as well as templates for formatting tool results and other agent messages.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="aria.agent.prompts.format_tool_result">
+<span class="sig-prename descclassname"><span class="pre">aria.agent.prompts.</span></span><span class="sig-name descname"><span class="pre">format_tool_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tool_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aria/agent/prompts.html#format_tool_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aria.agent.prompts.format_tool_result" title="Link to this definition"></a></dt>
+<dd><p>Format a tool execution result for the LLM.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tool_name</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Name of the tool that was executed</p></li>
+<li><p><strong>result</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="tools.html#aria.tools.base.ToolResult" title="aria.tools.base.ToolResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ToolResult</span></code></a></span>) – Result from the tool execution</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Formatted result message</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aria.agent.prompts.format_tool_error">
+<span class="sig-prename descclassname"><span class="pre">aria.agent.prompts.</span></span><span class="sig-name descname"><span class="pre">format_tool_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tool_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aria/agent/prompts.html#format_tool_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aria.agent.prompts.format_tool_error" title="Link to this definition"></a></dt>
+<dd><p>Format a tool execution error for the LLM.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tool_name</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Name of the tool that failed</p></li>
+<li><p><strong>error</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Error message</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Formatted error message</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aria.agent.prompts.format_available_tools">
+<span class="sig-prename descclassname"><span class="pre">aria.agent.prompts.</span></span><span class="sig-name descname"><span class="pre">format_available_tools</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tools</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aria/agent/prompts.html#format_available_tools"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aria.agent.prompts.format_available_tools" title="Link to this definition"></a></dt>
+<dd><p>Format a human-readable list of available tools.</p>
+<p>This is for display in the system prompt to help the LLM understand
+what tools are available.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tools</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="tools.html#aria.tools.base.BaseTool" title="aria.tools.base.BaseTool"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseTool</span></code></a>]</span>) – List of available tools</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Formatted tool list</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aria.agent.prompts.format_thinking_message">
+<span class="sig-prename descclassname"><span class="pre">aria.agent.prompts.</span></span><span class="sig-name descname"><span class="pre">format_thinking_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thought</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aria/agent/prompts.html#format_thinking_message"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aria.agent.prompts.format_thinking_message" title="Link to this definition"></a></dt>
+<dd><p>Format a thinking/reasoning message.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>thought</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – The agent’s thought process</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Formatted thinking message</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aria.agent.prompts.format_approval_denied_message">
+<span class="sig-prename descclassname"><span class="pre">aria.agent.prompts.</span></span><span class="sig-name descname"><span class="pre">format_approval_denied_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tool_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reason</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aria/agent/prompts.html#format_approval_denied_message"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aria.agent.prompts.format_approval_denied_message" title="Link to this definition"></a></dt>
+<dd><p>Format a message about denied approval.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tool_name</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Name of the tool that was denied</p></li>
+<li><p><strong>reason</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Reason for denial</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Formatted denial message</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="aria.agent.prompts.create_system_message_with_tools">
+<span class="sig-prename descclassname"><span class="pre">aria.agent.prompts.</span></span><span class="sig-name descname"><span class="pre">create_system_message_with_tools</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tools</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/aria/agent/prompts.html#create_system_message_with_tools"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#aria.agent.prompts.create_system_message_with_tools" title="Link to this definition"></a></dt>
+<dd><p>Create the full system message including available tools.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tools</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="tools.html#aria.tools.base.BaseTool" title="aria.tools.base.BaseTool"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseTool</span></code></a>]</span>) – List of available tools</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Complete system message</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../tutorials/custom_workflows.html" class="btn btn-neutral float-left" title="custom workflows" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tools.html" class="btn btn-neutral float-right" title="Tools" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, ARIA Contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

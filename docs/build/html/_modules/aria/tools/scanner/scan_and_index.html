@@ -1,0 +1,1176 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>aria.tools.scanner.scan_and_index &mdash; ARIA 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            ARIA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../installation.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../installation.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../installation.html#installation-steps">Installation Steps</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../installation.html#clone-the-repository">1. Clone the Repository</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../installation.html#install-dependencies">2. Install Dependencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../installation.html#configure-environment">3. Configure Environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../installation.html#pull-llm-model">4. Pull LLM Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../installation.html#initialize-database">5. Initialize Database</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../installation.html#verify-installation">Verify Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../installation.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../installation.html#ollama-connection-issues">Ollama Connection Issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../installation.html#gpu-not-detected">GPU Not Detected</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../installation.html#import-errors">Import Errors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../installation.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../quickstart.html">Quickstart Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../quickstart.html#first-run">1. First Run</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../quickstart.html#basic-commands">2. Basic Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../quickstart.html#ask-a-question">Ask a Question</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../quickstart.html#web-search">Web Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../quickstart.html#email-management-requires-gmail-setup">Email Management (requires Gmail setup)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../quickstart.html#document-processing">3. Document Processing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../quickstart.html#scan-and-index-documents">Scan and Index Documents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../quickstart.html#search-archived-documents">Search Archived Documents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../quickstart.html#web-interface">4. Web Interface</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../quickstart.html#start-the-web-server">Start the Web Server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../quickstart.html#access-the-interface">Access the Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../quickstart.html#common-workflows">5. Common Workflows</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../quickstart.html#daily-email-summary">Daily Email Summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../quickstart.html#document-search">Document Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../quickstart.html#file-organization">File Organization</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../quickstart.html#command-reference">Command Reference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../quickstart.html#cli-commands">CLI Commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../quickstart.html#chat-commands">Chat Commands</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../quickstart.html#configuration-tips">Configuration Tips</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../quickstart.html#adjust-llm-temperature">Adjust LLM Temperature</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../quickstart.html#enable-auto-approval">Enable Auto-Approval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../quickstart.html#customize-document-categories">Customize Document Categories</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../quickstart.html#next-steps">Next Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../quickstart.html#getting-help">Getting Help</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../configuration.html">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../configuration.html#environment-variables">Environment Variables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../configuration.html#ollama-configuration">Ollama Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../configuration.html#application-settings">Application Settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../configuration.html#database-configuration">Database Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../configuration.html#vector-store-configuration">Vector Store Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../configuration.html#gmail-configuration">Gmail Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../configuration.html#tool-execution-settings">Tool Execution Settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../configuration.html#agent-settings">Agent Settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../configuration.html#web-application-security">Web Application Security</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../configuration.html#programmatic-configuration">Programmatic Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../configuration.html#custom-settings">Custom Settings</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../configuration.html#document-classification">Document Classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../configuration.html#archive-structure">Archive Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../configuration.html#performance-tuning">Performance Tuning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../configuration.html#llm-performance">LLM Performance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../configuration.html#vector-store-performance">Vector Store Performance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../configuration.html#database-performance">Database Performance</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../configuration.html#logging">Logging</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../configuration.html#log-levels">Log Levels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../configuration.html#log-files">Log Files</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../configuration.html#advanced-configuration">Advanced Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../configuration.html#custom-embeddings-model">Custom Embeddings Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../configuration.html#custom-ocr-settings">Custom OCR Settings</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../configuration.html#environment-specific-configs">Environment-Specific Configs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../configuration.html#validation">Validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../configuration.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user_guide/overview.html">User Guide Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../user_guide/overview.html#core-features">Core Features</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../user_guide/overview.html#document-management">📄 Document Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../user_guide/overview.html#email-management">✉️ Email Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../user_guide/overview.html#web-interface">🌐 Web Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../user_guide/overview.html#ai-agent">🤖 AI Agent</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../user_guide/overview.html#getting-started">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../user_guide/overview.html#detailed-guides">Detailed Guides</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user_guide/file_management.html">File Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user_guide/document_analysis.html">Document Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user_guide/email_management.html">Email Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user_guide/web_interface.html">Web Interface</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/scanning_documents.html">scanning documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/setting_up_gmail.html">setting up gmail</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/using_web_interface.html">using web interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/custom_workflows.html">custom workflows</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/agent.html">Agent</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/agent.html#module-aria.agent.core">Core Agent</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/agent.html#aria.agent.core.AgentError"><code class="docutils literal notranslate"><span class="pre">AgentError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/agent.html#aria.agent.core.ToolCallRecord"><code class="docutils literal notranslate"><span class="pre">ToolCallRecord</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.core.ToolCallRecord.tool_name"><code class="docutils literal notranslate"><span class="pre">ToolCallRecord.tool_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.core.ToolCallRecord.tool_input"><code class="docutils literal notranslate"><span class="pre">ToolCallRecord.tool_input</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.core.ToolCallRecord.result"><code class="docutils literal notranslate"><span class="pre">ToolCallRecord.result</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.core.ToolCallRecord.execution_time_ms"><code class="docutils literal notranslate"><span class="pre">ToolCallRecord.execution_time_ms</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/agent.html#aria.agent.core.Agent"><code class="docutils literal notranslate"><span class="pre">Agent</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.core.Agent.__init__"><code class="docutils literal notranslate"><span class="pre">Agent.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.core.Agent.start_session"><code class="docutils literal notranslate"><span class="pre">Agent.start_session()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.core.Agent.chat"><code class="docutils literal notranslate"><span class="pre">Agent.chat()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.core.Agent.run"><code class="docutils literal notranslate"><span class="pre">Agent.run()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.core.Agent.stream_response"><code class="docutils literal notranslate"><span class="pre">Agent.stream_response()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/agent.html#module-aria.agent.planner">Planner</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/agent.html#aria.agent.planner.TaskAnalysis"><code class="docutils literal notranslate"><span class="pre">TaskAnalysis</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.planner.TaskAnalysis.requires_tools"><code class="docutils literal notranslate"><span class="pre">TaskAnalysis.requires_tools</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.planner.TaskAnalysis.complexity"><code class="docutils literal notranslate"><span class="pre">TaskAnalysis.complexity</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.planner.TaskAnalysis.suggested_approach"><code class="docutils literal notranslate"><span class="pre">TaskAnalysis.suggested_approach</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.planner.TaskAnalysis.confidence"><code class="docutils literal notranslate"><span class="pre">TaskAnalysis.confidence</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.planner.TaskAnalysis.model_config"><code class="docutils literal notranslate"><span class="pre">TaskAnalysis.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/agent.html#aria.agent.planner.TaskPlanner"><code class="docutils literal notranslate"><span class="pre">TaskPlanner</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.planner.TaskPlanner.__init__"><code class="docutils literal notranslate"><span class="pre">TaskPlanner.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.planner.TaskPlanner.analyze_request"><code class="docutils literal notranslate"><span class="pre">TaskPlanner.analyze_request()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/agent.html#module-aria.agent.executor">Executor</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/agent.html#aria.agent.executor.ToolExecutionError"><code class="docutils literal notranslate"><span class="pre">ToolExecutionError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/agent.html#aria.agent.executor.ToolExecutor"><code class="docutils literal notranslate"><span class="pre">ToolExecutor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.executor.ToolExecutor.__init__"><code class="docutils literal notranslate"><span class="pre">ToolExecutor.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.executor.ToolExecutor.execute"><code class="docutils literal notranslate"><span class="pre">ToolExecutor.execute()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.executor.ToolExecutor.execute_multiple"><code class="docutils literal notranslate"><span class="pre">ToolExecutor.execute_multiple()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.executor.ToolExecutor.get_execution_summary"><code class="docutils literal notranslate"><span class="pre">ToolExecutor.get_execution_summary()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/agent.html#module-aria.agent.prompts">Prompts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/agent.html#aria.agent.prompts.format_tool_result"><code class="docutils literal notranslate"><span class="pre">format_tool_result()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/agent.html#aria.agent.prompts.format_tool_error"><code class="docutils literal notranslate"><span class="pre">format_tool_error()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/agent.html#aria.agent.prompts.format_available_tools"><code class="docutils literal notranslate"><span class="pre">format_available_tools()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/agent.html#aria.agent.prompts.format_thinking_message"><code class="docutils literal notranslate"><span class="pre">format_thinking_message()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/agent.html#aria.agent.prompts.format_approval_denied_message"><code class="docutils literal notranslate"><span class="pre">format_approval_denied_message()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/agent.html#aria.agent.prompts.create_system_message_with_tools"><code class="docutils literal notranslate"><span class="pre">create_system_message_with_tools()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tools.html">Tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/tools.html#module-aria.tools.base">Base Tool</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.RiskLevel"><code class="docutils literal notranslate"><span class="pre">RiskLevel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.RiskLevel.LOW"><code class="docutils literal notranslate"><span class="pre">RiskLevel.LOW</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.RiskLevel.MEDIUM"><code class="docutils literal notranslate"><span class="pre">RiskLevel.MEDIUM</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.RiskLevel.HIGH"><code class="docutils literal notranslate"><span class="pre">RiskLevel.HIGH</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.RiskLevel.CRITICAL"><code class="docutils literal notranslate"><span class="pre">RiskLevel.CRITICAL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.RiskLevel.requires_confirmation"><code class="docutils literal notranslate"><span class="pre">RiskLevel.requires_confirmation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.RiskLevel.requires_double_confirmation"><code class="docutils literal notranslate"><span class="pre">RiskLevel.requires_double_confirmation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.RiskLevel.__str__"><code class="docutils literal notranslate"><span class="pre">RiskLevel.__str__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.ToolResult"><code class="docutils literal notranslate"><span class="pre">ToolResult</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.ToolResult.success"><code class="docutils literal notranslate"><span class="pre">ToolResult.success</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.ToolResult.data"><code class="docutils literal notranslate"><span class="pre">ToolResult.data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.ToolResult.error"><code class="docutils literal notranslate"><span class="pre">ToolResult.error</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.ToolResult.metadata"><code class="docutils literal notranslate"><span class="pre">ToolResult.metadata</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.ToolResult.success_result"><code class="docutils literal notranslate"><span class="pre">ToolResult.success_result()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.ToolResult.error_result"><code class="docutils literal notranslate"><span class="pre">ToolResult.error_result()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.ToolResult.__str__"><code class="docutils literal notranslate"><span class="pre">ToolResult.__str__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.ToolResult.model_config"><code class="docutils literal notranslate"><span class="pre">ToolResult.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.BaseTool"><code class="docutils literal notranslate"><span class="pre">BaseTool</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.BaseTool.name"><code class="docutils literal notranslate"><span class="pre">BaseTool.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.BaseTool.description"><code class="docutils literal notranslate"><span class="pre">BaseTool.description</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.BaseTool.risk_level"><code class="docutils literal notranslate"><span class="pre">BaseTool.risk_level</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.BaseTool.parameters_schema"><code class="docutils literal notranslate"><span class="pre">BaseTool.parameters_schema</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.BaseTool.__init__"><code class="docutils literal notranslate"><span class="pre">BaseTool.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.BaseTool.requires_confirmation"><code class="docutils literal notranslate"><span class="pre">BaseTool.requires_confirmation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.BaseTool.requires_double_confirmation"><code class="docutils literal notranslate"><span class="pre">BaseTool.requires_double_confirmation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.BaseTool.execute"><code class="docutils literal notranslate"><span class="pre">BaseTool.execute()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.BaseTool.get_confirmation_message"><code class="docutils literal notranslate"><span class="pre">BaseTool.get_confirmation_message()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.BaseTool.validate_params"><code class="docutils literal notranslate"><span class="pre">BaseTool.validate_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.BaseTool.to_ollama_tool"><code class="docutils literal notranslate"><span class="pre">BaseTool.to_ollama_tool()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.BaseTool.run"><code class="docutils literal notranslate"><span class="pre">BaseTool.run()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.BaseTool.__repr__"><code class="docutils literal notranslate"><span class="pre">BaseTool.__repr__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.create_params_schema"><code class="docutils literal notranslate"><span class="pre">create_params_schema()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/tools.html#document-tools">Document Tools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/tools.html#module-aria.tools.documents.processor">Document Processing</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.documents.processor.DocumentProcessor"><code class="docutils literal notranslate"><span class="pre">DocumentProcessor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/tools.html#module-aria.tools.documents.classifier">Document Classifier</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.documents.classifier.DocumentClassifier"><code class="docutils literal notranslate"><span class="pre">DocumentClassifier</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/tools.html#module-aria.tools.documents.ocr">OCR</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.documents.ocr.OCRParams"><code class="docutils literal notranslate"><span class="pre">OCRParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.documents.ocr.OCRTool"><code class="docutils literal notranslate"><span class="pre">OCRTool</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/tools.html#scanner-tools">Scanner Tools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/tools.html#module-aria.tools.scanner.scan_and_index">Scan and Index</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.scanner.scan_and_index.ScanAndIndexParams"><code class="docutils literal notranslate"><span class="pre">ScanAndIndexParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.scanner.scan_and_index.ScanAndIndexTool"><code class="docutils literal notranslate"><span class="pre">ScanAndIndexTool</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/tools.html#module-aria.tools.scanner.deduplicate">Deduplicate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.scanner.deduplicate.compute_file_hash"><code class="docutils literal notranslate"><span class="pre">compute_file_hash()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.scanner.deduplicate.DeduplicateParams"><code class="docutils literal notranslate"><span class="pre">DeduplicateParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.scanner.deduplicate.DeduplicateTool"><code class="docutils literal notranslate"><span class="pre">DeduplicateTool</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/tools.html#email-tools">Email Tools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/tools.html#gmail-client">Gmail Client</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/tools.html#id1">Email Tools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.email.tools.ListEmailsParams"><code class="docutils literal notranslate"><span class="pre">ListEmailsParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.email.tools.ListEmailsTool"><code class="docutils literal notranslate"><span class="pre">ListEmailsTool</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.email.tools.SearchEmailsParams"><code class="docutils literal notranslate"><span class="pre">SearchEmailsParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.email.tools.SearchEmailsTool"><code class="docutils literal notranslate"><span class="pre">SearchEmailsTool</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.email.tools.ReadEmailParams"><code class="docutils literal notranslate"><span class="pre">ReadEmailParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.email.tools.ReadEmailTool"><code class="docutils literal notranslate"><span class="pre">ReadEmailTool</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.email.tools.LabelEmailParams"><code class="docutils literal notranslate"><span class="pre">LabelEmailParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.email.tools.LabelEmailTool"><code class="docutils literal notranslate"><span class="pre">LabelEmailTool</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.email.tools.ArchiveEmailParams"><code class="docutils literal notranslate"><span class="pre">ArchiveEmailParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.email.tools.ArchiveEmailTool"><code class="docutils literal notranslate"><span class="pre">ArchiveEmailTool</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.email.tools.CreateDraftParams"><code class="docutils literal notranslate"><span class="pre">CreateDraftParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.email.tools.CreateDraftTool"><code class="docutils literal notranslate"><span class="pre">CreateDraftTool</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.email.tools.SendEmailParams"><code class="docutils literal notranslate"><span class="pre">SendEmailParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.email.tools.SendEmailTool"><code class="docutils literal notranslate"><span class="pre">SendEmailTool</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/tools.html#search-tools">Search Tools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/tools.html#module-aria.tools.search.web">Web Search</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.search.web.WebSearchParams"><code class="docutils literal notranslate"><span class="pre">WebSearchParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.search.web.WebSearchTool"><code class="docutils literal notranslate"><span class="pre">WebSearchTool</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.search.web.FetchWebPageParams"><code class="docutils literal notranslate"><span class="pre">FetchWebPageParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.search.web.FetchWebPageTool"><code class="docutils literal notranslate"><span class="pre">FetchWebPageTool</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/tools.html#local-search">Local Search</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/memory.html">Memory &amp; Storage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/memory.html#module-aria.memory.archive">Archive Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.id"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.original_filename"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.original_filename</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.original_path"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.original_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.archived_path"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.archived_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.person"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.person</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.category"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.category</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.document_date"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.document_date</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.sender"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.sender</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.summary"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.summary</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.tags"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.tags</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.ocr_confidence"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.ocr_confidence</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.processed_at"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.processed_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.file_size_bytes"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.file_size_bytes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.chroma_doc_ids"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.chroma_doc_ids</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.extraction_model"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.extraction_model</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.last_edited_at"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.last_edited_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.last_edited_by"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.last_edited_by</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.model_config"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveStatistics"><code class="docutils literal notranslate"><span class="pre">ArchiveStatistics</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveStatistics.total_documents"><code class="docutils literal notranslate"><span class="pre">ArchiveStatistics.total_documents</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveStatistics.documents_by_person"><code class="docutils literal notranslate"><span class="pre">ArchiveStatistics.documents_by_person</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveStatistics.documents_by_category"><code class="docutils literal notranslate"><span class="pre">ArchiveStatistics.documents_by_category</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveStatistics.documents_by_year"><code class="docutils literal notranslate"><span class="pre">ArchiveStatistics.documents_by_year</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveStatistics.total_size_bytes"><code class="docutils literal notranslate"><span class="pre">ArchiveStatistics.total_size_bytes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveStatistics.earliest_document"><code class="docutils literal notranslate"><span class="pre">ArchiveStatistics.earliest_document</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveStatistics.latest_document"><code class="docutils literal notranslate"><span class="pre">ArchiveStatistics.latest_document</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveStatistics.model_config"><code class="docutils literal notranslate"><span class="pre">ArchiveStatistics.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveIndex"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveIndex.__init__"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveIndex.initialize"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.initialize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveIndex.add_document"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.add_document()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveIndex.get_document"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.get_document()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveIndex.get_document_by_path"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.get_document_by_path()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveIndex.update_document"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.update_document()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveIndex.search"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.search()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveIndex.list_by_person"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.list_by_person()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveIndex.list_by_category"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.list_by_category()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveIndex.list_by_date_range"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.list_by_date_range()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveIndex.get_statistics"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.get_statistics()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveIndex.get_all_tags"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.get_all_tags()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/memory.html#module-aria.memory.vectors">Vector Store</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.VectorStoreError"><code class="docutils literal notranslate"><span class="pre">VectorStoreError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.Document"><code class="docutils literal notranslate"><span class="pre">Document</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.Document.content"><code class="docutils literal notranslate"><span class="pre">Document.content</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.Document.metadata"><code class="docutils literal notranslate"><span class="pre">Document.metadata</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.Document.doc_id"><code class="docutils literal notranslate"><span class="pre">Document.doc_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.Document.with_id"><code class="docutils literal notranslate"><span class="pre">Document.with_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.Document.model_config"><code class="docutils literal notranslate"><span class="pre">Document.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.SearchResult"><code class="docutils literal notranslate"><span class="pre">SearchResult</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.SearchResult.doc_id"><code class="docutils literal notranslate"><span class="pre">SearchResult.doc_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.SearchResult.content"><code class="docutils literal notranslate"><span class="pre">SearchResult.content</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.SearchResult.metadata"><code class="docutils literal notranslate"><span class="pre">SearchResult.metadata</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.SearchResult.score"><code class="docutils literal notranslate"><span class="pre">SearchResult.score</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.SearchResult.distance"><code class="docutils literal notranslate"><span class="pre">SearchResult.distance</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.SearchResult.model_config"><code class="docutils literal notranslate"><span class="pre">SearchResult.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.CollectionStats"><code class="docutils literal notranslate"><span class="pre">CollectionStats</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.CollectionStats.name"><code class="docutils literal notranslate"><span class="pre">CollectionStats.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.CollectionStats.count"><code class="docutils literal notranslate"><span class="pre">CollectionStats.count</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.CollectionStats.dimension"><code class="docutils literal notranslate"><span class="pre">CollectionStats.dimension</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.CollectionStats.model_config"><code class="docutils literal notranslate"><span class="pre">CollectionStats.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.VectorStore"><code class="docutils literal notranslate"><span class="pre">VectorStore</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.VectorStore.__init__"><code class="docutils literal notranslate"><span class="pre">VectorStore.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.VectorStore.initialize"><code class="docutils literal notranslate"><span class="pre">VectorStore.initialize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.VectorStore.add_document"><code class="docutils literal notranslate"><span class="pre">VectorStore.add_document()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.VectorStore.add_documents"><code class="docutils literal notranslate"><span class="pre">VectorStore.add_documents()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.VectorStore.delete_document"><code class="docutils literal notranslate"><span class="pre">VectorStore.delete_document()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.VectorStore.search"><code class="docutils literal notranslate"><span class="pre">VectorStore.search()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.VectorStore.search_by_embedding"><code class="docutils literal notranslate"><span class="pre">VectorStore.search_by_embedding()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.VectorStore.get_document"><code class="docutils literal notranslate"><span class="pre">VectorStore.get_document()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.VectorStore.get_stats"><code class="docutils literal notranslate"><span class="pre">VectorStore.get_stats()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.VectorStore.clear"><code class="docutils literal notranslate"><span class="pre">VectorStore.clear()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.VectorStore.update_metadata"><code class="docutils literal notranslate"><span class="pre">VectorStore.update_metadata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.VectorStore.close"><code class="docutils literal notranslate"><span class="pre">VectorStore.close()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/memory.html#module-aria.memory.conversation">Conversation Store</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/memory.html#aria.memory.conversation.ConversationStore"><code class="docutils literal notranslate"><span class="pre">ConversationStore</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.conversation.ConversationStore.__init__"><code class="docutils literal notranslate"><span class="pre">ConversationStore.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.conversation.ConversationStore.initialize"><code class="docutils literal notranslate"><span class="pre">ConversationStore.initialize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.conversation.ConversationStore.create_session"><code class="docutils literal notranslate"><span class="pre">ConversationStore.create_session()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.conversation.ConversationStore.get_session"><code class="docutils literal notranslate"><span class="pre">ConversationStore.get_session()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.conversation.ConversationStore.list_sessions"><code class="docutils literal notranslate"><span class="pre">ConversationStore.list_sessions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.conversation.ConversationStore.update_session"><code class="docutils literal notranslate"><span class="pre">ConversationStore.update_session()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.conversation.ConversationStore.delete_session"><code class="docutils literal notranslate"><span class="pre">ConversationStore.delete_session()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.conversation.ConversationStore.add_message"><code class="docutils literal notranslate"><span class="pre">ConversationStore.add_message()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.conversation.ConversationStore.get_messages"><code class="docutils literal notranslate"><span class="pre">ConversationStore.get_messages()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.conversation.ConversationStore.get_context"><code class="docutils literal notranslate"><span class="pre">ConversationStore.get_context()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.conversation.ConversationStore.add_tool_call"><code class="docutils literal notranslate"><span class="pre">ConversationStore.add_tool_call()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.conversation.ConversationStore.update_tool_call"><code class="docutils literal notranslate"><span class="pre">ConversationStore.update_tool_call()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.conversation.ConversationStore.search_messages"><code class="docutils literal notranslate"><span class="pre">ConversationStore.search_messages()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.conversation.ConversationStore.get_recent_sessions"><code class="docutils literal notranslate"><span class="pre">ConversationStore.get_recent_sessions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.conversation.ConversationStore.close"><code class="docutils literal notranslate"><span class="pre">ConversationStore.close()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/memory.html#knowledge-base">Knowledge Base</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/web.html">Web Application</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/web.html#application">Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/web.html#authentication">Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/web.html#module-aria.web.database">User Database</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/web.html#aria.web.database.UserDatabase"><code class="docutils literal notranslate"><span class="pre">UserDatabase</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.database.UserDatabase.__init__"><code class="docutils literal notranslate"><span class="pre">UserDatabase.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.database.UserDatabase.initialize"><code class="docutils literal notranslate"><span class="pre">UserDatabase.initialize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.database.UserDatabase.close"><code class="docutils literal notranslate"><span class="pre">UserDatabase.close()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.database.UserDatabase.verify_password"><code class="docutils literal notranslate"><span class="pre">UserDatabase.verify_password()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.database.UserDatabase.create_user"><code class="docutils literal notranslate"><span class="pre">UserDatabase.create_user()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.database.UserDatabase.get_user_by_username"><code class="docutils literal notranslate"><span class="pre">UserDatabase.get_user_by_username()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.database.UserDatabase.get_user_by_id"><code class="docutils literal notranslate"><span class="pre">UserDatabase.get_user_by_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.database.UserDatabase.update_last_login"><code class="docutils literal notranslate"><span class="pre">UserDatabase.update_last_login()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.database.UserDatabase.list_users"><code class="docutils literal notranslate"><span class="pre">UserDatabase.list_users()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.database.UserDatabase.update_user"><code class="docutils literal notranslate"><span class="pre">UserDatabase.update_user()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.database.UserDatabase.delete_user"><code class="docutils literal notranslate"><span class="pre">UserDatabase.delete_user()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.database.UserDatabase.user_exists"><code class="docutils literal notranslate"><span class="pre">UserDatabase.user_exists()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/web.html#module-aria.web.models">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserRole"><code class="docutils literal notranslate"><span class="pre">UserRole</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserRole.ADMIN"><code class="docutils literal notranslate"><span class="pre">UserRole.ADMIN</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserRole.POWER_USER"><code class="docutils literal notranslate"><span class="pre">UserRole.POWER_USER</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserRole.FAMILY_MEMBER"><code class="docutils literal notranslate"><span class="pre">UserRole.FAMILY_MEMBER</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserRole.VIEWER"><code class="docutils literal notranslate"><span class="pre">UserRole.VIEWER</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserRole.ALL_ROLES"><code class="docutils literal notranslate"><span class="pre">UserRole.ALL_ROLES</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserPermissions"><code class="docutils literal notranslate"><span class="pre">UserPermissions</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserPermissions.allowed_persons"><code class="docutils literal notranslate"><span class="pre">UserPermissions.allowed_persons</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserPermissions.denied_persons"><code class="docutils literal notranslate"><span class="pre">UserPermissions.denied_persons</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserPermissions.allowed_categories"><code class="docutils literal notranslate"><span class="pre">UserPermissions.allowed_categories</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserPermissions.denied_categories"><code class="docutils literal notranslate"><span class="pre">UserPermissions.denied_categories</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserPermissions.can_view"><code class="docutils literal notranslate"><span class="pre">UserPermissions.can_view</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserPermissions.can_download"><code class="docutils literal notranslate"><span class="pre">UserPermissions.can_download</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserPermissions.can_search_all"><code class="docutils literal notranslate"><span class="pre">UserPermissions.can_search_all</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserPermissions.can_manage_users"><code class="docutils literal notranslate"><span class="pre">UserPermissions.can_manage_users</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserPermissions.can_rescan"><code class="docutils literal notranslate"><span class="pre">UserPermissions.can_rescan</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserPermissions.can_delete"><code class="docutils literal notranslate"><span class="pre">UserPermissions.can_delete</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserPermissions.can_create_tags"><code class="docutils literal notranslate"><span class="pre">UserPermissions.can_create_tags</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserPermissions.model_config"><code class="docutils literal notranslate"><span class="pre">UserPermissions.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/web.html#aria.web.models.User"><code class="docutils literal notranslate"><span class="pre">User</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.User.id"><code class="docutils literal notranslate"><span class="pre">User.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.User.username"><code class="docutils literal notranslate"><span class="pre">User.username</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.User.full_name"><code class="docutils literal notranslate"><span class="pre">User.full_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.User.role"><code class="docutils literal notranslate"><span class="pre">User.role</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.User.permissions"><code class="docutils literal notranslate"><span class="pre">User.permissions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.User.created_at"><code class="docutils literal notranslate"><span class="pre">User.created_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.User.last_login"><code class="docutils literal notranslate"><span class="pre">User.last_login</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.User.is_active"><code class="docutils literal notranslate"><span class="pre">User.is_active</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.User.get_default_permissions"><code class="docutils literal notranslate"><span class="pre">User.get_default_permissions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.User.model_config"><code class="docutils literal notranslate"><span class="pre">User.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserInDB"><code class="docutils literal notranslate"><span class="pre">UserInDB</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserInDB.password_hash"><code class="docutils literal notranslate"><span class="pre">UserInDB.password_hash</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserInDB.model_config"><code class="docutils literal notranslate"><span class="pre">UserInDB.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserCreate"><code class="docutils literal notranslate"><span class="pre">UserCreate</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserCreate.username"><code class="docutils literal notranslate"><span class="pre">UserCreate.username</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserCreate.password"><code class="docutils literal notranslate"><span class="pre">UserCreate.password</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserCreate.full_name"><code class="docutils literal notranslate"><span class="pre">UserCreate.full_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserCreate.role"><code class="docutils literal notranslate"><span class="pre">UserCreate.role</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserCreate.permissions"><code class="docutils literal notranslate"><span class="pre">UserCreate.permissions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserCreate.model_config"><code class="docutils literal notranslate"><span class="pre">UserCreate.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserUpdate"><code class="docutils literal notranslate"><span class="pre">UserUpdate</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserUpdate.full_name"><code class="docutils literal notranslate"><span class="pre">UserUpdate.full_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserUpdate.role"><code class="docutils literal notranslate"><span class="pre">UserUpdate.role</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserUpdate.permissions"><code class="docutils literal notranslate"><span class="pre">UserUpdate.permissions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserUpdate.is_active"><code class="docutils literal notranslate"><span class="pre">UserUpdate.is_active</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserUpdate.password"><code class="docutils literal notranslate"><span class="pre">UserUpdate.password</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserUpdate.model_config"><code class="docutils literal notranslate"><span class="pre">UserUpdate.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/web.html#aria.web.models.Token"><code class="docutils literal notranslate"><span class="pre">Token</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.Token.access_token"><code class="docutils literal notranslate"><span class="pre">Token.access_token</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.Token.token_type"><code class="docutils literal notranslate"><span class="pre">Token.token_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.Token.model_config"><code class="docutils literal notranslate"><span class="pre">Token.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/web.html#aria.web.models.TokenData"><code class="docutils literal notranslate"><span class="pre">TokenData</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.TokenData.username"><code class="docutils literal notranslate"><span class="pre">TokenData.username</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.TokenData.model_config"><code class="docutils literal notranslate"><span class="pre">TokenData.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/web.html#aria.web.models.LoginRequest"><code class="docutils literal notranslate"><span class="pre">LoginRequest</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.LoginRequest.username"><code class="docutils literal notranslate"><span class="pre">LoginRequest.username</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.LoginRequest.password"><code class="docutils literal notranslate"><span class="pre">LoginRequest.password</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.LoginRequest.model_config"><code class="docutils literal notranslate"><span class="pre">LoginRequest.model_config</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/web.html#api-endpoints">API Endpoints</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/web.html#authentication-api">Authentication API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/web.html#documents-api">Documents API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/web.html#admin-api">Admin API</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../development/architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../development/contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../development/testing.html">Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../development/extending.html">Extending</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">ARIA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">aria.tools.scanner.scan_and_index</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for aria.tools.scanner.scan_and_index</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Integrated document scanning and indexing tool.</span>
+
+<span class="sd">This module provides a unified tool that scans a directory for documents,</span>
+<span class="sd">processes them with OCR and classification, organizes them into an archive,</span>
+<span class="sd">and indexes them for semantic search.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">signal</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">uuid</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">aria.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">Settings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">aria.logging</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_logger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">aria.memory.archive</span><span class="w"> </span><span class="kn">import</span> <span class="n">ArchiveDocument</span><span class="p">,</span> <span class="n">ArchiveIndex</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">aria.memory.ingestion</span><span class="w"> </span><span class="kn">import</span> <span class="n">DocumentIngester</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">aria.tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseTool</span><span class="p">,</span> <span class="n">RiskLevel</span><span class="p">,</span> <span class="n">ToolResult</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">aria.tools.documents.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">ProcessedDocument</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">aria.tools.documents.processor</span><span class="w"> </span><span class="kn">import</span> <span class="n">DocumentProcessor</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">(</span><span class="s2">&quot;aria.tools.scanner&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ScanAndIndexParams">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.scanner.scan_and_index.ScanAndIndexParams">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ScanAndIndexParams</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parameters for scanning and indexing documents.&quot;&quot;&quot;</span>
+
+    <span class="n">source_directory</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Directory to scan (defaults to scan_directory from settings)&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">file_pattern</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;*.pdf&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Glob pattern for files to process (default: *.pdf)&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">preview_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;If True, show what would happen without actually processing&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">move_originals</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Move original files to processed directory after successful indexing&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">max_files</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Maximum number of files to process (for testing)&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">deduplicate_after</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Run deduplication after processing to move any remaining duplicates&quot;</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ScanAndIndexTool">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.scanner.scan_and_index.ScanAndIndexTool">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ScanAndIndexTool</span><span class="p">(</span><span class="n">BaseTool</span><span class="p">[</span><span class="n">ScanAndIndexParams</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Scan directory, process documents, and index them for semantic search.</span>
+
+<span class="sd">    This tool provides the complete document processing pipeline:</span>
+<span class="sd">    1. Scans source directory for PDF files</span>
+<span class="sd">    2. Processes each document:</span>
+<span class="sd">       - Runs OCR to extract text</span>
+<span class="sd">       - Uses LLM to classify (person, category, date, sender, summary, tags)</span>
+<span class="sd">       - Generates intelligent filename</span>
+<span class="sd">    3. Organizes the file:</span>
+<span class="sd">       - Copies to archive directory with structured path</span>
+<span class="sd">    4. Indexes for search:</span>
+<span class="sd">       - Ingests into ChromaDB with metadata</span>
+<span class="sd">       - Adds to archive index database</span>
+<span class="sd">    5. Moves original:</span>
+<span class="sd">       - Moves original file to processed directory (after confirmation)</span>
+
+<span class="sd">    Risk Level: MEDIUM - Copies files to archive, modifies ChromaDB, moves originals</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;scan_and_index&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;Scan a directory for documents, process them with OCR and classification, &quot;</span>
+        <span class="s2">&quot;organize into archive, and index for semantic search. &quot;</span>
+        <span class="s2">&quot;Complete end-to-end document processing pipeline.&quot;</span>
+    <span class="p">)</span>
+    <span class="n">risk_level</span> <span class="o">=</span> <span class="n">RiskLevel</span><span class="o">.</span><span class="n">MEDIUM</span>
+    <span class="n">parameters_schema</span> <span class="o">=</span> <span class="n">ScanAndIndexParams</span>
+
+<div class="viewcode-block" id="ScanAndIndexTool.__init__">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.scanner.scan_and_index.ScanAndIndexTool.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">processor</span><span class="p">:</span> <span class="n">DocumentProcessor</span><span class="p">,</span>
+        <span class="n">ingester</span><span class="p">:</span> <span class="n">DocumentIngester</span><span class="p">,</span>
+        <span class="n">archive_index</span><span class="p">:</span> <span class="n">ArchiveIndex</span><span class="p">,</span>
+        <span class="n">settings</span><span class="p">:</span> <span class="n">Settings</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the scan and index tool.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            processor: Document processor for OCR and classification</span>
+<span class="sd">            ingester: Document ingester for ChromaDB</span>
+<span class="sd">            archive_index: Archive index for tracking</span>
+<span class="sd">            settings: ARIA settings</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">processor</span> <span class="o">=</span> <span class="n">processor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ingester</span> <span class="o">=</span> <span class="n">ingester</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">archive_index</span> <span class="o">=</span> <span class="n">archive_index</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_shutdown_event</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_task</span><span class="p">:</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Task</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="ScanAndIndexTool.get_confirmation_message">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.scanner.scan_and_index.ScanAndIndexTool.get_confirmation_message">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_confirmation_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">ScanAndIndexParams</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get confirmation message.&quot;&quot;&quot;</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">source_directory</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">scan_directory</span>
+        <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">preview_only</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Preview documents in: </span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">action</span> <span class="o">=</span> <span class="s2">&quot;process, organize, index&quot;</span>
+            <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">move_originals</span><span class="p">:</span>
+                <span class="n">action</span> <span class="o">+=</span> <span class="s2">&quot;, and move originals&quot;</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Scan </span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">action</span><span class="si">}</span><span class="s2"> all </span><span class="si">{</span><span class="n">params</span><span class="o">.</span><span class="n">file_pattern</span><span class="si">}</span><span class="s2"> files&quot;</span></div>
+
+
+<div class="viewcode-block" id="ScanAndIndexTool.execute">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.scanner.scan_and_index.ScanAndIndexTool.execute">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">ScanAndIndexParams</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ToolResult</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute the scan and index operation.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Determine source directory</span>
+            <span class="n">source_dir</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">Path</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">source_directory</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">scan_directory</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">source_dir</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                <span class="k">return</span> <span class="n">ToolResult</span><span class="o">.</span><span class="n">error_result</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Source directory does not exist: </span><span class="si">{</span><span class="n">source_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">source_dir</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+                <span class="k">return</span> <span class="n">ToolResult</span><span class="o">.</span><span class="n">error_result</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Source path is not a directory: </span><span class="si">{</span><span class="n">source_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Find files matching pattern</span>
+            <span class="n">pdf_files</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">source_dir</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">file_pattern</span><span class="p">))</span>
+
+            <span class="c1"># Filter out hidden macOS metadata files (._*)</span>
+            <span class="n">pdf_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">pdf_files</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;._&quot;</span><span class="p">)]</span>
+
+            <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">max_files</span><span class="p">:</span>
+                <span class="n">pdf_files</span> <span class="o">=</span> <span class="n">pdf_files</span><span class="p">[:</span> <span class="n">params</span><span class="o">.</span><span class="n">max_files</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">pdf_files</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">ToolResult</span><span class="o">.</span><span class="n">success_result</span><span class="p">(</span>
+                    <span class="n">data</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s2">&quot;source_dir&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">source_dir</span><span class="p">),</span>
+                        <span class="s2">&quot;pattern&quot;</span><span class="p">:</span> <span class="n">params</span><span class="o">.</span><span class="n">file_pattern</span><span class="p">,</span>
+                        <span class="s2">&quot;found_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                        <span class="s2">&quot;processed_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                        <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;No files matching &#39;</span><span class="si">{</span><span class="n">params</span><span class="o">.</span><span class="n">file_pattern</span><span class="si">}</span><span class="s2">&#39; found&quot;</span><span class="p">,</span>
+                    <span class="p">}</span>
+                <span class="p">)</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">pdf_files</span><span class="p">)</span><span class="si">}</span><span class="s2"> files in </span><span class="si">{</span><span class="n">source_dir</span><span class="si">}</span><span class="s2"> (pattern: </span><span class="si">{</span><span class="n">params</span><span class="o">.</span><span class="n">file_pattern</span><span class="si">}</span><span class="s2">)&quot;</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Process documents (parallel or sequential based on settings)</span>
+            <span class="n">processed_docs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ProcessedDocument</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">failed</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">enable_parallel_processing</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">pdf_files</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># Parallel processing mode</span>
+                <span class="n">processed_docs</span><span class="p">,</span> <span class="n">failed</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_documents_parallel</span><span class="p">(</span><span class="n">pdf_files</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Sequential processing mode</span>
+                <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">pdf_file</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pdf_files</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="c1"># Check for shutdown/cancellation</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shutdown_event</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                            <span class="s2">&quot;Shutdown requested, stopping processing&quot;</span><span class="p">,</span>
+                            <span class="n">processed</span><span class="o">=</span><span class="n">idx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+                            <span class="n">remaining</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">pdf_files</span><span class="p">)</span> <span class="o">-</span> <span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                        <span class="p">)</span>
+                        <span class="k">break</span>
+
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing </span><span class="si">{</span><span class="n">pdf_file</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">pdf_files</span><span class="p">)</span><span class="si">}</span><span class="s2">)...&quot;</span><span class="p">)</span>
+
+                        <span class="c1"># Create cancellable task</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_current_task</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">processor</span><span class="o">.</span><span class="n">process_document</span><span class="p">(</span><span class="n">pdf_file</span><span class="p">)</span>
+                        <span class="p">)</span>
+
+                        <span class="c1"># Wait for completion or cancellation</span>
+                        <span class="n">doc</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_task</span>
+                        <span class="n">processed_docs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;Processed </span><span class="si">{</span><span class="n">pdf_file</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: &quot;</span>
+                            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">doc</span><span class="o">.</span><span class="n">person</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">doc</span><span class="o">.</span><span class="n">category</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">doc</span><span class="o">.</span><span class="n">summary</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span><span class="si">}</span><span class="s2">...&quot;</span>
+                        <span class="p">)</span>
+
+                    <span class="k">except</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">CancelledError</span><span class="p">:</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing cancelled for </span><span class="si">{</span><span class="n">pdf_file</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                        <span class="k">break</span>
+
+                    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to process </span><span class="si">{</span><span class="n">pdf_file</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                        <span class="n">failed</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">pdf_file</span><span class="p">),</span> <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)})</span>
+
+            <span class="c1"># If preview only, return summary without modifying anything</span>
+            <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">preview_only</span><span class="p">:</span>
+                <span class="n">person_counts</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+                <span class="n">category_counts</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+                <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">processed_docs</span><span class="p">:</span>
+                    <span class="n">person_counts</span><span class="p">[</span><span class="n">doc</span><span class="o">.</span><span class="n">person</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">category_counts</span><span class="p">[</span><span class="n">doc</span><span class="o">.</span><span class="n">category</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                <span class="n">doc_list</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="p">{</span>
+                        <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">source_path</span><span class="p">),</span>
+                        <span class="s2">&quot;person&quot;</span><span class="p">:</span> <span class="n">doc</span><span class="o">.</span><span class="n">person</span><span class="p">,</span>
+                        <span class="s2">&quot;category&quot;</span><span class="p">:</span> <span class="n">doc</span><span class="o">.</span><span class="n">category</span><span class="p">,</span>
+                        <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="n">doc</span><span class="o">.</span><span class="n">document_date</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="k">if</span> <span class="n">doc</span><span class="o">.</span><span class="n">document_date</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="s2">&quot;sender&quot;</span><span class="p">:</span> <span class="n">doc</span><span class="o">.</span><span class="n">sender</span><span class="p">,</span>
+                        <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="n">doc</span><span class="o">.</span><span class="n">summary</span><span class="p">,</span>
+                        <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="n">doc</span><span class="o">.</span><span class="n">tags</span><span class="p">,</span>
+                        <span class="s2">&quot;destination&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">suggested_destination</span><span class="p">),</span>
+                        <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="n">doc</span><span class="o">.</span><span class="n">confidence</span><span class="p">,</span>
+                    <span class="p">}</span>
+                    <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">processed_docs</span>
+                <span class="p">]</span>
+
+                <span class="k">return</span> <span class="n">ToolResult</span><span class="o">.</span><span class="n">success_result</span><span class="p">(</span>
+                    <span class="n">data</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s2">&quot;source_dir&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">source_dir</span><span class="p">),</span>
+                        <span class="s2">&quot;found_count&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">pdf_files</span><span class="p">),</span>
+                        <span class="s2">&quot;processed_count&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">processed_docs</span><span class="p">),</span>
+                        <span class="s2">&quot;failed_count&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">failed</span><span class="p">),</span>
+                        <span class="s2">&quot;preview_only&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                        <span class="s2">&quot;person_counts&quot;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">person_counts</span><span class="p">),</span>
+                        <span class="s2">&quot;category_counts&quot;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">category_counts</span><span class="p">),</span>
+                        <span class="s2">&quot;documents&quot;</span><span class="p">:</span> <span class="n">doc_list</span><span class="p">,</span>
+                        <span class="s2">&quot;failures&quot;</span><span class="p">:</span> <span class="n">failed</span><span class="p">,</span>
+                    <span class="p">}</span>
+                <span class="p">)</span>
+
+            <span class="c1"># NOT preview mode - actually process files</span>
+            <span class="n">organized_count</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">indexed_count</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">moved_count</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">processed_docs</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="c1"># Step 1: Copy to archive directory</span>
+                    <span class="n">archive_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_archive_path</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+                    <span class="n">archive_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+                    <span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">source_path</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">archive_path</span><span class="p">))</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Copied to archive: </span><span class="si">{</span><span class="n">archive_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">organized_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                    <span class="c1"># Step 2: Ingest into ChromaDB</span>
+                    <span class="c1"># Build metadata, filtering out None values (ChromaDB doesn&#39;t support them)</span>
+                    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="s2">&quot;original_filename&quot;</span><span class="p">:</span> <span class="n">doc</span><span class="o">.</span><span class="n">source_path</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                        <span class="s2">&quot;original_path&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">source_path</span><span class="p">),</span>
+                        <span class="s2">&quot;archived_path&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">archive_path</span><span class="p">),</span>
+                        <span class="s2">&quot;person&quot;</span><span class="p">:</span> <span class="n">doc</span><span class="o">.</span><span class="n">person</span><span class="p">,</span>
+                        <span class="s2">&quot;category&quot;</span><span class="p">:</span> <span class="n">doc</span><span class="o">.</span><span class="n">category</span><span class="p">,</span>
+                        <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="n">doc</span><span class="o">.</span><span class="n">summary</span><span class="p">,</span>
+                        <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">tags</span><span class="p">),</span>
+                        <span class="s2">&quot;processed_at&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+                        <span class="s2">&quot;file_size_bytes&quot;</span><span class="p">:</span> <span class="n">doc</span><span class="o">.</span><span class="n">source_path</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_size</span><span class="p">,</span>
+                    <span class="p">}</span>
+
+                    <span class="c1"># Add optional fields only if they have values</span>
+                    <span class="k">if</span> <span class="n">doc</span><span class="o">.</span><span class="n">document_date</span><span class="p">:</span>
+                        <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;document_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">document_date</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">doc</span><span class="o">.</span><span class="n">sender</span><span class="p">:</span>
+                        <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;sender&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">sender</span>
+
+                    <span class="c1"># Use ingest_text with pre-extracted OCR text instead of re-extracting</span>
+                    <span class="n">ingest_result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">ingester</span><span class="o">.</span><span class="n">ingest_text</span><span class="p">(</span>
+                        <span class="n">text</span><span class="o">=</span><span class="n">doc</span><span class="o">.</span><span class="n">text_content</span><span class="p">,</span>
+                        <span class="n">file_path</span><span class="o">=</span><span class="n">archive_path</span><span class="p">,</span>
+                        <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
+                        <span class="n">tags</span><span class="o">=</span><span class="n">doc</span><span class="o">.</span><span class="n">tags</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+                    <span class="k">if</span> <span class="n">ingest_result</span><span class="o">.</span><span class="n">success</span><span class="p">:</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ingested to ChromaDB: </span><span class="si">{</span><span class="n">ingest_result</span><span class="o">.</span><span class="n">chunks_created</span><span class="si">}</span><span class="s2"> chunks&quot;</span><span class="p">)</span>
+                        <span class="n">indexed_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                        <span class="c1"># Step 3: Add to archive index</span>
+                        <span class="n">doc_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
+                        <span class="c1"># Get the ChromaDB document IDs for tracking</span>
+                        <span class="c1"># (they&#39;re created by ingester with specific pattern)</span>
+                        <span class="n">chroma_doc_ids</span> <span class="o">=</span> <span class="p">[</span>
+                            <span class="sa">f</span><span class="s2">&quot;doc_</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">archive_path</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;_&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;_&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span>
+                            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ingest_result</span><span class="o">.</span><span class="n">chunks_created</span><span class="p">)</span>
+                        <span class="p">]</span>
+
+                        <span class="n">archive_doc</span> <span class="o">=</span> <span class="n">ArchiveDocument</span><span class="p">(</span>
+                            <span class="nb">id</span><span class="o">=</span><span class="n">doc_id</span><span class="p">,</span>
+                            <span class="n">original_filename</span><span class="o">=</span><span class="n">doc</span><span class="o">.</span><span class="n">source_path</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                            <span class="n">original_path</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">source_path</span><span class="p">),</span>
+                            <span class="n">archived_path</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">archive_path</span><span class="p">),</span>
+                            <span class="n">person</span><span class="o">=</span><span class="n">doc</span><span class="o">.</span><span class="n">person</span><span class="p">,</span>
+                            <span class="n">category</span><span class="o">=</span><span class="n">doc</span><span class="o">.</span><span class="n">category</span><span class="p">,</span>
+                            <span class="n">document_date</span><span class="o">=</span><span class="n">doc</span><span class="o">.</span><span class="n">document_date</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+                            <span class="k">if</span> <span class="n">doc</span><span class="o">.</span><span class="n">document_date</span>
+                            <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                            <span class="n">sender</span><span class="o">=</span><span class="n">doc</span><span class="o">.</span><span class="n">sender</span><span class="p">,</span>
+                            <span class="n">summary</span><span class="o">=</span><span class="n">doc</span><span class="o">.</span><span class="n">summary</span><span class="p">,</span>
+                            <span class="n">tags</span><span class="o">=</span><span class="n">doc</span><span class="o">.</span><span class="n">tags</span><span class="p">,</span>
+                            <span class="n">ocr_confidence</span><span class="o">=</span><span class="n">doc</span><span class="o">.</span><span class="n">confidence</span><span class="p">,</span>
+                            <span class="n">processed_at</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+                            <span class="n">file_size_bytes</span><span class="o">=</span><span class="n">doc</span><span class="o">.</span><span class="n">source_path</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_size</span><span class="p">,</span>
+                            <span class="n">chroma_doc_ids</span><span class="o">=</span><span class="n">chroma_doc_ids</span><span class="p">,</span>
+                            <span class="n">extraction_model</span><span class="o">=</span><span class="n">doc</span><span class="o">.</span><span class="n">extraction_model</span><span class="p">,</span>
+                        <span class="p">)</span>
+
+                        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">archive_index</span><span class="o">.</span><span class="n">add_document</span><span class="p">(</span><span class="n">archive_doc</span><span class="p">)</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added to archive index: </span><span class="si">{</span><span class="n">doc_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+                        <span class="c1"># Step 4: Move original to processed directory (if requested)</span>
+                        <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">move_originals</span><span class="p">:</span>
+                            <span class="n">processed_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">processed_originals_directory</span>
+                            <span class="n">processed_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+                            <span class="n">processed_path</span> <span class="o">=</span> <span class="n">processed_dir</span> <span class="o">/</span> <span class="n">doc</span><span class="o">.</span><span class="n">source_path</span><span class="o">.</span><span class="n">name</span>
+
+                            <span class="c1"># Handle filename collisions</span>
+                            <span class="k">if</span> <span class="n">processed_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                                <span class="n">timestamp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">_%H%M%S&quot;</span><span class="p">)</span>
+                                <span class="n">processed_path</span> <span class="o">=</span> <span class="p">(</span>
+                                    <span class="n">processed_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">doc</span><span class="o">.</span><span class="n">source_path</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+                                <span class="p">)</span>
+
+                            <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">source_path</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">processed_path</span><span class="p">))</span>
+                            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Moved original to: </span><span class="si">{</span><span class="n">processed_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                            <span class="n">moved_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to ingest: </span><span class="si">{</span><span class="n">ingest_result</span><span class="o">.</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                        <span class="n">failed</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                            <span class="p">{</span>
+                                <span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">source_path</span><span class="p">),</span>
+                                <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Ingestion failed: </span><span class="si">{</span><span class="n">ingest_result</span><span class="o">.</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                            <span class="p">}</span>
+                        <span class="p">)</span>
+
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to index </span><span class="si">{</span><span class="n">doc</span><span class="o">.</span><span class="n">source_path</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">failed</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">source_path</span><span class="p">),</span>
+                            <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Indexing failed: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                        <span class="p">}</span>
+                    <span class="p">)</span>
+
+            <span class="c1"># Generate summary statistics</span>
+            <span class="n">person_counts</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+            <span class="n">category_counts</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">processed_docs</span><span class="p">:</span>
+                <span class="n">person_counts</span><span class="p">[</span><span class="n">doc</span><span class="o">.</span><span class="n">person</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">category_counts</span><span class="p">[</span><span class="n">doc</span><span class="o">.</span><span class="n">category</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="n">doc_list</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">source_path</span><span class="p">),</span>
+                    <span class="s2">&quot;person&quot;</span><span class="p">:</span> <span class="n">doc</span><span class="o">.</span><span class="n">person</span><span class="p">,</span>
+                    <span class="s2">&quot;category&quot;</span><span class="p">:</span> <span class="n">doc</span><span class="o">.</span><span class="n">category</span><span class="p">,</span>
+                    <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="n">doc</span><span class="o">.</span><span class="n">document_date</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="k">if</span> <span class="n">doc</span><span class="o">.</span><span class="n">document_date</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="s2">&quot;sender&quot;</span><span class="p">:</span> <span class="n">doc</span><span class="o">.</span><span class="n">sender</span><span class="p">,</span>
+                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="n">doc</span><span class="o">.</span><span class="n">summary</span><span class="p">,</span>
+                    <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="n">doc</span><span class="o">.</span><span class="n">tags</span><span class="p">,</span>
+                    <span class="s2">&quot;destination&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_archive_path</span><span class="p">(</span><span class="n">doc</span><span class="p">)),</span>  <span class="c1"># Use helper method</span>
+                    <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="n">doc</span><span class="o">.</span><span class="n">confidence</span><span class="p">,</span>
+                <span class="p">}</span>
+                <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">processed_docs</span>
+            <span class="p">]</span>
+
+            <span class="c1"># Run deduplication if requested</span>
+            <span class="n">dedupe_result</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">deduplicate_after</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Running deduplication after processing...&quot;</span><span class="p">)</span>
+                <span class="kn">from</span><span class="w"> </span><span class="nn">aria.tools.scanner.deduplicate</span><span class="w"> </span><span class="kn">import</span> <span class="n">DeduplicateTool</span><span class="p">,</span> <span class="n">DeduplicateParams</span>
+
+                <span class="n">dedupe_tool</span> <span class="o">=</span> <span class="n">DeduplicateTool</span><span class="p">(</span>
+                    <span class="n">archive_index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">archive_index</span><span class="p">,</span>
+                    <span class="n">settings</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">dedupe_params</span> <span class="o">=</span> <span class="n">DeduplicateParams</span><span class="p">(</span>
+                    <span class="n">source_directory</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">source_dir</span><span class="p">),</span>
+                    <span class="n">file_pattern</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">file_pattern</span><span class="p">,</span>
+                    <span class="n">preview_only</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="c1"># Always execute when part of pipeline</span>
+                    <span class="n">check_by</span><span class="o">=</span><span class="s2">&quot;filename&quot;</span><span class="p">,</span>  <span class="c1"># Use fast filename check</span>
+                <span class="p">)</span>
+                <span class="n">dedupe_result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">dedupe_tool</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">dedupe_params</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">dedupe_result</span><span class="o">.</span><span class="n">success</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Deduplication complete: deleted </span><span class="si">{</span><span class="n">dedupe_result</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;deleted_count&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="si">}</span><span class="s2"> duplicates&quot;</span>
+                    <span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">ToolResult</span><span class="o">.</span><span class="n">success_result</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s2">&quot;source_dir&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">source_dir</span><span class="p">),</span>
+                    <span class="s2">&quot;found_count&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">pdf_files</span><span class="p">),</span>
+                    <span class="s2">&quot;processed_count&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">processed_docs</span><span class="p">),</span>
+                    <span class="s2">&quot;organized_count&quot;</span><span class="p">:</span> <span class="n">organized_count</span><span class="p">,</span>
+                    <span class="s2">&quot;indexed_count&quot;</span><span class="p">:</span> <span class="n">indexed_count</span><span class="p">,</span>
+                    <span class="s2">&quot;moved_count&quot;</span><span class="p">:</span> <span class="n">moved_count</span><span class="p">,</span>
+                    <span class="s2">&quot;failed_count&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">failed</span><span class="p">),</span>
+                    <span class="s2">&quot;preview_only&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                    <span class="s2">&quot;person_counts&quot;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">person_counts</span><span class="p">),</span>
+                    <span class="s2">&quot;category_counts&quot;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">category_counts</span><span class="p">),</span>
+                    <span class="s2">&quot;documents&quot;</span><span class="p">:</span> <span class="n">doc_list</span><span class="p">,</span>
+                    <span class="s2">&quot;failures&quot;</span><span class="p">:</span> <span class="n">failed</span><span class="p">,</span>
+                    <span class="s2">&quot;deduplication&quot;</span><span class="p">:</span> <span class="n">dedupe_result</span><span class="o">.</span><span class="n">data</span> <span class="k">if</span> <span class="n">dedupe_result</span> <span class="ow">and</span> <span class="n">dedupe_result</span><span class="o">.</span><span class="n">success</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Scan and index failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ToolResult</span><span class="o">.</span><span class="n">error_result</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Operation failed: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_archive_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">ProcessedDocument</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the archive path for a processed document.</span>
+
+<span class="sd">        Creates path: archive_directory/{Year}/{Person}/{Category}/{filename}</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            doc: Processed document</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Full archive path</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Get year from document date or use current year</span>
+        <span class="n">year</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">document_date</span><span class="o">.</span><span class="n">year</span><span class="p">)</span> <span class="k">if</span> <span class="n">doc</span><span class="o">.</span><span class="n">document_date</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">year</span><span class="p">)</span>
+
+        <span class="c1"># Build path: Archive/{Year}/{Person}/{Category}/{filename}</span>
+        <span class="n">archive_path</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">archive_directory</span>
+            <span class="o">/</span> <span class="n">year</span>
+            <span class="o">/</span> <span class="n">doc</span><span class="o">.</span><span class="n">person</span>
+            <span class="o">/</span> <span class="n">doc</span><span class="o">.</span><span class="n">category</span>
+            <span class="o">/</span> <span class="n">doc</span><span class="o">.</span><span class="n">suggested_filename</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">archive_path</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_process_documents_parallel</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">pdf_files</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">ProcessedDocument</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Process multiple documents in parallel batches.</span>
+
+<span class="sd">        Strategy:</span>
+<span class="sd">        - Process documents in batches for better throughput</span>
+<span class="sd">        - LLM classification is sequential (single GPU), but OCR can be parallel</span>
+<span class="sd">        - Use semaphore to limit concurrent OCR operations</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            pdf_files: List of PDF files to process</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple of (processed_docs, failed_docs)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">processed_docs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ProcessedDocument</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">failed</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Create semaphore to limit concurrent operations</span>
+        <span class="n">semaphore</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Semaphore</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">max_parallel_ocr</span><span class="p">)</span>
+
+        <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">process_with_semaphore</span><span class="p">(</span>
+            <span class="n">pdf_file</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">idx</span><span class="p">:</span> <span class="nb">int</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">ProcessedDocument</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Process a single document with semaphore control.&quot;&quot;&quot;</span>
+            <span class="k">async</span> <span class="k">with</span> <span class="n">semaphore</span><span class="p">:</span>
+                <span class="c1"># Check for shutdown</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shutdown_event</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+                    <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing </span><span class="si">{</span><span class="n">pdf_file</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">idx</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">pdf_files</span><span class="p">)</span><span class="si">}</span><span class="s2">)...&quot;</span><span class="p">)</span>
+
+                    <span class="c1"># Process document</span>
+                    <span class="n">doc</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">processor</span><span class="o">.</span><span class="n">process_document</span><span class="p">(</span><span class="n">pdf_file</span><span class="p">)</span>
+
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Processed </span><span class="si">{</span><span class="n">pdf_file</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">doc</span><span class="o">.</span><span class="n">person</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">doc</span><span class="o">.</span><span class="n">category</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">doc</span><span class="o">.</span><span class="n">summary</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span><span class="si">}</span><span class="s2">...&quot;</span>
+                    <span class="p">)</span>
+
+                    <span class="k">return</span> <span class="n">doc</span><span class="p">,</span> <span class="kc">None</span>
+
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to process </span><span class="si">{</span><span class="n">pdf_file</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">pdf_file</span><span class="p">),</span> <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)}</span>
+
+        <span class="c1"># Create tasks for all documents</span>
+        <span class="n">tasks</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">process_with_semaphore</span><span class="p">(</span><span class="n">pdf_file</span><span class="p">,</span> <span class="n">idx</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">pdf_file</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pdf_files</span><span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="c1"># Store tasks for cancellation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_current_task</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Track batch instead</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Process all tasks concurrently (with semaphore limiting parallelism)</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="n">tasks</span><span class="p">,</span> <span class="n">return_exceptions</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="c1"># Separate successful and failed results</span>
+            <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">):</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Task failed with exception: </span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">continue</span>
+
+                <span class="n">doc</span><span class="p">,</span> <span class="n">error</span> <span class="o">=</span> <span class="n">result</span>
+
+                <span class="k">if</span> <span class="n">doc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">processed_docs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">error</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">failed</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">CancelledError</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Parallel processing cancelled, cancelling all tasks...&quot;</span><span class="p">)</span>
+            <span class="c1"># Cancel all pending tasks</span>
+            <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">tasks</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">task</span><span class="o">.</span><span class="n">done</span><span class="p">():</span>
+                    <span class="n">task</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
+            <span class="c1"># Wait for all to finish</span>
+            <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="n">tasks</span><span class="p">,</span> <span class="n">return_exceptions</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">raise</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Parallel processing complete: processed=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">processed_docs</span><span class="p">)</span><span class="si">}</span><span class="s2">, failed=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">failed</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">processed_docs</span><span class="p">,</span> <span class="n">failed</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, ARIA Contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -34,7 +34,8 @@
       "Bash(git check-ignore:*)",
       "Bash(git ls-tree:*)",
       "Bash(git add:*)",
-      "Bash(uv run:*)"
+      "Bash(uv run:*)",
+      "Bash(git reset:*)"
     ]
   }
 }

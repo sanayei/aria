@@ -1,0 +1,1476 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>aria.tools.email.tools &mdash; ARIA 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            ARIA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../installation.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../installation.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../installation.html#installation-steps">Installation Steps</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../installation.html#clone-the-repository">1. Clone the Repository</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../installation.html#install-dependencies">2. Install Dependencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../installation.html#configure-environment">3. Configure Environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../installation.html#pull-llm-model">4. Pull LLM Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../installation.html#initialize-database">5. Initialize Database</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../installation.html#verify-installation">Verify Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../installation.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../installation.html#ollama-connection-issues">Ollama Connection Issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../installation.html#gpu-not-detected">GPU Not Detected</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../installation.html#import-errors">Import Errors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../installation.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../quickstart.html">Quickstart Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../quickstart.html#first-run">1. First Run</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../quickstart.html#basic-commands">2. Basic Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../quickstart.html#ask-a-question">Ask a Question</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../quickstart.html#web-search">Web Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../quickstart.html#email-management-requires-gmail-setup">Email Management (requires Gmail setup)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../quickstart.html#document-processing">3. Document Processing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../quickstart.html#scan-and-index-documents">Scan and Index Documents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../quickstart.html#search-archived-documents">Search Archived Documents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../quickstart.html#web-interface">4. Web Interface</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../quickstart.html#start-the-web-server">Start the Web Server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../quickstart.html#access-the-interface">Access the Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../quickstart.html#common-workflows">5. Common Workflows</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../quickstart.html#daily-email-summary">Daily Email Summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../quickstart.html#document-search">Document Search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../quickstart.html#file-organization">File Organization</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../quickstart.html#command-reference">Command Reference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../quickstart.html#cli-commands">CLI Commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../quickstart.html#chat-commands">Chat Commands</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../quickstart.html#configuration-tips">Configuration Tips</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../quickstart.html#adjust-llm-temperature">Adjust LLM Temperature</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../quickstart.html#enable-auto-approval">Enable Auto-Approval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../quickstart.html#customize-document-categories">Customize Document Categories</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../quickstart.html#next-steps">Next Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../quickstart.html#getting-help">Getting Help</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../configuration.html">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../configuration.html#environment-variables">Environment Variables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../configuration.html#ollama-configuration">Ollama Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../configuration.html#application-settings">Application Settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../configuration.html#database-configuration">Database Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../configuration.html#vector-store-configuration">Vector Store Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../configuration.html#gmail-configuration">Gmail Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../configuration.html#tool-execution-settings">Tool Execution Settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../configuration.html#agent-settings">Agent Settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../configuration.html#web-application-security">Web Application Security</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../configuration.html#programmatic-configuration">Programmatic Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../configuration.html#custom-settings">Custom Settings</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../configuration.html#document-classification">Document Classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../configuration.html#archive-structure">Archive Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../configuration.html#performance-tuning">Performance Tuning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../configuration.html#llm-performance">LLM Performance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../configuration.html#vector-store-performance">Vector Store Performance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../configuration.html#database-performance">Database Performance</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../configuration.html#logging">Logging</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../configuration.html#log-levels">Log Levels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../configuration.html#log-files">Log Files</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../configuration.html#advanced-configuration">Advanced Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../configuration.html#custom-embeddings-model">Custom Embeddings Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../configuration.html#custom-ocr-settings">Custom OCR Settings</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../configuration.html#environment-specific-configs">Environment-Specific Configs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../configuration.html#validation">Validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../configuration.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user_guide/overview.html">User Guide Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../user_guide/overview.html#core-features">Core Features</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../user_guide/overview.html#document-management">📄 Document Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../user_guide/overview.html#email-management">✉️ Email Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../user_guide/overview.html#web-interface">🌐 Web Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../user_guide/overview.html#ai-agent">🤖 AI Agent</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../user_guide/overview.html#getting-started">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../user_guide/overview.html#detailed-guides">Detailed Guides</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user_guide/file_management.html">File Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user_guide/document_analysis.html">Document Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user_guide/email_management.html">Email Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user_guide/web_interface.html">Web Interface</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/scanning_documents.html">scanning documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/setting_up_gmail.html">setting up gmail</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/using_web_interface.html">using web interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/custom_workflows.html">custom workflows</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/agent.html">Agent</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/agent.html#module-aria.agent.core">Core Agent</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/agent.html#aria.agent.core.AgentError"><code class="docutils literal notranslate"><span class="pre">AgentError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/agent.html#aria.agent.core.ToolCallRecord"><code class="docutils literal notranslate"><span class="pre">ToolCallRecord</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.core.ToolCallRecord.tool_name"><code class="docutils literal notranslate"><span class="pre">ToolCallRecord.tool_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.core.ToolCallRecord.tool_input"><code class="docutils literal notranslate"><span class="pre">ToolCallRecord.tool_input</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.core.ToolCallRecord.result"><code class="docutils literal notranslate"><span class="pre">ToolCallRecord.result</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.core.ToolCallRecord.execution_time_ms"><code class="docutils literal notranslate"><span class="pre">ToolCallRecord.execution_time_ms</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/agent.html#aria.agent.core.Agent"><code class="docutils literal notranslate"><span class="pre">Agent</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.core.Agent.__init__"><code class="docutils literal notranslate"><span class="pre">Agent.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.core.Agent.start_session"><code class="docutils literal notranslate"><span class="pre">Agent.start_session()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.core.Agent.chat"><code class="docutils literal notranslate"><span class="pre">Agent.chat()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.core.Agent.run"><code class="docutils literal notranslate"><span class="pre">Agent.run()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.core.Agent.stream_response"><code class="docutils literal notranslate"><span class="pre">Agent.stream_response()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/agent.html#module-aria.agent.planner">Planner</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/agent.html#aria.agent.planner.TaskAnalysis"><code class="docutils literal notranslate"><span class="pre">TaskAnalysis</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.planner.TaskAnalysis.requires_tools"><code class="docutils literal notranslate"><span class="pre">TaskAnalysis.requires_tools</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.planner.TaskAnalysis.complexity"><code class="docutils literal notranslate"><span class="pre">TaskAnalysis.complexity</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.planner.TaskAnalysis.suggested_approach"><code class="docutils literal notranslate"><span class="pre">TaskAnalysis.suggested_approach</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.planner.TaskAnalysis.confidence"><code class="docutils literal notranslate"><span class="pre">TaskAnalysis.confidence</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.planner.TaskAnalysis.model_config"><code class="docutils literal notranslate"><span class="pre">TaskAnalysis.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/agent.html#aria.agent.planner.TaskPlanner"><code class="docutils literal notranslate"><span class="pre">TaskPlanner</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.planner.TaskPlanner.__init__"><code class="docutils literal notranslate"><span class="pre">TaskPlanner.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.planner.TaskPlanner.analyze_request"><code class="docutils literal notranslate"><span class="pre">TaskPlanner.analyze_request()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/agent.html#module-aria.agent.executor">Executor</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/agent.html#aria.agent.executor.ToolExecutionError"><code class="docutils literal notranslate"><span class="pre">ToolExecutionError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/agent.html#aria.agent.executor.ToolExecutor"><code class="docutils literal notranslate"><span class="pre">ToolExecutor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.executor.ToolExecutor.__init__"><code class="docutils literal notranslate"><span class="pre">ToolExecutor.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.executor.ToolExecutor.execute"><code class="docutils literal notranslate"><span class="pre">ToolExecutor.execute()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.executor.ToolExecutor.execute_multiple"><code class="docutils literal notranslate"><span class="pre">ToolExecutor.execute_multiple()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/agent.html#aria.agent.executor.ToolExecutor.get_execution_summary"><code class="docutils literal notranslate"><span class="pre">ToolExecutor.get_execution_summary()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/agent.html#module-aria.agent.prompts">Prompts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/agent.html#aria.agent.prompts.format_tool_result"><code class="docutils literal notranslate"><span class="pre">format_tool_result()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/agent.html#aria.agent.prompts.format_tool_error"><code class="docutils literal notranslate"><span class="pre">format_tool_error()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/agent.html#aria.agent.prompts.format_available_tools"><code class="docutils literal notranslate"><span class="pre">format_available_tools()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/agent.html#aria.agent.prompts.format_thinking_message"><code class="docutils literal notranslate"><span class="pre">format_thinking_message()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/agent.html#aria.agent.prompts.format_approval_denied_message"><code class="docutils literal notranslate"><span class="pre">format_approval_denied_message()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/agent.html#aria.agent.prompts.create_system_message_with_tools"><code class="docutils literal notranslate"><span class="pre">create_system_message_with_tools()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/tools.html">Tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/tools.html#module-aria.tools.base">Base Tool</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.RiskLevel"><code class="docutils literal notranslate"><span class="pre">RiskLevel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.RiskLevel.LOW"><code class="docutils literal notranslate"><span class="pre">RiskLevel.LOW</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.RiskLevel.MEDIUM"><code class="docutils literal notranslate"><span class="pre">RiskLevel.MEDIUM</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.RiskLevel.HIGH"><code class="docutils literal notranslate"><span class="pre">RiskLevel.HIGH</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.RiskLevel.CRITICAL"><code class="docutils literal notranslate"><span class="pre">RiskLevel.CRITICAL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.RiskLevel.requires_confirmation"><code class="docutils literal notranslate"><span class="pre">RiskLevel.requires_confirmation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.RiskLevel.requires_double_confirmation"><code class="docutils literal notranslate"><span class="pre">RiskLevel.requires_double_confirmation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.RiskLevel.__str__"><code class="docutils literal notranslate"><span class="pre">RiskLevel.__str__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.ToolResult"><code class="docutils literal notranslate"><span class="pre">ToolResult</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.ToolResult.success"><code class="docutils literal notranslate"><span class="pre">ToolResult.success</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.ToolResult.data"><code class="docutils literal notranslate"><span class="pre">ToolResult.data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.ToolResult.error"><code class="docutils literal notranslate"><span class="pre">ToolResult.error</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.ToolResult.metadata"><code class="docutils literal notranslate"><span class="pre">ToolResult.metadata</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.ToolResult.success_result"><code class="docutils literal notranslate"><span class="pre">ToolResult.success_result()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.ToolResult.error_result"><code class="docutils literal notranslate"><span class="pre">ToolResult.error_result()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.ToolResult.__str__"><code class="docutils literal notranslate"><span class="pre">ToolResult.__str__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.ToolResult.model_config"><code class="docutils literal notranslate"><span class="pre">ToolResult.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.BaseTool"><code class="docutils literal notranslate"><span class="pre">BaseTool</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.BaseTool.name"><code class="docutils literal notranslate"><span class="pre">BaseTool.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.BaseTool.description"><code class="docutils literal notranslate"><span class="pre">BaseTool.description</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.BaseTool.risk_level"><code class="docutils literal notranslate"><span class="pre">BaseTool.risk_level</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.BaseTool.parameters_schema"><code class="docutils literal notranslate"><span class="pre">BaseTool.parameters_schema</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.BaseTool.__init__"><code class="docutils literal notranslate"><span class="pre">BaseTool.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.BaseTool.requires_confirmation"><code class="docutils literal notranslate"><span class="pre">BaseTool.requires_confirmation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.BaseTool.requires_double_confirmation"><code class="docutils literal notranslate"><span class="pre">BaseTool.requires_double_confirmation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.BaseTool.execute"><code class="docutils literal notranslate"><span class="pre">BaseTool.execute()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.BaseTool.get_confirmation_message"><code class="docutils literal notranslate"><span class="pre">BaseTool.get_confirmation_message()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.BaseTool.validate_params"><code class="docutils literal notranslate"><span class="pre">BaseTool.validate_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.BaseTool.to_ollama_tool"><code class="docutils literal notranslate"><span class="pre">BaseTool.to_ollama_tool()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.BaseTool.run"><code class="docutils literal notranslate"><span class="pre">BaseTool.run()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.BaseTool.__repr__"><code class="docutils literal notranslate"><span class="pre">BaseTool.__repr__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/tools.html#aria.tools.base.create_params_schema"><code class="docutils literal notranslate"><span class="pre">create_params_schema()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/tools.html#document-tools">Document Tools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/tools.html#module-aria.tools.documents.processor">Document Processing</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.documents.processor.DocumentProcessor"><code class="docutils literal notranslate"><span class="pre">DocumentProcessor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/tools.html#module-aria.tools.documents.classifier">Document Classifier</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.documents.classifier.DocumentClassifier"><code class="docutils literal notranslate"><span class="pre">DocumentClassifier</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/tools.html#module-aria.tools.documents.ocr">OCR</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.documents.ocr.OCRParams"><code class="docutils literal notranslate"><span class="pre">OCRParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.documents.ocr.OCRTool"><code class="docutils literal notranslate"><span class="pre">OCRTool</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/tools.html#scanner-tools">Scanner Tools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/tools.html#module-aria.tools.scanner.scan_and_index">Scan and Index</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.scanner.scan_and_index.ScanAndIndexParams"><code class="docutils literal notranslate"><span class="pre">ScanAndIndexParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.scanner.scan_and_index.ScanAndIndexTool"><code class="docutils literal notranslate"><span class="pre">ScanAndIndexTool</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/tools.html#module-aria.tools.scanner.deduplicate">Deduplicate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.scanner.deduplicate.compute_file_hash"><code class="docutils literal notranslate"><span class="pre">compute_file_hash()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.scanner.deduplicate.DeduplicateParams"><code class="docutils literal notranslate"><span class="pre">DeduplicateParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.scanner.deduplicate.DeduplicateTool"><code class="docutils literal notranslate"><span class="pre">DeduplicateTool</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/tools.html#email-tools">Email Tools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/tools.html#gmail-client">Gmail Client</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/tools.html#id1">Email Tools</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.email.tools.ListEmailsParams"><code class="docutils literal notranslate"><span class="pre">ListEmailsParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.email.tools.ListEmailsTool"><code class="docutils literal notranslate"><span class="pre">ListEmailsTool</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.email.tools.SearchEmailsParams"><code class="docutils literal notranslate"><span class="pre">SearchEmailsParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.email.tools.SearchEmailsTool"><code class="docutils literal notranslate"><span class="pre">SearchEmailsTool</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.email.tools.ReadEmailParams"><code class="docutils literal notranslate"><span class="pre">ReadEmailParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.email.tools.ReadEmailTool"><code class="docutils literal notranslate"><span class="pre">ReadEmailTool</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.email.tools.LabelEmailParams"><code class="docutils literal notranslate"><span class="pre">LabelEmailParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.email.tools.LabelEmailTool"><code class="docutils literal notranslate"><span class="pre">LabelEmailTool</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.email.tools.ArchiveEmailParams"><code class="docutils literal notranslate"><span class="pre">ArchiveEmailParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.email.tools.ArchiveEmailTool"><code class="docutils literal notranslate"><span class="pre">ArchiveEmailTool</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.email.tools.CreateDraftParams"><code class="docutils literal notranslate"><span class="pre">CreateDraftParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.email.tools.CreateDraftTool"><code class="docutils literal notranslate"><span class="pre">CreateDraftTool</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.email.tools.SendEmailParams"><code class="docutils literal notranslate"><span class="pre">SendEmailParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.email.tools.SendEmailTool"><code class="docutils literal notranslate"><span class="pre">SendEmailTool</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/tools.html#search-tools">Search Tools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/tools.html#module-aria.tools.search.web">Web Search</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.search.web.WebSearchParams"><code class="docutils literal notranslate"><span class="pre">WebSearchParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.search.web.WebSearchTool"><code class="docutils literal notranslate"><span class="pre">WebSearchTool</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.search.web.FetchWebPageParams"><code class="docutils literal notranslate"><span class="pre">FetchWebPageParams</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/tools.html#aria.tools.search.web.FetchWebPageTool"><code class="docutils literal notranslate"><span class="pre">FetchWebPageTool</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/tools.html#local-search">Local Search</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/memory.html">Memory &amp; Storage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/memory.html#module-aria.memory.archive">Archive Index</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.id"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.original_filename"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.original_filename</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.original_path"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.original_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.archived_path"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.archived_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.person"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.person</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.category"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.category</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.document_date"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.document_date</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.sender"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.sender</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.summary"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.summary</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.tags"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.tags</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.ocr_confidence"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.ocr_confidence</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.processed_at"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.processed_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.file_size_bytes"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.file_size_bytes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.chroma_doc_ids"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.chroma_doc_ids</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.extraction_model"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.extraction_model</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.last_edited_at"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.last_edited_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.last_edited_by"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.last_edited_by</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveDocument.model_config"><code class="docutils literal notranslate"><span class="pre">ArchiveDocument.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveStatistics"><code class="docutils literal notranslate"><span class="pre">ArchiveStatistics</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveStatistics.total_documents"><code class="docutils literal notranslate"><span class="pre">ArchiveStatistics.total_documents</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveStatistics.documents_by_person"><code class="docutils literal notranslate"><span class="pre">ArchiveStatistics.documents_by_person</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveStatistics.documents_by_category"><code class="docutils literal notranslate"><span class="pre">ArchiveStatistics.documents_by_category</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveStatistics.documents_by_year"><code class="docutils literal notranslate"><span class="pre">ArchiveStatistics.documents_by_year</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveStatistics.total_size_bytes"><code class="docutils literal notranslate"><span class="pre">ArchiveStatistics.total_size_bytes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveStatistics.earliest_document"><code class="docutils literal notranslate"><span class="pre">ArchiveStatistics.earliest_document</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveStatistics.latest_document"><code class="docutils literal notranslate"><span class="pre">ArchiveStatistics.latest_document</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveStatistics.model_config"><code class="docutils literal notranslate"><span class="pre">ArchiveStatistics.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveIndex"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveIndex.__init__"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveIndex.initialize"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.initialize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveIndex.add_document"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.add_document()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveIndex.get_document"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.get_document()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveIndex.get_document_by_path"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.get_document_by_path()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveIndex.update_document"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.update_document()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveIndex.search"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.search()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveIndex.list_by_person"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.list_by_person()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveIndex.list_by_category"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.list_by_category()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveIndex.list_by_date_range"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.list_by_date_range()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveIndex.get_statistics"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.get_statistics()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.archive.ArchiveIndex.get_all_tags"><code class="docutils literal notranslate"><span class="pre">ArchiveIndex.get_all_tags()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/memory.html#module-aria.memory.vectors">Vector Store</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.VectorStoreError"><code class="docutils literal notranslate"><span class="pre">VectorStoreError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.Document"><code class="docutils literal notranslate"><span class="pre">Document</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.Document.content"><code class="docutils literal notranslate"><span class="pre">Document.content</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.Document.metadata"><code class="docutils literal notranslate"><span class="pre">Document.metadata</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.Document.doc_id"><code class="docutils literal notranslate"><span class="pre">Document.doc_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.Document.with_id"><code class="docutils literal notranslate"><span class="pre">Document.with_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.Document.model_config"><code class="docutils literal notranslate"><span class="pre">Document.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.SearchResult"><code class="docutils literal notranslate"><span class="pre">SearchResult</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.SearchResult.doc_id"><code class="docutils literal notranslate"><span class="pre">SearchResult.doc_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.SearchResult.content"><code class="docutils literal notranslate"><span class="pre">SearchResult.content</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.SearchResult.metadata"><code class="docutils literal notranslate"><span class="pre">SearchResult.metadata</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.SearchResult.score"><code class="docutils literal notranslate"><span class="pre">SearchResult.score</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.SearchResult.distance"><code class="docutils literal notranslate"><span class="pre">SearchResult.distance</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.SearchResult.model_config"><code class="docutils literal notranslate"><span class="pre">SearchResult.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.CollectionStats"><code class="docutils literal notranslate"><span class="pre">CollectionStats</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.CollectionStats.name"><code class="docutils literal notranslate"><span class="pre">CollectionStats.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.CollectionStats.count"><code class="docutils literal notranslate"><span class="pre">CollectionStats.count</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.CollectionStats.dimension"><code class="docutils literal notranslate"><span class="pre">CollectionStats.dimension</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.CollectionStats.model_config"><code class="docutils literal notranslate"><span class="pre">CollectionStats.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.VectorStore"><code class="docutils literal notranslate"><span class="pre">VectorStore</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.VectorStore.__init__"><code class="docutils literal notranslate"><span class="pre">VectorStore.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.VectorStore.initialize"><code class="docutils literal notranslate"><span class="pre">VectorStore.initialize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.VectorStore.add_document"><code class="docutils literal notranslate"><span class="pre">VectorStore.add_document()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.VectorStore.add_documents"><code class="docutils literal notranslate"><span class="pre">VectorStore.add_documents()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.VectorStore.delete_document"><code class="docutils literal notranslate"><span class="pre">VectorStore.delete_document()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.VectorStore.search"><code class="docutils literal notranslate"><span class="pre">VectorStore.search()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.VectorStore.search_by_embedding"><code class="docutils literal notranslate"><span class="pre">VectorStore.search_by_embedding()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.VectorStore.get_document"><code class="docutils literal notranslate"><span class="pre">VectorStore.get_document()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.VectorStore.get_stats"><code class="docutils literal notranslate"><span class="pre">VectorStore.get_stats()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.VectorStore.clear"><code class="docutils literal notranslate"><span class="pre">VectorStore.clear()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.VectorStore.update_metadata"><code class="docutils literal notranslate"><span class="pre">VectorStore.update_metadata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.vectors.VectorStore.close"><code class="docutils literal notranslate"><span class="pre">VectorStore.close()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/memory.html#module-aria.memory.conversation">Conversation Store</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/memory.html#aria.memory.conversation.ConversationStore"><code class="docutils literal notranslate"><span class="pre">ConversationStore</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.conversation.ConversationStore.__init__"><code class="docutils literal notranslate"><span class="pre">ConversationStore.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.conversation.ConversationStore.initialize"><code class="docutils literal notranslate"><span class="pre">ConversationStore.initialize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.conversation.ConversationStore.create_session"><code class="docutils literal notranslate"><span class="pre">ConversationStore.create_session()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.conversation.ConversationStore.get_session"><code class="docutils literal notranslate"><span class="pre">ConversationStore.get_session()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.conversation.ConversationStore.list_sessions"><code class="docutils literal notranslate"><span class="pre">ConversationStore.list_sessions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.conversation.ConversationStore.update_session"><code class="docutils literal notranslate"><span class="pre">ConversationStore.update_session()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.conversation.ConversationStore.delete_session"><code class="docutils literal notranslate"><span class="pre">ConversationStore.delete_session()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.conversation.ConversationStore.add_message"><code class="docutils literal notranslate"><span class="pre">ConversationStore.add_message()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.conversation.ConversationStore.get_messages"><code class="docutils literal notranslate"><span class="pre">ConversationStore.get_messages()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.conversation.ConversationStore.get_context"><code class="docutils literal notranslate"><span class="pre">ConversationStore.get_context()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.conversation.ConversationStore.add_tool_call"><code class="docutils literal notranslate"><span class="pre">ConversationStore.add_tool_call()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.conversation.ConversationStore.update_tool_call"><code class="docutils literal notranslate"><span class="pre">ConversationStore.update_tool_call()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.conversation.ConversationStore.search_messages"><code class="docutils literal notranslate"><span class="pre">ConversationStore.search_messages()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.conversation.ConversationStore.get_recent_sessions"><code class="docutils literal notranslate"><span class="pre">ConversationStore.get_recent_sessions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/memory.html#aria.memory.conversation.ConversationStore.close"><code class="docutils literal notranslate"><span class="pre">ConversationStore.close()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/memory.html#knowledge-base">Knowledge Base</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/web.html">Web Application</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/web.html#application">Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/web.html#authentication">Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/web.html#module-aria.web.database">User Database</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/web.html#aria.web.database.UserDatabase"><code class="docutils literal notranslate"><span class="pre">UserDatabase</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.database.UserDatabase.__init__"><code class="docutils literal notranslate"><span class="pre">UserDatabase.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.database.UserDatabase.initialize"><code class="docutils literal notranslate"><span class="pre">UserDatabase.initialize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.database.UserDatabase.close"><code class="docutils literal notranslate"><span class="pre">UserDatabase.close()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.database.UserDatabase.verify_password"><code class="docutils literal notranslate"><span class="pre">UserDatabase.verify_password()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.database.UserDatabase.create_user"><code class="docutils literal notranslate"><span class="pre">UserDatabase.create_user()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.database.UserDatabase.get_user_by_username"><code class="docutils literal notranslate"><span class="pre">UserDatabase.get_user_by_username()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.database.UserDatabase.get_user_by_id"><code class="docutils literal notranslate"><span class="pre">UserDatabase.get_user_by_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.database.UserDatabase.update_last_login"><code class="docutils literal notranslate"><span class="pre">UserDatabase.update_last_login()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.database.UserDatabase.list_users"><code class="docutils literal notranslate"><span class="pre">UserDatabase.list_users()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.database.UserDatabase.update_user"><code class="docutils literal notranslate"><span class="pre">UserDatabase.update_user()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.database.UserDatabase.delete_user"><code class="docutils literal notranslate"><span class="pre">UserDatabase.delete_user()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.database.UserDatabase.user_exists"><code class="docutils literal notranslate"><span class="pre">UserDatabase.user_exists()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/web.html#module-aria.web.models">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserRole"><code class="docutils literal notranslate"><span class="pre">UserRole</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserRole.ADMIN"><code class="docutils literal notranslate"><span class="pre">UserRole.ADMIN</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserRole.POWER_USER"><code class="docutils literal notranslate"><span class="pre">UserRole.POWER_USER</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserRole.FAMILY_MEMBER"><code class="docutils literal notranslate"><span class="pre">UserRole.FAMILY_MEMBER</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserRole.VIEWER"><code class="docutils literal notranslate"><span class="pre">UserRole.VIEWER</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserRole.ALL_ROLES"><code class="docutils literal notranslate"><span class="pre">UserRole.ALL_ROLES</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserPermissions"><code class="docutils literal notranslate"><span class="pre">UserPermissions</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserPermissions.allowed_persons"><code class="docutils literal notranslate"><span class="pre">UserPermissions.allowed_persons</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserPermissions.denied_persons"><code class="docutils literal notranslate"><span class="pre">UserPermissions.denied_persons</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserPermissions.allowed_categories"><code class="docutils literal notranslate"><span class="pre">UserPermissions.allowed_categories</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserPermissions.denied_categories"><code class="docutils literal notranslate"><span class="pre">UserPermissions.denied_categories</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserPermissions.can_view"><code class="docutils literal notranslate"><span class="pre">UserPermissions.can_view</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserPermissions.can_download"><code class="docutils literal notranslate"><span class="pre">UserPermissions.can_download</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserPermissions.can_search_all"><code class="docutils literal notranslate"><span class="pre">UserPermissions.can_search_all</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserPermissions.can_manage_users"><code class="docutils literal notranslate"><span class="pre">UserPermissions.can_manage_users</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserPermissions.can_rescan"><code class="docutils literal notranslate"><span class="pre">UserPermissions.can_rescan</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserPermissions.can_delete"><code class="docutils literal notranslate"><span class="pre">UserPermissions.can_delete</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserPermissions.can_create_tags"><code class="docutils literal notranslate"><span class="pre">UserPermissions.can_create_tags</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserPermissions.model_config"><code class="docutils literal notranslate"><span class="pre">UserPermissions.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/web.html#aria.web.models.User"><code class="docutils literal notranslate"><span class="pre">User</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.User.id"><code class="docutils literal notranslate"><span class="pre">User.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.User.username"><code class="docutils literal notranslate"><span class="pre">User.username</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.User.full_name"><code class="docutils literal notranslate"><span class="pre">User.full_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.User.role"><code class="docutils literal notranslate"><span class="pre">User.role</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.User.permissions"><code class="docutils literal notranslate"><span class="pre">User.permissions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.User.created_at"><code class="docutils literal notranslate"><span class="pre">User.created_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.User.last_login"><code class="docutils literal notranslate"><span class="pre">User.last_login</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.User.is_active"><code class="docutils literal notranslate"><span class="pre">User.is_active</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.User.get_default_permissions"><code class="docutils literal notranslate"><span class="pre">User.get_default_permissions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.User.model_config"><code class="docutils literal notranslate"><span class="pre">User.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserInDB"><code class="docutils literal notranslate"><span class="pre">UserInDB</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserInDB.password_hash"><code class="docutils literal notranslate"><span class="pre">UserInDB.password_hash</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserInDB.model_config"><code class="docutils literal notranslate"><span class="pre">UserInDB.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserCreate"><code class="docutils literal notranslate"><span class="pre">UserCreate</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserCreate.username"><code class="docutils literal notranslate"><span class="pre">UserCreate.username</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserCreate.password"><code class="docutils literal notranslate"><span class="pre">UserCreate.password</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserCreate.full_name"><code class="docutils literal notranslate"><span class="pre">UserCreate.full_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserCreate.role"><code class="docutils literal notranslate"><span class="pre">UserCreate.role</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserCreate.permissions"><code class="docutils literal notranslate"><span class="pre">UserCreate.permissions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserCreate.model_config"><code class="docutils literal notranslate"><span class="pre">UserCreate.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserUpdate"><code class="docutils literal notranslate"><span class="pre">UserUpdate</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserUpdate.full_name"><code class="docutils literal notranslate"><span class="pre">UserUpdate.full_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserUpdate.role"><code class="docutils literal notranslate"><span class="pre">UserUpdate.role</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserUpdate.permissions"><code class="docutils literal notranslate"><span class="pre">UserUpdate.permissions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserUpdate.is_active"><code class="docutils literal notranslate"><span class="pre">UserUpdate.is_active</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserUpdate.password"><code class="docutils literal notranslate"><span class="pre">UserUpdate.password</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.UserUpdate.model_config"><code class="docutils literal notranslate"><span class="pre">UserUpdate.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/web.html#aria.web.models.Token"><code class="docutils literal notranslate"><span class="pre">Token</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.Token.access_token"><code class="docutils literal notranslate"><span class="pre">Token.access_token</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.Token.token_type"><code class="docutils literal notranslate"><span class="pre">Token.token_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.Token.model_config"><code class="docutils literal notranslate"><span class="pre">Token.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/web.html#aria.web.models.TokenData"><code class="docutils literal notranslate"><span class="pre">TokenData</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.TokenData.username"><code class="docutils literal notranslate"><span class="pre">TokenData.username</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.TokenData.model_config"><code class="docutils literal notranslate"><span class="pre">TokenData.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/web.html#aria.web.models.LoginRequest"><code class="docutils literal notranslate"><span class="pre">LoginRequest</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.LoginRequest.username"><code class="docutils literal notranslate"><span class="pre">LoginRequest.username</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.LoginRequest.password"><code class="docutils literal notranslate"><span class="pre">LoginRequest.password</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/web.html#aria.web.models.LoginRequest.model_config"><code class="docutils literal notranslate"><span class="pre">LoginRequest.model_config</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/web.html#api-endpoints">API Endpoints</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/web.html#authentication-api">Authentication API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/web.html#documents-api">Documents API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/web.html#admin-api">Admin API</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../development/architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../development/contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../development/testing.html">Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../development/extending.html">Extending</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">ARIA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">aria.tools.email.tools</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for aria.tools.email.tools</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Gmail email tools for ARIA agent.</span>
+
+<span class="sd">This module provides tools for listing, searching, and reading emails from Gmail.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">aria.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_settings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">aria.logging</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_logger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">aria.tools.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseTool</span><span class="p">,</span> <span class="n">ToolResult</span><span class="p">,</span> <span class="n">RiskLevel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">aria.tools.email.auth</span><span class="w"> </span><span class="kn">import</span> <span class="n">GmailAuth</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">aria.tools.email.client</span><span class="w"> </span><span class="kn">import</span> <span class="n">GmailClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">aria.tools.email.cache</span><span class="w"> </span><span class="kn">import</span> <span class="n">EmailCache</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">aria.tools.email.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">GmailQuery</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">(</span><span class="s2">&quot;aria.tools.email.tools&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ListEmailsParams">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.email.tools.ListEmailsParams">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ListEmailsParams</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Input for ListEmailsTool.&quot;&quot;&quot;</span>
+
+    <span class="n">folder</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;INBOX&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Gmail label/folder to list emails from (e.g., INBOX, SENT, SPAM)&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">max_results</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Maximum number of emails to return&quot;</span>
+    <span class="p">)</span>
+    <span class="n">unread_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;If True, only return unread emails&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ListEmailsTool">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.email.tools.ListEmailsTool">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ListEmailsTool</span><span class="p">(</span><span class="n">BaseTool</span><span class="p">[</span><span class="n">ListEmailsParams</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;List recent emails from Gmail.</span>
+
+<span class="sd">    This tool fetches a list of recent emails from a specified folder/label.</span>
+<span class="sd">    Results are cached to reduce API calls.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;list_emails&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;List recent emails from Gmail inbox or other folders. &quot;</span>
+        <span class="s2">&quot;Returns email summaries with subject, sender, date, and preview. &quot;</span>
+        <span class="s2">&quot;Use this to see what emails the user has received. &quot;</span>
+        <span class="s2">&quot;This tool is SUFFICIENT for showing the user their emails - no additional tools needed.&quot;</span>
+    <span class="p">)</span>
+    <span class="n">risk_level</span> <span class="o">=</span> <span class="n">RiskLevel</span><span class="o">.</span><span class="n">LOW</span>
+    <span class="n">parameters_schema</span> <span class="o">=</span> <span class="n">ListEmailsParams</span>
+
+<div class="viewcode-block" id="ListEmailsTool.__init__">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.email.tools.ListEmailsTool.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the list emails tool.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gmail_client</span><span class="p">:</span> <span class="n">GmailClient</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_email_cache</span><span class="p">:</span> <span class="n">EmailCache</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_get_gmail_client</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GmailClient</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get or create Gmail client.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gmail_client</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">settings</span> <span class="o">=</span> <span class="n">get_settings</span><span class="p">()</span>
+            <span class="n">gmail_auth</span> <span class="o">=</span> <span class="n">GmailAuth</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">gmail_credentials_dir</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_gmail_client</span> <span class="o">=</span> <span class="n">GmailClient</span><span class="p">(</span><span class="n">gmail_auth</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gmail_client</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_get_email_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EmailCache</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get or create email cache.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_email_cache</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">settings</span> <span class="o">=</span> <span class="n">get_settings</span><span class="p">()</span>
+            <span class="n">cache_path</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">aria_data_dir</span> <span class="o">/</span> <span class="s2">&quot;cache&quot;</span> <span class="o">/</span> <span class="s2">&quot;email_cache.db&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_email_cache</span> <span class="o">=</span> <span class="n">EmailCache</span><span class="p">(</span><span class="n">cache_path</span><span class="p">,</span> <span class="n">ttl_seconds</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">gmail_cache_ttl</span><span class="p">)</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_email_cache</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_email_cache</span>
+
+<div class="viewcode-block" id="ListEmailsTool.get_confirmation_message">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.email.tools.ListEmailsTool.get_confirmation_message">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_confirmation_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">ListEmailsParams</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get confirmation message.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            params: Validated parameters</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: Confirmation message</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">unread_text</span> <span class="o">=</span> <span class="s2">&quot; (unread only)&quot;</span> <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">unread_only</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;List </span><span class="si">{</span><span class="n">params</span><span class="o">.</span><span class="n">max_results</span><span class="si">}</span><span class="s2"> emails from </span><span class="si">{</span><span class="n">params</span><span class="o">.</span><span class="n">folder</span><span class="si">}{</span><span class="n">unread_text</span><span class="si">}</span><span class="s2">&quot;</span></div>
+
+
+<div class="viewcode-block" id="ListEmailsTool.execute">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.email.tools.ListEmailsTool.execute">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">ListEmailsParams</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ToolResult</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute the list emails tool.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            params: Validated input parameters</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            ToolResult: Result containing list of email summaries</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">gmail_client</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_gmail_client</span><span class="p">()</span>
+            <span class="n">cache</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_email_cache</span><span class="p">()</span>
+
+            <span class="c1"># Build label IDs</span>
+            <span class="n">label_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">params</span><span class="o">.</span><span class="n">folder</span><span class="o">.</span><span class="n">upper</span><span class="p">()]</span>
+            <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">unread_only</span><span class="p">:</span>
+                <span class="n">label_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;UNREAD&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Fetch emails</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Listing emails from </span><span class="si">{</span><span class="n">params</span><span class="o">.</span><span class="n">folder</span><span class="si">}</span><span class="s2"> (max: </span><span class="si">{</span><span class="n">params</span><span class="o">.</span><span class="n">max_results</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+            <span class="n">emails</span> <span class="o">=</span> <span class="k">await</span> <span class="n">gmail_client</span><span class="o">.</span><span class="n">list_messages</span><span class="p">(</span>
+                <span class="n">label_ids</span><span class="o">=</span><span class="n">label_ids</span><span class="p">,</span>
+                <span class="n">max_results</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">max_results</span><span class="p">,</span>
+                <span class="n">include_spam_trash</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">folder</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;SPAM&quot;</span><span class="p">,</span> <span class="s2">&quot;TRASH&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Cache results</span>
+            <span class="k">await</span> <span class="n">cache</span><span class="o">.</span><span class="n">put_many</span><span class="p">(</span><span class="n">emails</span><span class="p">)</span>
+
+            <span class="c1"># Format results</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">emails</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">ToolResult</span><span class="o">.</span><span class="n">success_result</span><span class="p">(</span>
+                    <span class="n">data</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                        <span class="s2">&quot;emails&quot;</span><span class="p">:</span> <span class="p">[],</span>
+                        <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;No emails found in </span><span class="si">{</span><span class="n">params</span><span class="o">.</span><span class="n">folder</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="p">}</span>
+                <span class="p">)</span>
+
+            <span class="c1"># Convert to dict for JSON serialization</span>
+            <span class="n">email_dicts</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">email</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                    <span class="s2">&quot;subject&quot;</span><span class="p">:</span> <span class="n">email</span><span class="o">.</span><span class="n">subject</span><span class="p">,</span>
+                    <span class="s2">&quot;sender&quot;</span><span class="p">:</span> <span class="n">email</span><span class="o">.</span><span class="n">sender</span><span class="p">,</span>
+                    <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="n">email</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+                    <span class="s2">&quot;snippet&quot;</span><span class="p">:</span> <span class="n">email</span><span class="o">.</span><span class="n">snippet</span><span class="p">,</span>
+                    <span class="s2">&quot;is_unread&quot;</span><span class="p">:</span> <span class="n">email</span><span class="o">.</span><span class="n">is_unread</span><span class="p">,</span>
+                    <span class="s2">&quot;has_attachments&quot;</span><span class="p">:</span> <span class="n">email</span><span class="o">.</span><span class="n">has_attachments</span><span class="p">,</span>
+                <span class="p">}</span>
+                <span class="k">for</span> <span class="n">email</span> <span class="ow">in</span> <span class="n">emails</span>
+            <span class="p">]</span>
+
+            <span class="k">return</span> <span class="n">ToolResult</span><span class="o">.</span><span class="n">success_result</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">emails</span><span class="p">),</span>
+                    <span class="s2">&quot;emails&quot;</span><span class="p">:</span> <span class="n">email_dicts</span><span class="p">,</span>
+                    <span class="s2">&quot;folder&quot;</span><span class="p">:</span> <span class="n">params</span><span class="o">.</span><span class="n">folder</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to list emails: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ToolResult</span><span class="o">.</span><span class="n">error_result</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Failed to list emails: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="SearchEmailsParams">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.email.tools.SearchEmailsParams">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SearchEmailsParams</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Input for SearchEmailsTool.&quot;&quot;&quot;</span>
+
+    <span class="n">query</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Gmail search query (supports Gmail search operators like &#39;from:&#39;, &#39;subject:&#39;, &#39;after:&#39;, etc.)&quot;</span>
+    <span class="p">)</span>
+    <span class="n">max_results</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Maximum number of emails to return&quot;</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="SearchEmailsTool">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.email.tools.SearchEmailsTool">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SearchEmailsTool</span><span class="p">(</span><span class="n">BaseTool</span><span class="p">[</span><span class="n">SearchEmailsParams</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Search emails using Gmail query syntax.</span>
+
+<span class="sd">    This tool allows searching emails using Gmail&#39;s powerful search operators.</span>
+<span class="sd">    Examples:</span>
+<span class="sd">    - &quot;from:john@example.com&quot;</span>
+<span class="sd">    - &quot;subject:invoice after:2024/01/01&quot;</span>
+<span class="sd">    - &quot;has:attachment is:unread&quot;</span>
+<span class="sd">    - &quot;newer_than:2d&quot; (emails from last 2 days)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;search_emails&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;Search emails using Gmail query syntax. &quot;</span>
+        <span class="s2">&quot;Supports operators like &#39;from:&#39;, &#39;to:&#39;, &#39;subject:&#39;, &#39;after:&#39;, &#39;before:&#39;, &quot;</span>
+        <span class="s2">&quot;&#39;has:attachment&#39;, &#39;is:unread&#39;, &#39;newer_than:&#39;, etc. &quot;</span>
+        <span class="s2">&quot;Use this to find specific emails based on criteria.&quot;</span>
+    <span class="p">)</span>
+    <span class="n">risk_level</span> <span class="o">=</span> <span class="n">RiskLevel</span><span class="o">.</span><span class="n">LOW</span>
+    <span class="n">parameters_schema</span> <span class="o">=</span> <span class="n">SearchEmailsParams</span>
+
+<div class="viewcode-block" id="SearchEmailsTool.__init__">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.email.tools.SearchEmailsTool.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the search emails tool.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gmail_client</span><span class="p">:</span> <span class="n">GmailClient</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_email_cache</span><span class="p">:</span> <span class="n">EmailCache</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_get_gmail_client</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GmailClient</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get or create Gmail client.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gmail_client</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">settings</span> <span class="o">=</span> <span class="n">get_settings</span><span class="p">()</span>
+            <span class="n">gmail_auth</span> <span class="o">=</span> <span class="n">GmailAuth</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">gmail_credentials_dir</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_gmail_client</span> <span class="o">=</span> <span class="n">GmailClient</span><span class="p">(</span><span class="n">gmail_auth</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gmail_client</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_get_email_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EmailCache</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get or create email cache.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_email_cache</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">settings</span> <span class="o">=</span> <span class="n">get_settings</span><span class="p">()</span>
+            <span class="n">cache_path</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">aria_data_dir</span> <span class="o">/</span> <span class="s2">&quot;cache&quot;</span> <span class="o">/</span> <span class="s2">&quot;email_cache.db&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_email_cache</span> <span class="o">=</span> <span class="n">EmailCache</span><span class="p">(</span><span class="n">cache_path</span><span class="p">,</span> <span class="n">ttl_seconds</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">gmail_cache_ttl</span><span class="p">)</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_email_cache</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_email_cache</span>
+
+<div class="viewcode-block" id="SearchEmailsTool.get_confirmation_message">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.email.tools.SearchEmailsTool.get_confirmation_message">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_confirmation_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">SearchEmailsParams</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get confirmation message.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            params: Validated parameters</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: Confirmation message</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Search emails with query: &#39;</span><span class="si">{</span><span class="n">params</span><span class="o">.</span><span class="n">query</span><span class="si">}</span><span class="s2">&#39; (max </span><span class="si">{</span><span class="n">params</span><span class="o">.</span><span class="n">max_results</span><span class="si">}</span><span class="s2"> results)&quot;</span></div>
+
+
+<div class="viewcode-block" id="SearchEmailsTool.execute">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.email.tools.SearchEmailsTool.execute">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">SearchEmailsParams</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ToolResult</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute the search emails tool.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            params: Validated input parameters</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            ToolResult: Result containing matching email summaries</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">gmail_client</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_gmail_client</span><span class="p">()</span>
+            <span class="n">cache</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_email_cache</span><span class="p">()</span>
+
+            <span class="c1"># Create query</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">GmailQuery</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">query</span><span class="p">,</span> <span class="n">max_results</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">max_results</span><span class="p">)</span>
+
+            <span class="c1"># Search emails</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Searching emails with query: </span><span class="si">{</span><span class="n">params</span><span class="o">.</span><span class="n">query</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">emails</span> <span class="o">=</span> <span class="k">await</span> <span class="n">gmail_client</span><span class="o">.</span><span class="n">search_messages</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+            <span class="c1"># Cache results</span>
+            <span class="k">await</span> <span class="n">cache</span><span class="o">.</span><span class="n">put_many</span><span class="p">(</span><span class="n">emails</span><span class="p">)</span>
+
+            <span class="c1"># Format results</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">emails</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">ToolResult</span><span class="o">.</span><span class="n">success_result</span><span class="p">(</span>
+                    <span class="n">data</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                        <span class="s2">&quot;emails&quot;</span><span class="p">:</span> <span class="p">[],</span>
+                        <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="n">params</span><span class="o">.</span><span class="n">query</span><span class="p">,</span>
+                        <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;No emails found matching query: </span><span class="si">{</span><span class="n">params</span><span class="o">.</span><span class="n">query</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="p">}</span>
+                <span class="p">)</span>
+
+            <span class="c1"># Convert to dict for JSON serialization</span>
+            <span class="n">email_dicts</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">email</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                    <span class="s2">&quot;subject&quot;</span><span class="p">:</span> <span class="n">email</span><span class="o">.</span><span class="n">subject</span><span class="p">,</span>
+                    <span class="s2">&quot;sender&quot;</span><span class="p">:</span> <span class="n">email</span><span class="o">.</span><span class="n">sender</span><span class="p">,</span>
+                    <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="n">email</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+                    <span class="s2">&quot;snippet&quot;</span><span class="p">:</span> <span class="n">email</span><span class="o">.</span><span class="n">snippet</span><span class="p">,</span>
+                    <span class="s2">&quot;is_unread&quot;</span><span class="p">:</span> <span class="n">email</span><span class="o">.</span><span class="n">is_unread</span><span class="p">,</span>
+                    <span class="s2">&quot;has_attachments&quot;</span><span class="p">:</span> <span class="n">email</span><span class="o">.</span><span class="n">has_attachments</span><span class="p">,</span>
+                <span class="p">}</span>
+                <span class="k">for</span> <span class="n">email</span> <span class="ow">in</span> <span class="n">emails</span>
+            <span class="p">]</span>
+
+            <span class="k">return</span> <span class="n">ToolResult</span><span class="o">.</span><span class="n">success_result</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">emails</span><span class="p">),</span>
+                    <span class="s2">&quot;emails&quot;</span><span class="p">:</span> <span class="n">email_dicts</span><span class="p">,</span>
+                    <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="n">params</span><span class="o">.</span><span class="n">query</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to search emails: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ToolResult</span><span class="o">.</span><span class="n">error_result</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Failed to search emails: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ReadEmailParams">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.email.tools.ReadEmailParams">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ReadEmailParams</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Input for ReadEmailTool.&quot;&quot;&quot;</span>
+
+    <span class="n">email_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Gmail message ID to read (obtained from list_emails or search_emails)&quot;</span>
+    <span class="p">)</span>
+    <span class="n">mark_as_read</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;If True, mark the email as read after reading&quot;</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ReadEmailTool">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.email.tools.ReadEmailTool">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ReadEmailTool</span><span class="p">(</span><span class="n">BaseTool</span><span class="p">[</span><span class="n">ReadEmailParams</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read full email content by ID.</span>
+
+<span class="sd">    This tool fetches the complete email including full body text,</span>
+<span class="sd">    all recipients, and attachment information.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;read_email&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;Read the full content of an email by its ID. &quot;</span>
+        <span class="s2">&quot;Returns complete email with body text, all recipients, and attachments. &quot;</span>
+        <span class="s2">&quot;Optionally mark the email as read.&quot;</span>
+    <span class="p">)</span>
+    <span class="n">parameters_schema</span> <span class="o">=</span> <span class="n">ReadEmailParams</span>
+
+<div class="viewcode-block" id="ReadEmailTool.__init__">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.email.tools.ReadEmailTool.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the read email tool.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gmail_client</span><span class="p">:</span> <span class="n">GmailClient</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">risk_level</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RiskLevel</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dynamic risk level based on whether we&#39;re modifying state.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            RiskLevel: LOW if just reading, MEDIUM if marking as read</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># This is a simplified approach - in practice, we&#39;d check the actual input</span>
+        <span class="c1"># For now, we&#39;ll mark it as MEDIUM to be safe since it can modify state</span>
+        <span class="k">return</span> <span class="n">RiskLevel</span><span class="o">.</span><span class="n">MEDIUM</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_get_gmail_client</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GmailClient</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get or create Gmail client.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gmail_client</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">settings</span> <span class="o">=</span> <span class="n">get_settings</span><span class="p">()</span>
+            <span class="n">gmail_auth</span> <span class="o">=</span> <span class="n">GmailAuth</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">gmail_credentials_dir</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_gmail_client</span> <span class="o">=</span> <span class="n">GmailClient</span><span class="p">(</span><span class="n">gmail_auth</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gmail_client</span>
+
+<div class="viewcode-block" id="ReadEmailTool.get_confirmation_message">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.email.tools.ReadEmailTool.get_confirmation_message">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_confirmation_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">ReadEmailParams</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get confirmation message.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            params: Validated parameters</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: Confirmation message</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mark_text</span> <span class="o">=</span> <span class="s2">&quot; and mark as read&quot;</span> <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">mark_as_read</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Read email with ID: </span><span class="si">{</span><span class="n">params</span><span class="o">.</span><span class="n">email_id</span><span class="si">}{</span><span class="n">mark_text</span><span class="si">}</span><span class="s2">&quot;</span></div>
+
+
+<div class="viewcode-block" id="ReadEmailTool.execute">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.email.tools.ReadEmailTool.execute">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">ReadEmailParams</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ToolResult</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute the read email tool.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            params: Validated input parameters</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            ToolResult: Result containing full email details</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">gmail_client</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_gmail_client</span><span class="p">()</span>
+
+            <span class="c1"># Fetch email</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reading email </span><span class="si">{</span><span class="n">params</span><span class="o">.</span><span class="n">email_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">email</span> <span class="o">=</span> <span class="k">await</span> <span class="n">gmail_client</span><span class="o">.</span><span class="n">get_message</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">email_id</span><span class="p">)</span>
+
+            <span class="c1"># Mark as read if requested</span>
+            <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">mark_as_read</span> <span class="ow">and</span> <span class="n">email</span><span class="o">.</span><span class="n">is_unread</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Marking email </span><span class="si">{</span><span class="n">params</span><span class="o">.</span><span class="n">email_id</span><span class="si">}</span><span class="s2"> as read&quot;</span><span class="p">)</span>
+                <span class="k">await</span> <span class="n">gmail_client</span><span class="o">.</span><span class="n">mark_as_read</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">email_id</span><span class="p">)</span>
+
+            <span class="c1"># Get body content</span>
+            <span class="n">body</span> <span class="o">=</span> <span class="n">email</span><span class="o">.</span><span class="n">get_display_body</span><span class="p">(</span><span class="n">prefer_html</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="c1"># Convert to dict for JSON serialization</span>
+            <span class="n">email_dict</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">email</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                <span class="s2">&quot;subject&quot;</span><span class="p">:</span> <span class="n">email</span><span class="o">.</span><span class="n">subject</span><span class="p">,</span>
+                <span class="s2">&quot;sender&quot;</span><span class="p">:</span> <span class="n">email</span><span class="o">.</span><span class="n">sender</span><span class="p">,</span>
+                <span class="s2">&quot;to&quot;</span><span class="p">:</span> <span class="n">email</span><span class="o">.</span><span class="n">to</span><span class="p">,</span>
+                <span class="s2">&quot;cc&quot;</span><span class="p">:</span> <span class="n">email</span><span class="o">.</span><span class="n">cc</span><span class="p">,</span>
+                <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="n">email</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+                <span class="s2">&quot;body&quot;</span><span class="p">:</span> <span class="n">body</span><span class="p">,</span>
+                <span class="s2">&quot;snippet&quot;</span><span class="p">:</span> <span class="n">email</span><span class="o">.</span><span class="n">snippet</span><span class="p">,</span>
+                <span class="s2">&quot;is_unread&quot;</span><span class="p">:</span> <span class="n">email</span><span class="o">.</span><span class="n">is_unread</span><span class="p">,</span>
+                <span class="s2">&quot;labels&quot;</span><span class="p">:</span> <span class="n">email</span><span class="o">.</span><span class="n">labels</span><span class="p">,</span>
+                <span class="s2">&quot;attachments&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">{</span>
+                        <span class="s2">&quot;filename&quot;</span><span class="p">:</span> <span class="n">att</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span>
+                        <span class="s2">&quot;mime_type&quot;</span><span class="p">:</span> <span class="n">att</span><span class="o">.</span><span class="n">mime_type</span><span class="p">,</span>
+                        <span class="s2">&quot;size_bytes&quot;</span><span class="p">:</span> <span class="n">att</span><span class="o">.</span><span class="n">size_bytes</span><span class="p">,</span>
+                    <span class="p">}</span>
+                    <span class="k">for</span> <span class="n">att</span> <span class="ow">in</span> <span class="n">email</span><span class="o">.</span><span class="n">attachments</span>
+                <span class="p">],</span>
+            <span class="p">}</span>
+
+            <span class="k">return</span> <span class="n">ToolResult</span><span class="o">.</span><span class="n">success_result</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">email_dict</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to read email: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ToolResult</span><span class="o">.</span><span class="n">error_result</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Failed to read email: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="LabelEmailParams">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.email.tools.LabelEmailParams">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">LabelEmailParams</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Input for LabelEmailTool.&quot;&quot;&quot;</span>
+
+    <span class="n">email_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Gmail message ID to label&quot;</span><span class="p">)</span>
+    <span class="n">add_labels</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;List of label names to add (e.g., [&#39;IMPORTANT&#39;, &#39;Work&#39;])&quot;</span>
+    <span class="p">)</span>
+    <span class="n">remove_labels</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;List of label names to remove&quot;</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="LabelEmailTool">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.email.tools.LabelEmailTool">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">LabelEmailTool</span><span class="p">(</span><span class="n">BaseTool</span><span class="p">[</span><span class="n">LabelEmailParams</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add or remove labels from an email.</span>
+
+<span class="sd">    This tool modifies email labels, allowing organization and categorization.</span>
+<span class="sd">    Common labels: INBOX, SENT, TRASH, SPAM, UNREAD, IMPORTANT, STARRED.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;label_email&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;Add or remove labels from an email message. &quot;</span>
+        <span class="s2">&quot;Use this to organize emails by adding labels like IMPORTANT, STARRED, etc. &quot;</span>
+        <span class="s2">&quot;Can also remove labels. Provide email_id and lists of labels to add/remove.&quot;</span>
+    <span class="p">)</span>
+    <span class="n">risk_level</span> <span class="o">=</span> <span class="n">RiskLevel</span><span class="o">.</span><span class="n">MEDIUM</span>
+    <span class="n">parameters_schema</span> <span class="o">=</span> <span class="n">LabelEmailParams</span>
+
+<div class="viewcode-block" id="LabelEmailTool.__init__">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.email.tools.LabelEmailTool.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the label email tool.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gmail_client</span><span class="p">:</span> <span class="n">GmailClient</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_get_gmail_client</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GmailClient</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get or create Gmail client.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gmail_client</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">settings</span> <span class="o">=</span> <span class="n">get_settings</span><span class="p">()</span>
+            <span class="n">gmail_auth</span> <span class="o">=</span> <span class="n">GmailAuth</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">gmail_credentials_dir</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_gmail_client</span> <span class="o">=</span> <span class="n">GmailClient</span><span class="p">(</span><span class="n">gmail_auth</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gmail_client</span>
+
+<div class="viewcode-block" id="LabelEmailTool.get_confirmation_message">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.email.tools.LabelEmailTool.get_confirmation_message">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_confirmation_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">LabelEmailParams</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get confirmation message.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            params: Validated parameters</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: Confirmation message</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">parts</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Modify labels for email </span><span class="si">{</span><span class="n">params</span><span class="o">.</span><span class="n">email_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">add_labels</span><span class="p">:</span>
+            <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Add: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">add_labels</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">remove_labels</span><span class="p">:</span>
+            <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Remove: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">remove_labels</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot; | &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LabelEmailTool.execute">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.email.tools.LabelEmailTool.execute">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">LabelEmailParams</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ToolResult</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute the label email tool.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            params: Validated input parameters</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            ToolResult: Result of labeling operation</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">gmail_client</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_gmail_client</span><span class="p">()</span>
+
+            <span class="c1"># Add labels if specified</span>
+            <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">add_labels</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Adding labels </span><span class="si">{</span><span class="n">params</span><span class="o">.</span><span class="n">add_labels</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">params</span><span class="o">.</span><span class="n">email_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">await</span> <span class="n">gmail_client</span><span class="o">.</span><span class="n">add_labels</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">email_id</span><span class="p">,</span> <span class="n">params</span><span class="o">.</span><span class="n">add_labels</span><span class="p">)</span>
+
+            <span class="c1"># Remove labels if specified</span>
+            <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">remove_labels</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Removing labels </span><span class="si">{</span><span class="n">params</span><span class="o">.</span><span class="n">remove_labels</span><span class="si">}</span><span class="s2"> from </span><span class="si">{</span><span class="n">params</span><span class="o">.</span><span class="n">email_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">await</span> <span class="n">gmail_client</span><span class="o">.</span><span class="n">remove_labels</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">email_id</span><span class="p">,</span> <span class="n">params</span><span class="o">.</span><span class="n">remove_labels</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">ToolResult</span><span class="o">.</span><span class="n">success_result</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s2">&quot;email_id&quot;</span><span class="p">:</span> <span class="n">params</span><span class="o">.</span><span class="n">email_id</span><span class="p">,</span>
+                    <span class="s2">&quot;added_labels&quot;</span><span class="p">:</span> <span class="n">params</span><span class="o">.</span><span class="n">add_labels</span><span class="p">,</span>
+                    <span class="s2">&quot;removed_labels&quot;</span><span class="p">:</span> <span class="n">params</span><span class="o">.</span><span class="n">remove_labels</span><span class="p">,</span>
+                    <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Labels updated successfully&quot;</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to update labels: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ToolResult</span><span class="o">.</span><span class="n">error_result</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Failed to update labels: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ArchiveEmailParams">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.email.tools.ArchiveEmailParams">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ArchiveEmailParams</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Input for ArchiveEmailTool.&quot;&quot;&quot;</span>
+
+    <span class="n">email_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Gmail message ID to archive&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ArchiveEmailTool">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.email.tools.ArchiveEmailTool">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ArchiveEmailTool</span><span class="p">(</span><span class="n">BaseTool</span><span class="p">[</span><span class="n">ArchiveEmailParams</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Archive an email (remove from INBOX).</span>
+
+<span class="sd">    Archiving removes the INBOX label, moving the email out of the inbox</span>
+<span class="sd">    while keeping it accessible via search and other labels.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;archive_email&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;Archive an email by removing it from the inbox. &quot;</span>
+        <span class="s2">&quot;The email will still be accessible via search and other labels. &quot;</span>
+        <span class="s2">&quot;Use this to clean up the inbox without deleting emails.&quot;</span>
+    <span class="p">)</span>
+    <span class="n">risk_level</span> <span class="o">=</span> <span class="n">RiskLevel</span><span class="o">.</span><span class="n">MEDIUM</span>
+    <span class="n">parameters_schema</span> <span class="o">=</span> <span class="n">ArchiveEmailParams</span>
+
+<div class="viewcode-block" id="ArchiveEmailTool.__init__">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.email.tools.ArchiveEmailTool.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the archive email tool.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gmail_client</span><span class="p">:</span> <span class="n">GmailClient</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_get_gmail_client</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GmailClient</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get or create Gmail client.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gmail_client</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">settings</span> <span class="o">=</span> <span class="n">get_settings</span><span class="p">()</span>
+            <span class="n">gmail_auth</span> <span class="o">=</span> <span class="n">GmailAuth</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">gmail_credentials_dir</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_gmail_client</span> <span class="o">=</span> <span class="n">GmailClient</span><span class="p">(</span><span class="n">gmail_auth</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gmail_client</span>
+
+<div class="viewcode-block" id="ArchiveEmailTool.get_confirmation_message">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.email.tools.ArchiveEmailTool.get_confirmation_message">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_confirmation_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">ArchiveEmailParams</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get confirmation message.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            params: Validated parameters</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: Confirmation message</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Archive email </span><span class="si">{</span><span class="n">params</span><span class="o">.</span><span class="n">email_id</span><span class="si">}</span><span class="s2"> (remove from inbox)&quot;</span></div>
+
+
+<div class="viewcode-block" id="ArchiveEmailTool.execute">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.email.tools.ArchiveEmailTool.execute">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">ArchiveEmailParams</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ToolResult</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute the archive email tool.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            params: Validated input parameters</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            ToolResult: Result of archiving operation</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">gmail_client</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_gmail_client</span><span class="p">()</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Archiving email </span><span class="si">{</span><span class="n">params</span><span class="o">.</span><span class="n">email_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">gmail_client</span><span class="o">.</span><span class="n">archive_message</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">email_id</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">ToolResult</span><span class="o">.</span><span class="n">success_result</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;email_id&quot;</span><span class="p">:</span> <span class="n">params</span><span class="o">.</span><span class="n">email_id</span><span class="p">,</span> <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Email archived successfully&quot;</span><span class="p">}</span>
+            <span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to archive email: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ToolResult</span><span class="o">.</span><span class="n">error_result</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Failed to archive email: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="CreateDraftParams">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.email.tools.CreateDraftParams">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CreateDraftParams</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Input for CreateDraftTool.&quot;&quot;&quot;</span>
+
+    <span class="n">to</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;List of recipient email addresses&quot;</span><span class="p">)</span>
+    <span class="n">subject</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Email subject&quot;</span><span class="p">)</span>
+    <span class="n">body</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Email body (plain text)&quot;</span><span class="p">)</span>
+    <span class="n">cc</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;List of CC recipient email addresses&quot;</span><span class="p">)</span>
+    <span class="n">reply_to_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Optional message ID to reply to (for threading)&quot;</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="CreateDraftTool">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.email.tools.CreateDraftTool">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CreateDraftTool</span><span class="p">(</span><span class="n">BaseTool</span><span class="p">[</span><span class="n">CreateDraftParams</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create an email draft.</span>
+
+<span class="sd">    This tool creates a draft email that can be reviewed and sent later.</span>
+<span class="sd">    Drafts are saved to Gmail and can be edited in any email client.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;create_draft&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;Create an email draft. The draft will be saved to Gmail but not sent. &quot;</span>
+        <span class="s2">&quot;Use this to compose emails for later review and sending. &quot;</span>
+        <span class="s2">&quot;Provide recipient(s), subject, and body text.&quot;</span>
+    <span class="p">)</span>
+    <span class="n">risk_level</span> <span class="o">=</span> <span class="n">RiskLevel</span><span class="o">.</span><span class="n">LOW</span>
+    <span class="n">parameters_schema</span> <span class="o">=</span> <span class="n">CreateDraftParams</span>
+
+<div class="viewcode-block" id="CreateDraftTool.__init__">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.email.tools.CreateDraftTool.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the create draft tool.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gmail_client</span><span class="p">:</span> <span class="n">GmailClient</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_get_gmail_client</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GmailClient</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get or create Gmail client.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gmail_client</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">settings</span> <span class="o">=</span> <span class="n">get_settings</span><span class="p">()</span>
+            <span class="n">gmail_auth</span> <span class="o">=</span> <span class="n">GmailAuth</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">gmail_credentials_dir</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_gmail_client</span> <span class="o">=</span> <span class="n">GmailClient</span><span class="p">(</span><span class="n">gmail_auth</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gmail_client</span>
+
+<div class="viewcode-block" id="CreateDraftTool.get_confirmation_message">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.email.tools.CreateDraftTool.get_confirmation_message">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_confirmation_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">CreateDraftParams</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get confirmation message.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            params: Validated parameters</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: Confirmation message</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">to_str</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">to</span><span class="p">)</span>
+        <span class="n">body_preview</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">body</span><span class="p">[:</span><span class="mi">100</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;...&quot;</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">body</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">100</span> <span class="k">else</span> <span class="n">params</span><span class="o">.</span><span class="n">body</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Create draft to </span><span class="si">{</span><span class="n">to_str</span><span class="si">}</span><span class="s2"> | Subject: </span><span class="si">{</span><span class="n">params</span><span class="o">.</span><span class="n">subject</span><span class="si">}</span><span class="s2"> | Body: </span><span class="si">{</span><span class="n">body_preview</span><span class="si">}</span><span class="s2">&quot;</span></div>
+
+
+<div class="viewcode-block" id="CreateDraftTool.execute">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.email.tools.CreateDraftTool.execute">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">CreateDraftParams</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ToolResult</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute the create draft tool.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            params: Validated input parameters</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            ToolResult: Result containing draft ID</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">gmail_client</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_gmail_client</span><span class="p">()</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Creating draft to </span><span class="si">{</span><span class="n">params</span><span class="o">.</span><span class="n">to</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">draft_id</span> <span class="o">=</span> <span class="k">await</span> <span class="n">gmail_client</span><span class="o">.</span><span class="n">create_draft</span><span class="p">(</span>
+                <span class="n">to</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">to</span><span class="p">,</span>
+                <span class="n">subject</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">subject</span><span class="p">,</span>
+                <span class="n">body</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">body</span><span class="p">,</span>
+                <span class="n">cc</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">cc</span> <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">cc</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">reply_to_id</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">reply_to_id</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">ToolResult</span><span class="o">.</span><span class="n">success_result</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s2">&quot;draft_id&quot;</span><span class="p">:</span> <span class="n">draft_id</span><span class="p">,</span>
+                    <span class="s2">&quot;to&quot;</span><span class="p">:</span> <span class="n">params</span><span class="o">.</span><span class="n">to</span><span class="p">,</span>
+                    <span class="s2">&quot;subject&quot;</span><span class="p">:</span> <span class="n">params</span><span class="o">.</span><span class="n">subject</span><span class="p">,</span>
+                    <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Draft created successfully&quot;</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to create draft: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ToolResult</span><span class="o">.</span><span class="n">error_result</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Failed to create draft: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="SendEmailParams">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.email.tools.SendEmailParams">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SendEmailParams</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Input for SendEmailTool.&quot;&quot;&quot;</span>
+
+    <span class="n">to</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;List of recipient email addresses&quot;</span><span class="p">)</span>
+    <span class="n">subject</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Email subject&quot;</span><span class="p">)</span>
+    <span class="n">body</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Email body (plain text)&quot;</span><span class="p">)</span>
+    <span class="n">cc</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;List of CC recipient email addresses&quot;</span><span class="p">)</span>
+    <span class="n">reply_to_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Optional message ID to reply to (for threading)&quot;</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="SendEmailTool">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.email.tools.SendEmailTool">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SendEmailTool</span><span class="p">(</span><span class="n">BaseTool</span><span class="p">[</span><span class="n">SendEmailParams</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Send an email message.</span>
+
+<span class="sd">    This tool sends email directly through Gmail. It requires user confirmation</span>
+<span class="sd">    before sending to prevent accidental sends.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;send_email&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;Send an email message through Gmail. &quot;</span>
+        <span class="s2">&quot;Requires user confirmation before sending. &quot;</span>
+        <span class="s2">&quot;Provide recipient(s), subject, and body text. &quot;</span>
+        <span class="s2">&quot;Optionally include CC recipients and reply-to threading.&quot;</span>
+    <span class="p">)</span>
+    <span class="n">risk_level</span> <span class="o">=</span> <span class="n">RiskLevel</span><span class="o">.</span><span class="n">MEDIUM</span>
+    <span class="n">parameters_schema</span> <span class="o">=</span> <span class="n">SendEmailParams</span>
+
+<div class="viewcode-block" id="SendEmailTool.__init__">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.email.tools.SendEmailTool.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the send email tool.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gmail_client</span><span class="p">:</span> <span class="n">GmailClient</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_get_gmail_client</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GmailClient</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get or create Gmail client.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gmail_client</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">settings</span> <span class="o">=</span> <span class="n">get_settings</span><span class="p">()</span>
+            <span class="n">gmail_auth</span> <span class="o">=</span> <span class="n">GmailAuth</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">gmail_credentials_dir</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_gmail_client</span> <span class="o">=</span> <span class="n">GmailClient</span><span class="p">(</span><span class="n">gmail_auth</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gmail_client</span>
+
+<div class="viewcode-block" id="SendEmailTool.get_confirmation_message">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.email.tools.SendEmailTool.get_confirmation_message">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_confirmation_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">SendEmailParams</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get confirmation message.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            params: Validated parameters</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: Confirmation message with full email preview</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;Send email?&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;To: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">to</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">cc</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CC: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">cc</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Subject: </span><span class="si">{</span><span class="n">params</span><span class="o">.</span><span class="n">subject</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>  <span class="c1"># Blank line</span>
+
+        <span class="c1"># Include body preview (first 500 chars)</span>
+        <span class="n">body_preview</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">body</span><span class="p">[:</span><span class="mi">500</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">body</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">500</span><span class="p">:</span>
+            <span class="n">body_preview</span> <span class="o">+=</span> <span class="s2">&quot;...&quot;</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">body_preview</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SendEmailTool.execute">
+<a class="viewcode-back" href="../../../../api/tools.html#aria.tools.email.tools.SendEmailTool.execute">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">SendEmailParams</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ToolResult</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute the send email tool.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            params: Validated input parameters</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            ToolResult: Result containing sent message ID</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">gmail_client</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_gmail_client</span><span class="p">()</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Sending email to </span><span class="si">{</span><span class="n">params</span><span class="o">.</span><span class="n">to</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">message_id</span> <span class="o">=</span> <span class="k">await</span> <span class="n">gmail_client</span><span class="o">.</span><span class="n">send_message</span><span class="p">(</span>
+                <span class="n">to</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">to</span><span class="p">,</span>
+                <span class="n">subject</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">subject</span><span class="p">,</span>
+                <span class="n">body</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">body</span><span class="p">,</span>
+                <span class="n">cc</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">cc</span> <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">cc</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">reply_to_id</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">reply_to_id</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">ToolResult</span><span class="o">.</span><span class="n">success_result</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s2">&quot;message_id&quot;</span><span class="p">:</span> <span class="n">message_id</span><span class="p">,</span>
+                    <span class="s2">&quot;to&quot;</span><span class="p">:</span> <span class="n">params</span><span class="o">.</span><span class="n">to</span><span class="p">,</span>
+                    <span class="s2">&quot;subject&quot;</span><span class="p">:</span> <span class="n">params</span><span class="o">.</span><span class="n">subject</span><span class="p">,</span>
+                    <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Email sent successfully&quot;</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to send email: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ToolResult</span><span class="o">.</span><span class="n">error_result</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Failed to send email: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, ARIA Contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

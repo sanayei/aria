@@ -5,6 +5,7 @@ __pycache__/
 *.so
 .Python
 build/
+!docs/build/
 develop-eggs/
 dist/
 downloads/
@@ -92,8 +93,10 @@ temp/
 
 # Documentation build
 docs/_build/
-# docs/build/
 docs/source/_autosummary/
+docs/build/html/.doctrees/
+
+# Note: docs/build/ is tracked for GitHub Pages hosting
 
 # ARIA-specific
 # ChromaDB vector store
